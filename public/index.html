@@ -2374,8 +2374,9 @@ function createUser() {
   alert('Compte cree avec succes !');
 }
 
-function deleteUser(email) {
-  if (!confirm('Supprimer le compte ' + email + ' ?')) return;
+function deleteUser(emailOrEl) {
+  var email = (typeof emailOrEl === 'string') ? emailOrEl : emailOrEl;
+  if (!confirm('Supprimer ce compte ?')) return;
   const users = getUsers().filter(u => u.email !== email);
   saveUsers(users);
   addAudit('SUPER ADMIN', 'Compte supprime : ' + email);
@@ -2383,26 +2384,30 @@ function deleteUser(email) {
 }
 
 function refreshUsersList() {
-  const div = document.getElementById('users-list');
+  var div = document.getElementById('users-list');
   if (!div) return;
-  const users = getUsers();
-  const now = Date.now();
-  div.innerHTML = users.map(u => {
-    const expired = u.expires && now > u.expires;
-    const expStr  = u.expires ? new Date(u.expires).toLocaleDateString('fr-FR') : 'Illimite';
-    const badge   = u.role === 'super' ? 'b-pur' : u.role === 'demo' ? 'b-org' : expired ? 'b-red' : 'b-grn';
-    const label   = u.role === 'super' ? 'Super Admin' : u.role === 'demo' ? 'Demo 24h' : expired ? 'Expire' : 'Actif';
-    return '<div class="emp-card">' +
-      '<div style="display:flex;gap:12px;align-items:center">' +
-      '<div class="emp-avatar" style="background:linear-gradient(135deg,var(--pur),var(--blu))">' + (u.nom[0]||'?') + '</div>' +
-      '<div class="emp-info"><div class="emp-name">' + u.nom + '</div>' +
-      '<div class="emp-meta">' + u.email + '</div>' +
-      '<div class="emp-meta" style="margin-top:2px">Expire : ' + expStr + '</div></div>' +
-      '<div style="text-align:right">' +
-      '<span class="badge ' + badge + '">' + label + '</span>' +
-      (u.role !== 'super' ? '<button class="btn btn-d btn-sm" style="margin-top:8px" onclick="deleteUser('' + u.email + '')">🗑</button>' : '') +
-      '</div></div></div>';
-  }).join('');
+  var users = getUsers();
+  var now = Date.now();
+  var html = '';
+  for (var i = 0; i < users.length; i++) {
+    var u = users[i];
+    var expired = u.expires && now > u.expires;
+    var expStr = u.expires ? new Date(u.expires).toLocaleDateString('fr-FR') : 'Illimite';
+    var badge = u.role === 'super' ? 'b-pur' : u.role === 'demo' ? 'b-org' : expired ? 'b-red' : 'b-grn';
+    var lbl = u.role === 'super' ? 'Super Admin' : u.role === 'demo' ? 'Demo 24h' : expired ? 'Expire' : 'Actif';
+    var delBtn = '';
+    if (u.role !== 'super') {
+      delBtn = '<button class="btn btn-d btn-sm" style="margin-top:8px" onclick="deleteUser(\'' + u.email + '\')">Supprimer</button>';
+    }
+    html += '<div class="emp-card"><div style="display:flex;gap:12px;align-items:center">';
+    html += '<div class="emp-avatar" style="background:linear-gradient(135deg,var(--pur),var(--blu))">' + (u.nom[0] || '?') + '</div>';
+    html += '<div class="emp-info"><div class="emp-name">' + u.nom + '</div>';
+    html += '<div class="emp-meta">' + u.email + '</div>';
+    html += '<div class="emp-meta">Expiration : ' + expStr + '</div></div>';
+    html += '<div style="text-align:right"><span class="badge ' + badge + '">' + lbl + '</span>' + delBtn + '</div>';
+    html += '</div></div>';
+  }
+  div.innerHTML = html || '<div style="color:var(--txt2);padding:12px">Aucun utilisateur</div>';
 }
 
 // Afficher nav super admin si role super
