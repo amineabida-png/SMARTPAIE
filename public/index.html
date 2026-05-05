@@ -451,9 +451,85 @@ select option { background: var(--s2); }
   .doc-pro table { page-break-inside:avoid; }
   .doc-pro .dp-sig { page-break-inside:avoid; page-break-before:avoid; }
 }
+
+/* ===== LOGIN SCREEN ===== */
+#login-screen {
+  position:fixed;inset:0;background:var(--bg);z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+.login-box {
+  background:var(--s1);border:1px solid var(--brd2);border-radius:20px;
+  padding:36px 28px;width:100%;max-width:360px;
+  box-shadow:0 24px 60px rgba(0,0,0,.6);
+}
+.login-logo {
+  text-align:center;margin-bottom:28px;
+}
+.login-logo-icon {
+  width:56px;height:56px;background:linear-gradient(135deg,var(--grn),#06b6d4);
+  border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:24px;color:#080c14;margin:0 auto 12px;
+  box-shadow:var(--glow-grn);
+}
+.login-title {font-weight:800;font-size:20px;letter-spacing:-.3px;}
+.login-title span{color:var(--grn);}
+.login-sub{font-size:11px;color:var(--txt3);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+.login-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);
+  color:var(--red);border-radius:8px;padding:10px 14px;font-size:12px;
+  margin-bottom:14px;display:none;}
+.login-field{margin-bottom:14px;}
+.login-field label{font-size:10px;color:var(--txt3);text-transform:uppercase;
+  letter-spacing:1px;font-weight:600;display:block;margin-bottom:6px;}
+.login-field input{width:100%;background:var(--s2);border:1px solid var(--brd);
+  border-radius:10px;color:var(--txt);padding:12px 14px;font-size:14px;outline:none;transition:all .2s;}
+.login-field input:focus{border-color:var(--grn);box-shadow:0 0 0 3px rgba(16,217,160,.08);}
+.login-btn{width:100%;background:linear-gradient(135deg,var(--grn),var(--grn2));
+  color:#080c14;border:none;border-radius:10px;padding:13px;font-weight:800;
+  font-size:14px;cursor:pointer;transition:all .18s;margin-top:4px;}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(16,217,160,.3);}
+.login-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.demo-banner{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(245,158,11,.04));
+  border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:10px 14px;
+  margin-top:14px;text-align:center;}
+.demo-timer{font-size:22px;font-weight:800;color:var(--org);font-family:monospace;}
+.demo-label{font-size:10px;color:var(--txt3);margin-top:2px;}
+/* topbar user pill */
+.user-pill{background:var(--s3);border:1px solid var(--brd2);border-radius:20px;
+  padding:5px 12px;font-size:11px;color:var(--txt2);cursor:pointer;
+  display:flex;align-items:center;gap:6px;}
+.user-pill:hover{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:var(--red);}
+.demo-topbar-badge{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);
+  border-radius:20px;padding:3px 10px;font-size:10px;color:var(--org);font-weight:600;}
 </style>
 </head>
 <body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">S</div>
+      <div class="login-title">Smart<span>PAIE</span> Pro+</div>
+      <div class="login-sub">Gestion de paie · Maroc 2026</div>
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-field">
+      <label>Adresse email</label>
+      <input type="email" id="login-email" placeholder="votre@email.com" autocomplete="email">
+    </div>
+    <div class="login-field">
+      <label>Mot de passe</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Se connecter</button>
+    <div class="demo-banner" id="demo-info" style="display:none">
+      <div class="demo-timer" id="demo-countdown">24:00:00</div>
+      <div class="demo-label">Temps restant sur votre accès démo</div>
+    </div>
+  </div>
+</div>
+
 
 <!-- TOPBAR -->
 <div class="topbar">
@@ -464,8 +540,13 @@ select option { background: var(--s2); }
       <div class="logo-sub">Gestion de paie · Maroc</div>
     </div>
   </div>
-  <div class="topbar-right">
+  <div class="topbar-right" style="display:flex;align-items:center;gap:8px">
+    <div id="demo-topbar" class="demo-topbar-badge" style="display:none">⏱ <span id="demo-topbar-time"></span></div>
     <div class="topbar-pill"><span id="today-date"></span></div>
+    <div class="user-pill" id="user-pill" onclick="doLogout()" style="display:none">
+      <span id="user-name-topbar">—</span>
+      <span style="font-size:14px">⏻</span>
+    </div>
   </div>
 </div>
 
@@ -2019,7 +2100,7 @@ function nav(id,btn){
   if(refreshMap[id]) refreshMap[id]();
 }
 function refreshCalcSelect(){populateAllEmployeeSelects();}
-function refreshAll(){refreshEmpList();refreshDashboard();refreshCalcSelect();refreshAnciennete();refreshCNSS();refreshIR();refreshBulletins();refreshAudit();refreshCongesList();refreshDocumentsList();populateAllEmployeeSelects();}
+function refreshAll(){ if(!currentUser) return;refreshEmpList();refreshDashboard();refreshCalcSelect();refreshAnciennete();refreshCNSS();refreshIR();refreshBulletins();refreshAudit();refreshCongesList();refreshDocumentsList();populateAllEmployeeSelects();}
 function initDemo(){
   if(employes.length===0){
     employes.push({id:1001,prenom:"TAOUIRE",nom:"EL HOUSSINE",cin:"AB123456",cnss:"109800873",poste:"CHAUFFEUR",dept:"Transport",salaire:4200,date:"2025-12-01",charges:2,contrat:"CDI",dateFinContrat:null,dateFinEssai:null,soldeConges:18,email:"",tel:"",adresse:"",rib:"",sitfam:"Marié",docUrl:"",absences:[],statut:"Actif"});
@@ -2029,6 +2110,8 @@ function initDemo(){
   refreshAll();
 }
 document.addEventListener('DOMContentLoaded',()=>{
+  // Vérif session existante
+  if (checkSession()) { showApp(); } else { showLogin(); }
   loadAll(); initCharts(); initDemo();
   document.getElementById('today-date').innerHTML=new Date().toLocaleDateString('fr-MA',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
   const moisSel=document.getElementById('c-mois');
@@ -2038,6 +2121,124 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m) m.classList.remove('open');}));
   setInterval(()=>refreshDashboard(),60000);
 });
+
+// ======================== AUTH SYSTÈME ========================
+const USERS_DB = [
+  { email:'admin@smartpaie.ma',  pass:'admin2026',  role:'admin', nom:'Administrateur' },
+  { email:'super@smartpaie.ma',  pass:'super2026',  role:'super', nom:'Super Admin'     },
+  { email:'demo@smartpaie.ma',   pass:'demo2026',   role:'demo',  nom:'Compte Démo'     }
+];
+const DEMO_DURATION = 24 * 60 * 60 * 1000; // 24h en ms
+let currentUser = null;
+let demoInterval = null;
+
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  const btn   = document.getElementById('login-btn');
+  errEl.style.display = 'none';
+  const user = USERS_DB.find(u => u.email === email && u.pass === pass);
+  if (!user) {
+    errEl.textContent = 'Email ou mot de passe incorrect.';
+    errEl.style.display = 'block';
+    return;
+  }
+  // Vérif démo 24h
+  if (user.role === 'demo') {
+    const demoData = JSON.parse(localStorage.getItem('sp_demo_trial') || 'null');
+    const now = Date.now();
+    if (!demoData) {
+      localStorage.setItem('sp_demo_trial', JSON.stringify({ start: now, expires: now + DEMO_DURATION }));
+    } else if (now > demoData.expires) {
+      errEl.textContent = 'Votre période démo de 24h a expiré. Contactez l'administrateur.';
+      errEl.style.display = 'block';
+      return;
+    }
+  }
+  currentUser = user;
+  localStorage.setItem('sp_session', JSON.stringify({ email: user.email, role: user.role, nom: user.nom, ts: Date.now() }));
+  showApp();
+}
+
+function checkSession() {
+  const sess = JSON.parse(localStorage.getItem('sp_session') || 'null');
+  if (!sess) return false;
+  // Session expire après 7 jours
+  if (Date.now() - sess.ts > 7 * 24 * 60 * 60 * 1000) {
+    localStorage.removeItem('sp_session');
+    return false;
+  }
+  const user = USERS_DB.find(u => u.email === sess.email);
+  if (!user) return false;
+  // Vérif démo
+  if (user.role === 'demo') {
+    const demoData = JSON.parse(localStorage.getItem('sp_demo_trial') || 'null');
+    if (!demoData || Date.now() > demoData.expires) {
+      localStorage.removeItem('sp_session');
+      return false;
+    }
+  }
+  currentUser = user;
+  return true;
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('user-pill').style.display = 'flex';
+  document.getElementById('user-name-topbar').textContent = currentUser.nom;
+  // Badge démo
+  if (currentUser.role === 'demo') {
+    startDemoTimer();
+    document.getElementById('demo-topbar').style.display = 'flex';
+  }
+  refreshAll();
+}
+
+function showLogin() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('user-pill').style.display = 'none';
+  document.getElementById('demo-topbar').style.display = 'none';
+  if (demoInterval) clearInterval(demoInterval);
+}
+
+function doLogout() {
+  if (!confirm('Se déconnecter ?')) return;
+  localStorage.removeItem('sp_session');
+  currentUser = null;
+  if (demoInterval) clearInterval(demoInterval);
+  showLogin();
+}
+
+function startDemoTimer() {
+  const demoData = JSON.parse(localStorage.getItem('sp_demo_trial') || 'null');
+  if (!demoData) return;
+  function tick() {
+    const remaining = Math.max(0, demoData.expires - Date.now());
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    const s = Math.floor((remaining % 60000) / 1000);
+    const str = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    const el1 = document.getElementById('demo-countdown');
+    const el2 = document.getElementById('demo-topbar-time');
+    if (el1) el1.textContent = str;
+    if (el2) el2.textContent = str;
+    if (remaining === 0) {
+      clearInterval(demoInterval);
+      alert('Votre période démo a expiré.');
+      doLogout();
+    }
+  }
+  tick();
+  demoInterval = setInterval(tick, 1000);
+  document.getElementById('demo-info').style.display = 'block';
+}
+
+// Login sur Entrée
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+});
+
 </script>
 </body>
 </html>
