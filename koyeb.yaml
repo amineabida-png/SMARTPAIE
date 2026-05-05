@@ -1,0 +1,23 @@
+name: smartpaie
+services:
+  - name: smartpaie-app
+    type: web
+    git:
+      repository: github.com/amineabida-png/SMARTPAIE
+      branch: main
+    build:
+      buildpack:
+        run_command: npm install
+    run:
+      command: node server/index.js
+    ports:
+      - port: 3000
+        protocol: http
+    env:
+      - key: PORT
+        value: "8000"
+      - key: NODE_ENV
+        value: production
+    routes:
+      - path: /
+        port: 8000
