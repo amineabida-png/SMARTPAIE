@@ -523,9 +523,17 @@ select option { background: var(--s2); }
       <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
     </div>
     <button class="login-btn" id="login-btn" onclick="doLogin()">Se connecter</button>
+    <button class="login-btn" onclick="startDemo24()" style="background:linear-gradient(135deg,#f59e0b,#d97706);margin-top:10px">
+      ⏱ Essayer gratuitement 24h
+    </button>
     <div class="demo-banner" id="demo-info" style="display:none">
       <div class="demo-timer" id="demo-countdown">24:00:00</div>
-      <div class="demo-label">Temps restant sur votre accès démo</div>
+      <div class="demo-label">Temps restant sur votre acces demo</div>
+    </div>
+    <div style="text-align:center;margin-top:16px">
+      <span style="font-size:10px;color:var(--txt3)">Super Admin ? </span>
+      <span onclick="document.getElementById('login-email').value='super@smartpaie.ma'" 
+            style="font-size:10px;color:var(--grn);cursor:pointer;text-decoration:underline">Acces admin</span>
     </div>
   </div>
 </div>
@@ -1104,6 +1112,16 @@ select option { background: var(--s2); }
   </div>
 </div>
 
+
+  <!-- SUPER ADMIN -->
+  <div class="view" id="view-superadmin">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Gestion des comptes utilisateurs</div>
+      <button class="btn btn-p" onclick="openModal('addUser')" style="margin-bottom:14px">＋ Créer un compte</button>
+      <div id="users-list"></div>
+    </div>
+  </div>
+
 <!-- NAV BOTTOM -->
 <nav class="nav-bottom">
   <button class="nav-btn active" onclick="nav('dashboard',this)"><span class="ico">📊</span>Tableau</button>
@@ -1118,7 +1136,36 @@ select option { background: var(--s2); }
   <button class="nav-btn" onclick="nav('params',this)"><span class="ico">⚙️</span>Taux</button>
   <button class="nav-btn" onclick="nav('entreprise',this)"><span class="ico">🏢</span>Société</button>
   <button class="nav-btn" onclick="nav('audit',this)"><span class="ico">📜</span>Audit</button>
+  <button class="nav-btn" id="nav-super" onclick="nav('superadmin',this)" style="display:none"><span class="ico">👑</span>Super</button>
 </nav>
+
+
+<!-- MODAL AJOUTER UTILISATEUR (Super Admin) -->
+<div class="modal-bg" id="modal-addUser">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Créer un compte <span class="modal-close" onclick="closeModal('addUser')">×</span></div>
+    <div class="fg"><label>Nom complet</label><input type="text" id="nu-nom" placeholder="Ex: Mohammed Alaoui"></div>
+    <div class="fg"><label>Email</label><input type="email" id="nu-email" placeholder="email@exemple.ma"></div>
+    <div class="fg"><label>Mot de passe</label><input type="password" id="nu-pass" placeholder="Choisir un mot de passe"></div>
+    <div class="fg"><label>Type de compte</label>
+      <select id="nu-role" onchange="updateExpiry()">
+        <option value="admin">Admin (illimité)</option>
+        <option value="trial30">Essai 30 jours</option>
+        <option value="trial365">Essai 1 an (365 jours)</option>
+        <option value="lifetime">A vie (illimité)</option>
+        <option value="demo">Demo 24h</option>
+      </select>
+    </div>
+    <div class="fg" id="expiry-info" style="display:none">
+      <div class="alert a-info" id="expiry-label">Expiration : —</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-p" onclick="createUser()">✅ Créer le compte</button>
+      <button class="btn btn-o" onclick="closeModal('addUser')">Annuler</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL AJOUT EMPLOYÉ -->
 <div class="modal-bg" id="modal-addEmp">
@@ -2096,7 +2143,7 @@ function nav(id,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   const v=document.getElementById('view-'+id);if(v) v.classList.add('active');
   if(btn) btn.classList.add('active');
-  const refreshMap={calcul:()=>refreshCalcSelect(),cnss:refreshCNSS,ir:refreshIR,anciennete:refreshAnciennete,bulletins:refreshBulletins,employes:refreshEmpList,dashboard:refreshDashboard,audit:refreshAudit,conges:()=>{refreshCongesList();populateAllEmployeeSelects();},documents:refreshDocumentsList,params:()=>{},entreprise:()=>{}};
+  const refreshMap={calcul:()=>refreshCalcSelect(),cnss:refreshCNSS,ir:refreshIR,anciennete:refreshAnciennete,bulletins:refreshBulletins,employes:refreshEmpList,dashboard:refreshDashboard,audit:refreshAudit,conges:()=>{refreshCongesList();populateAllEmployeeSelects();},documents:refreshDocumentsList,params:()=>{},entreprise:()=>{},superadmin:refreshUsersList};
   if(refreshMap[id]) refreshMap[id]();
 }
 function refreshCalcSelect(){populateAllEmployeeSelects();}
@@ -2107,6 +2154,7 @@ function initDemo(){
     employes.push({id:1002,prenom:"Fatima",nom:"Benali",cin:"CD789012",cnss:"987654321",poste:"Comptable",dept:"Finance",salaire:12000,date:"2020-06-15",charges:1,contrat:"CDI",dateFinContrat:null,dateFinEssai:null,soldeConges:22,email:"",tel:"",adresse:"",rib:"",sitfam:"Célibataire",docUrl:"",absences:[],statut:"Actif"});
     saveAll();
   }
+  checkSuperAdmin();
   refreshAll();
 }
 document.addEventListener('DOMContentLoaded',()=>{
@@ -2127,12 +2175,18 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 // ======================== AUTH SYSTÈME ========================
-const USERS_DB = [
-  { email:'admin@smartpaie.ma',  pass:'admin2026',  role:'admin', nom:'Administrateur' },
-  { email:'super@smartpaie.ma',  pass:'super2026',  role:'super', nom:'Super Admin'     },
-  { email:'demo@smartpaie.ma',   pass:'demo2026',   role:'demo',  nom:'Compte Démo'     }
+// ── Base utilisateurs (gérée par Super Admin) ─────────────────────────────
+const DEMO_DURATION = 24 * 60 * 60 * 1000;
+const DEFAULT_USERS = [
+  { email:'super@smartpaie.ma', pass:'super2026', role:'super', nom:'Super Admin', expires:null },
+  { email:'admin@smartpaie.ma', pass:'admin2026', role:'admin', nom:'Administrateur', expires:null },
+  { email:'demo@smartpaie.ma',  pass:'demo2026',  role:'demo',  nom:'Compte Demo',   expires:null }
 ];
-const DEMO_DURATION = 24 * 60 * 60 * 1000; // 24h en ms
+function getUsers() {
+  const saved = localStorage.getItem('sp_users');
+  return saved ? JSON.parse(saved) : DEFAULT_USERS;
+}
+function saveUsers(users) { localStorage.setItem('sp_users', JSON.stringify(users)); }
 let currentUser = null;
 let demoInterval = null;
 
@@ -2140,50 +2194,54 @@ function doLogin() {
   const email = document.getElementById('login-email').value.trim().toLowerCase();
   const pass  = document.getElementById('login-pass').value;
   const errEl = document.getElementById('login-error');
-  const btn   = document.getElementById('login-btn');
   errEl.style.display = 'none';
-  const user = USERS_DB.find(u => u.email === email && u.pass === pass);
+  const users = getUsers();
+  const user  = users.find(u => u.email === email && u.pass === pass);
   if (!user) {
     errEl.textContent = 'Email ou mot de passe incorrect.';
     errEl.style.display = 'block';
     return;
   }
+  const now = Date.now();
+  // Vérif expiration compte (30j, 365j, a vie)
+  if (user.expires && now > user.expires) {
+    errEl.textContent = 'Votre compte a expiré. Contactez le Super Admin.';
+    errEl.style.display = 'block';
+    return;
+  }
   // Vérif démo 24h
   if (user.role === 'demo') {
-    const demoData = JSON.parse(localStorage.getItem('sp_demo_trial') || 'null');
-    const now = Date.now();
+    const key = 'sp_demo_' + email.replace(/[^a-z]/g,'');
+    let demoData = JSON.parse(localStorage.getItem(key) || 'null');
     if (!demoData) {
-      localStorage.setItem('sp_demo_trial', JSON.stringify({ start: now, expires: now + DEMO_DURATION }));
+      demoData = { start: now, expires: now + DEMO_DURATION };
+      localStorage.setItem(key, JSON.stringify(demoData));
     } else if (now > demoData.expires) {
-      errEl.textContent = 'Votre période démo de 24h a expiré. Contactez l'administrateur.';
+      errEl.textContent = 'Periode demo 24h expiree. Contactez le Super Admin.';
       errEl.style.display = 'block';
       return;
     }
+    localStorage.setItem('sp_demo_ref', key);
   }
-  currentUser = user;
-  localStorage.setItem('sp_session', JSON.stringify({ email: user.email, role: user.role, nom: user.nom, ts: Date.now() }));
+  currentUser = { ...user };
+  localStorage.setItem('sp_session', JSON.stringify({ email: user.email, role: user.role, nom: user.nom, ts: now }));
   showApp();
 }
 
 function checkSession() {
   const sess = JSON.parse(localStorage.getItem('sp_session') || 'null');
   if (!sess) return false;
-  // Session expire après 7 jours
-  if (Date.now() - sess.ts > 7 * 24 * 60 * 60 * 1000) {
-    localStorage.removeItem('sp_session');
-    return false;
-  }
-  const user = USERS_DB.find(u => u.email === sess.email);
+  if (Date.now() - sess.ts > 7 * 24 * 60 * 60 * 1000) { localStorage.removeItem('sp_session'); return false; }
+  const users = getUsers();
+  const user = users.find(u => u.email === sess.email);
   if (!user) return false;
-  // Vérif démo
+  if (user.expires && Date.now() > user.expires) { localStorage.removeItem('sp_session'); return false; }
   if (user.role === 'demo') {
-    const demoData = JSON.parse(localStorage.getItem('sp_demo_trial') || 'null');
-    if (!demoData || Date.now() > demoData.expires) {
-      localStorage.removeItem('sp_session');
-      return false;
-    }
+    const key = 'sp_demo_' + sess.email.replace(/[^a-z]/g,'');
+    const demoData = JSON.parse(localStorage.getItem(key) || 'null');
+    if (!demoData || Date.now() > demoData.expires) { localStorage.removeItem('sp_session'); return false; }
   }
-  currentUser = user;
+  currentUser = { ...user };
   return true;
 }
 
@@ -2219,7 +2277,8 @@ function doLogout() {
 }
 
 function startDemoTimer() {
-  const demoData = JSON.parse(localStorage.getItem('sp_demo_trial') || 'null');
+  const key = localStorage.getItem('sp_demo_ref') || ('sp_demo_' + (currentUser?.email||'').replace(/[^a-z]/g,''));
+  const demoData = JSON.parse(localStorage.getItem(key) || 'null');
   if (!demoData) return;
   function tick() {
     const remaining = Math.max(0, demoData.expires - Date.now());
@@ -2246,6 +2305,111 @@ function startDemoTimer() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
 });
+
+
+// ======================== SUPER ADMIN ========================
+function startDemo24() {
+  const users = getUsers();
+  const demo = users.find(u => u.role === 'demo');
+  if (!demo) return alert('Compte demo introuvable.');
+  const email = demo.email;
+  const key = 'sp_demo_' + email.replace(/[^a-z]/g,'');
+  const now = Date.now();
+  const existing = JSON.parse(localStorage.getItem(key) || 'null');
+  if (existing && now < existing.expires) {
+    // Deja actif — login direct
+    document.getElementById('login-email').value = email;
+    document.getElementById('login-pass').value = demo.pass;
+    doLogin();
+    return;
+  }
+  // Nouveau trial
+  localStorage.setItem(key, JSON.stringify({ start: now, expires: now + DEMO_DURATION }));
+  localStorage.setItem('sp_demo_ref', key);
+  document.getElementById('login-email').value = email;
+  document.getElementById('login-pass').value = demo.pass;
+  doLogin();
+}
+
+function updateExpiry() {
+  const role = document.getElementById('nu-role').value;
+  const ei = document.getElementById('expiry-info');
+  const el = document.getElementById('expiry-label');
+  const now = new Date();
+  if (role === 'admin' || role === 'lifetime') {
+    ei.style.display = 'none'; return;
+  }
+  ei.style.display = 'block';
+  if (role === 'trial30') {
+    const d = new Date(now.getTime() + 30*24*60*60*1000);
+    el.textContent = 'Expiration : ' + d.toLocaleDateString('fr-FR') + ' (30 jours)';
+  } else if (role === 'trial365') {
+    const d = new Date(now.getTime() + 365*24*60*60*1000);
+    el.textContent = 'Expiration : ' + d.toLocaleDateString('fr-FR') + ' (1 an)';
+  } else if (role === 'demo') {
+    el.textContent = 'Demo : acces 24h a partir de la premiere connexion';
+  }
+}
+
+function createUser() {
+  const nom   = document.getElementById('nu-nom').value.trim();
+  const email = document.getElementById('nu-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('nu-pass').value;
+  const roleV = document.getElementById('nu-role').value;
+  if (!nom || !email || !pass) return alert('Tous les champs sont obligatoires.');
+  const users = getUsers();
+  if (users.find(u => u.email === email)) return alert('Cet email existe deja.');
+  const now = Date.now();
+  let expires = null;
+  let role = roleV;
+  if (roleV === 'trial30')  { expires = now + 30*24*60*60*1000; role = 'admin'; }
+  if (roleV === 'trial365') { expires = now + 365*24*60*60*1000; role = 'admin'; }
+  if (roleV === 'lifetime') { expires = null; role = 'admin'; }
+  if (roleV === 'demo')     { expires = null; role = 'demo'; }
+  users.push({ email, pass, role, nom, expires, createdAt: now });
+  saveUsers(users);
+  addAudit('SUPER ADMIN', 'Compte cree : ' + email + ' (' + roleV + ')');
+  closeModal('addUser');
+  refreshUsersList();
+  alert('Compte cree avec succes !');
+}
+
+function deleteUser(email) {
+  if (!confirm('Supprimer le compte ' + email + ' ?')) return;
+  const users = getUsers().filter(u => u.email !== email);
+  saveUsers(users);
+  addAudit('SUPER ADMIN', 'Compte supprime : ' + email);
+  refreshUsersList();
+}
+
+function refreshUsersList() {
+  const div = document.getElementById('users-list');
+  if (!div) return;
+  const users = getUsers();
+  const now = Date.now();
+  div.innerHTML = users.map(u => {
+    const expired = u.expires && now > u.expires;
+    const expStr  = u.expires ? new Date(u.expires).toLocaleDateString('fr-FR') : 'Illimite';
+    const badge   = u.role === 'super' ? 'b-pur' : u.role === 'demo' ? 'b-org' : expired ? 'b-red' : 'b-grn';
+    const label   = u.role === 'super' ? 'Super Admin' : u.role === 'demo' ? 'Demo 24h' : expired ? 'Expire' : 'Actif';
+    return '<div class="emp-card">' +
+      '<div style="display:flex;gap:12px;align-items:center">' +
+      '<div class="emp-avatar" style="background:linear-gradient(135deg,var(--pur),var(--blu))">' + (u.nom[0]||'?') + '</div>' +
+      '<div class="emp-info"><div class="emp-name">' + u.nom + '</div>' +
+      '<div class="emp-meta">' + u.email + '</div>' +
+      '<div class="emp-meta" style="margin-top:2px">Expire : ' + expStr + '</div></div>' +
+      '<div style="text-align:right">' +
+      '<span class="badge ' + badge + '">' + label + '</span>' +
+      (u.role !== 'super' ? '<button class="btn btn-d btn-sm" style="margin-top:8px" onclick="deleteUser('' + u.email + '')">🗑</button>' : '') +
+      '</div></div></div>';
+  }).join('');
+}
+
+// Afficher nav super admin si role super
+function checkSuperAdmin() {
+  const btn = document.getElementById('nav-super');
+  if (btn && currentUser && currentUser.role === 'super') btn.style.display = 'flex';
+}
 
 </script>
 </body>
