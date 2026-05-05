@@ -2110,9 +2110,13 @@ function initDemo(){
   refreshAll();
 }
 document.addEventListener('DOMContentLoaded',()=>{
-  // Vérif session existante
-  if (checkSession()) { showApp(); } else { showLogin(); }
-  loadAll(); initCharts(); initDemo();
+  // Vérif session existante — init app only if logged in
+  if (checkSession()) { 
+    loadAll(); initCharts(); initDemo();
+    showApp(); 
+  } else { 
+    showLogin(); 
+  }
   document.getElementById('today-date').innerHTML=new Date().toLocaleDateString('fr-MA',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
   const moisSel=document.getElementById('c-mois');
   const MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
@@ -2183,14 +2187,18 @@ function checkSession() {
   return true;
 }
 
+let _appInitialized = false;
 function showApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('user-pill').style.display = 'flex';
   document.getElementById('user-name-topbar').textContent = currentUser.nom;
-  // Badge démo
   if (currentUser.role === 'demo') {
     startDemoTimer();
     document.getElementById('demo-topbar').style.display = 'flex';
+  }
+  if (!_appInitialized) {
+    loadAll(); initCharts(); initDemo();
+    _appInitialized = true;
   }
   refreshAll();
 }
