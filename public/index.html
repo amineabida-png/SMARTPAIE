@@ -1155,10 +1155,10 @@ select option { background: var(--s2); }
     <div class="fg"><label>Type de compte</label>
       <select id="nu-role" onchange="updateExpiry()">
         <option value="admin">Admin (illimité)</option>
-        <option value="trial30">Essai 30 jours</option>
-        <option value="trial365">Essai 1 an (365 jours)</option>
-        <option value="lifetime">A vie (illimité)</option>
-        <option value="demo">Demo 24h</option>
+        <option value="trial30">Abonnement 30 jours</option>
+        <option value="trial365">Abonnement 1 an (365 jours)</option>
+        <option value="lifetime">Abonnement à vie (illimité)</option>
+        <option value="demo">Demo 24h (essai gratuit)</option>
       </select>
     </div>
     <div class="fg" id="expiry-info" style="display:none">
@@ -2353,12 +2353,12 @@ function updateExpiry() {
   ei.style.display = 'block';
   if (role === 'trial30') {
     const d = new Date(now.getTime() + 30*24*60*60*1000);
-    el.textContent = 'Expiration : ' + d.toLocaleDateString('fr-FR') + ' (30 jours)';
+    el.textContent = 'Abonnement 30 jours — expire le ' + d.toLocaleDateString('fr-FR');
   } else if (role === 'trial365') {
     const d = new Date(now.getTime() + 365*24*60*60*1000);
-    el.textContent = 'Expiration : ' + d.toLocaleDateString('fr-FR') + ' (1 an)';
+    el.textContent = 'Abonnement 1 an — expire le ' + d.toLocaleDateString('fr-FR');
   } else if (role === 'demo') {
-    el.textContent = 'Demo : acces 24h a partir de la premiere connexion';
+    el.textContent = 'Demo gratuite : 24h a partir de la premiere connexion';
   }
 }
 
