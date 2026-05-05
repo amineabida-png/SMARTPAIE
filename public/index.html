@@ -2363,21 +2363,22 @@ function updateExpiry() {
 }
 
 function createUser() {
-  const nom   = document.getElementById('nu-nom').value.trim();
-  const email = document.getElementById('nu-email').value.trim().toLowerCase();
-  const pass  = document.getElementById('nu-pass').value;
-  const roleV = document.getElementById('nu-role').value;
-  if (!nom || !email || !pass) return alert('Tous les champs sont obligatoires.');
-  const users = getUsers();
-  if (users.find(u => u.email === email)) return alert('Cet email existe deja.');
-  const now = Date.now();
-  let expires = null;
-  let role = roleV;
-  if (roleV === 'trial30')  { expires = now + 30*24*60*60*1000; role = 'admin'; }
-  if (roleV === 'trial365') { expires = now + 365*24*60*60*1000; role = 'admin'; }
-  if (roleV === 'lifetime') { expires = null; role = 'admin'; }
-  if (roleV === 'demo')     { expires = null; role = 'demo'; }
-  users.push({ email, pass, role, nom, expires, createdAt: now });
+  var nom   = document.getElementById('nu-nom').value.trim();
+  var email = document.getElementById('nu-email').value.trim().toLowerCase();
+  var pass  = document.getElementById('nu-pass').value;
+  var roleV = document.getElementById('nu-role').value;
+  if (!nom || !email || !pass) { alert('Tous les champs sont obligatoires.'); return; }
+  if (pass.length < 6) { alert('Mot de passe trop court (min 6 caracteres).'); return; }
+  var users = getUsers();
+  if (users.find(function(u){ return u.email === email; })) { alert('Cet email existe deja.'); return; }
+  var now = Date.now();
+  var expires = null;
+  var role = 'admin'; // jamais 'super' depuis le formulaire
+  if (roleV === 'trial30')  { expires = now + 30*24*60*60*1000; }
+  if (roleV === 'trial365') { expires = now + 365*24*60*60*1000; }
+  if (roleV === 'lifetime') { expires = null; }
+  if (roleV === 'demo')     { role = 'demo'; }
+  users.push({ email: email, pass: pass, role: role, nom: nom, expires: expires, createdAt: now });
   saveUsers(users);
   addAudit('SUPER ADMIN', 'Compte cree : ' + email + ' (' + roleV + ')');
   closeModal('addUser');
@@ -2385,13 +2386,40 @@ function createUser() {
   alert('Compte cree avec succes !');
 }
 
-function deleteUser(emailOrEl) {
-  var email = (typeof emailOrEl === 'string') ? emailOrEl : emailOrEl;
-  if (!confirm('Supprimer ce compte ?')) return;
-  const users = getUsers().filter(u => u.email !== email);
+function deleteUser(email) {
+  if (!confirm('Supprimer le compte ' + email + ' ?')) return;
+  var users = getUsers().filter(function(u){ return u.email !== email; });
   saveUsers(users);
   addAudit('SUPER ADMIN', 'Compte supprime : ' + email);
   refreshUsersList();
+}
+
+function resetPassword(email) {
+  var newPass = prompt('Nouveau mot de passe pour ' + email + ' (min 6 caracteres) :');
+  if (!newPass) return;
+  if (newPass.length < 6) { alert('Mot de passe trop court.'); return; }
+  var users = getUsers();
+  var user = users.find(function(u){ return u.email === email; });
+  if (!user) return alert('Compte introuvable.');
+  user.pass = newPass;
+  saveUsers(users);
+  addAudit('SUPER ADMIN', 'Mot de passe reinitialise : ' + email);
+  alert('Mot de passe mis a jour avec succes !');
+}
+
+function extendAccount(email) {
+  var choice = prompt('Prolonger de combien de jours ?\n30 = 1 mois\n365 = 1 an\n-1 = illimite');
+  if (!choice) return;
+  var days = parseInt(choice);
+  var users = getUsers();
+  var user = users.find(function(u){ return u.email === email; });
+  if (!user) return;
+  if (days === -1) { user.expires = null; }
+  else { var base = (user.expires && user.expires > Date.now()) ? user.expires : Date.now(); user.expires = base + days*24*60*60*1000; }
+  saveUsers(users);
+  addAudit('SUPER ADMIN', 'Compte prolonge : ' + email + ' (+' + (days===-1?'illimite':days+' j') + ')');
+  refreshUsersList();
+  alert('Compte mis a jour !');
 }
 
 function refreshUsersList() {
@@ -2408,7 +2436,11 @@ function refreshUsersList() {
     var lbl = u.role === 'super' ? 'Super Admin' : u.role === 'demo' ? 'Demo 24h' : expired ? 'Expire' : 'Actif';
     var delBtn = '';
     if (u.role !== 'super') {
-      delBtn = '<button class="btn btn-d btn-sm" style="margin-top:8px" onclick="deleteUser(\'' + u.email + '\')">Supprimer</button>';
+      delBtn  = '<div style="display:flex;flex-direction:column;gap:4px;margin-top:6px">';
+      delBtn += '<button class="btn btn-o btn-sm" onclick="resetPassword(\'' + u.email + '\')">🔑 Reset MDP</button>';
+      delBtn += '<button class="btn btn-o btn-sm" onclick="extendAccount(\'' + u.email + '\')">📅 Prolonger</button>';
+      delBtn += '<button class="btn btn-d btn-sm" onclick="deleteUser(\'' + u.email + '\')">🗑 Supprimer</button>';
+      delBtn += '</div>';
     }
     html += '<div class="emp-card"><div style="display:flex;gap:12px;align-items:center">';
     html += '<div class="emp-avatar" style="background:linear-gradient(135deg,var(--pur),var(--blu))">' + (u.nom[0] || '?') + '</div>';
@@ -2425,13 +2457,9 @@ function refreshUsersList() {
 function checkSuperAdmin() {
   var navBtn = document.getElementById('nav-super');
   var topBtn = document.getElementById('btn-superadmin');
-  if (currentUser && currentUser.role === 'super') {
-    if (navBtn) navBtn.style.display = 'flex';
-    if (topBtn) topBtn.style.display = 'flex';
-  } else {
-    if (navBtn) navBtn.style.display = 'none';
-    if (topBtn) topBtn.style.display = 'none';
-  }
+  var isSuper = currentUser && currentUser.role === 'super';
+  if (navBtn) navBtn.style.display = isSuper ? 'flex' : 'none';
+  if (topBtn) topBtn.style.display = isSuper ? 'flex' : 'none';
 }
 
 </script>
