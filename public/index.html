@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SmartPAIE Pro+ — Maroc</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ===== DESIGN SYSTEM PREMIUM ===== */
+:root {
+  --bg: #080c14;
+  --s1: #0e1520;
+  --s2: #131d2e;
+  --s3: #1a2540;
+  --brd: #1e2d45;
+  --brd2: #253452;
+  --grn: #10d9a0;
+  --grn2: #0ab880;
+  --blu: #3b82f6;
+  --blu2: #2563eb;
+  --org: #f59e0b;
+  --red: #ef4444;
+  --pur: #8b5cf6;
+  --txt: #e2e8f0;
+  --txt2: #94a3b8;
+  --txt3: #4e6080;
+  --r: 14px;
+  --r2: 10px;
+  --r3: 8px;
+  --glow-grn: 0 0 20px rgba(16,217,160,.15);
+  --glow-blu: 0 0 20px rgba(59,130,246,.15);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--txt); min-height:100vh; display:flex; flex-direction:column; }
+
+/* ===== TOPBAR ===== */
+.topbar {
+  background: linear-gradient(135deg, var(--s1) 0%, var(--s2) 100%);
+  border-bottom: 1px solid var(--brd);
+  padding: 0 16px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.logo { display:flex; align-items:center; gap:10px; }
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--grn), #06b6d4);
+  border-radius: 10px;
+  display: flex; align-items:center; justify-content:center;
+  font-weight: 900; font-size: 16px; color: #080c14;
+  box-shadow: var(--glow-grn);
+}
+.logo-txt { font-weight: 800; font-size: 17px; letter-spacing: -.3px; }
+.logo-txt span { color: var(--grn); }
+.logo-sub { font-size: 9px; color: var(--txt3); letter-spacing: 1.5px; text-transform: uppercase; }
+.topbar-right { display:flex; align-items:center; gap:8px; }
+.topbar-pill {
+  background: var(--s3);
+  border: 1px solid var(--brd2);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 10px;
+  color: var(--txt2);
+  letter-spacing: .5px;
+}
+.topbar-pill span { color: var(--grn); font-weight: 600; }
+
+/* ===== NAVIGATION ===== */
+.nav-bottom {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--s1);
+  border-top: 1px solid var(--brd);
+  display: flex; z-index: 100;
+  overflow-x: auto;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.nav-btn {
+  flex: 1; min-width: 52px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 9px 3px 7px;
+  cursor: pointer; color: var(--txt3);
+  font-size: 8.5px; letter-spacing: .5px; text-transform: uppercase;
+  border: none; background: none;
+  transition: all .2s;
+  border-top: 2px solid transparent;
+  position: relative;
+}
+.nav-btn .ico { font-size: 17px; }
+.nav-btn.active { color: var(--grn); border-top-color: var(--grn); }
+.nav-btn:hover:not(.active) { color: var(--txt2); background: rgba(255,255,255,.03); }
+
+/* ===== CONTENT ===== */
+.content { padding: 14px; flex: 1; overflow-y: auto; padding-bottom: 84px; }
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--s1);
+  border: 1px solid var(--brd);
+  border-radius: var(--r);
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--brd2); }
+.card-title {
+  font-size: 9.5px; color: var(--txt3);
+  text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 7px;
+  font-weight: 600;
+}
+.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--grn); display:inline-block; flex-shrink:0; }
+.dot.blu { background: var(--blu); }
+.dot.org { background: var(--org); }
+.dot.pur { background: var(--pur); }
+
+/* ===== STATS GRID ===== */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.stat {
+  background: var(--s1);
+  border: 1px solid var(--brd);
+  border-radius: var(--r);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.stat::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--grn);
+}
+.stat.blu::before { background: var(--blu); }
+.stat.org::before { background: var(--org); }
+.stat.red::before { background: var(--red); }
+.stat::after {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(16,217,160,.04);
+}
+.stat.blu::after { background: rgba(59,130,246,.04); }
+.stat.org::after { background: rgba(245,158,11,.04); }
+.stat.red::after { background: rgba(239,68,68,.04); }
+.stat-lbl { font-size: 9px; color: var(--txt3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 600; }
+.stat-val { font-weight: 800; font-size: 17px; color: var(--grn); line-height: 1; }
+.stat.blu .stat-val { color: var(--blu); }
+.stat.org .stat-val { color: var(--org); }
+.stat.red .stat-val { color: var(--red); }
+.stat-sub { font-size: 9px; color: var(--txt3); margin-top: 5px; }
+
+/* ===== FORMS ===== */
+.fg { margin-bottom: 12px; }
+label {
+  font-size: 10px; color: var(--txt3);
+  text-transform: uppercase; letter-spacing: 1px;
+  display: block; margin-bottom: 6px;
+  font-weight: 600;
+}
+input, select {
+  width: 100%;
+  background: var(--s2);
+  border: 1px solid var(--brd);
+  border-radius: var(--r3);
+  color: var(--txt);
+  padding: 10px 13px;
+  font-size: 14px;
+  outline: none;
+  transition: all .2s;
+}
+input:focus, select:focus {
+  border-color: var(--grn);
+  background: var(--s3);
+  box-shadow: 0 0 0 3px rgba(16,217,160,.08);
+}
+select option { background: var(--s2); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  font-weight: 700; font-size: 13px;
+  padding: 11px 18px;
+  border-radius: var(--r2);
+  border: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: all .18s; width: 100%;
+  letter-spacing: .2px;
+}
+.btn-p {
+  background: linear-gradient(135deg, var(--grn), var(--grn2));
+  color: #080c14;
+  box-shadow: 0 4px 14px rgba(16,217,160,.2);
+}
+.btn-p:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,217,160,.3); }
+.btn-p:active { transform: translateY(0); }
+.btn-b {
+  background: linear-gradient(135deg, var(--blu), var(--blu2));
+  color: white;
+  box-shadow: 0 4px 14px rgba(59,130,246,.2);
+}
+.btn-b:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,130,246,.3); }
+.btn-o {
+  background: transparent;
+  color: var(--txt2);
+  border: 1px solid var(--brd2);
+}
+.btn-o:hover { background: var(--s3); color: var(--txt); border-color: var(--txt3); }
+.btn-d { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 4px 14px rgba(239,68,68,.2); }
+.btn-sm { padding: 6px 11px; font-size: 11px; width: auto; border-radius: var(--r3); }
+
+/* ===== ROWS ===== */
+.rrow {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(30,45,69,.6);
+  font-size: 13px;
+}
+.rrow:last-child { border-bottom: none; }
+.rlbl { color: var(--txt2); font-size: 12px; }
+.rval { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12.5px; font-weight: 600; }
+.rval.red { color: var(--red); }
+.rval.grn { color: var(--grn); }
+.rval.org { color: var(--org); }
+
+/* ===== TOT BOX ===== */
+.tot-box {
+  background: linear-gradient(135deg, rgba(16,217,160,.07), rgba(16,217,160,.03));
+  border: 1px solid rgba(16,217,160,.2);
+  border-radius: var(--r2);
+  padding: 14px 16px;
+  margin-top: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.tot-box.org-box {
+  background: linear-gradient(135deg, rgba(245,158,11,.07), rgba(245,158,11,.03));
+  border-color: rgba(245,158,11,.2);
+}
+.tot-label { font-weight: 700; font-size: 13px; }
+.tot-value { font-weight: 800; font-size: 20px; color: var(--grn); font-family: monospace; }
+.tot-box.org-box .tot-value { color: var(--org); }
+
+/* ===== BADGES ===== */
+.badge {
+  font-size: 10px; padding: 3px 9px;
+  border-radius: 20px; display: inline-block; font-weight: 600;
+}
+.b-grn { background: rgba(16,217,160,.12); color: var(--grn); border: 1px solid rgba(16,217,160,.2); }
+.b-blu { background: rgba(59,130,246,.12); color: var(--blu); border: 1px solid rgba(59,130,246,.2); }
+.b-org { background: rgba(245,158,11,.12); color: var(--org); border: 1px solid rgba(245,158,11,.2); }
+.b-red { background: rgba(239,68,68,.12); color: var(--red); border: 1px solid rgba(239,68,68,.2); }
+.b-gry { background: rgba(148,163,184,.08); color: var(--txt2); border: 1px solid rgba(148,163,184,.15); }
+.b-pur { background: rgba(139,92,246,.12); color: var(--pur); border: 1px solid rgba(139,92,246,.2); }
+
+/* ===== ALERTS ===== */
+.alert { padding: 11px 14px; border-radius: var(--r3); font-size: 12px; margin-bottom: 10px; line-height: 1.5; }
+.a-warn { background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.25); color: var(--org); }
+.a-info { background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.25); color: var(--blu); }
+.a-ok { background: rgba(16,217,160,.08); border: 1px solid rgba(16,217,160,.25); color: var(--grn); }
+
+/* ===== ANCIENNETÉ ===== */
+.anc-box {
+  background: linear-gradient(135deg, rgba(16,217,160,.06), rgba(6,182,212,.04));
+  border: 1px solid rgba(16,217,160,.18);
+  border-radius: var(--r2);
+  padding: 11px 14px; margin-bottom: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+/* ===== VIEW SYSTEM ===== */
+.view { display:none; }
+.view.active { display: block; }
+.chart-container { height: 190px; margin-top: 10px; }
+
+/* ===== TABLE ===== */
+.tbl-wrap { overflow-x: auto; border-radius: var(--r3); }
+.tbl-wrap table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.tbl-wrap th {
+  background: var(--s3);
+  color: var(--txt2);
+  padding: 9px 10px;
+  text-align: left;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--brd2);
+}
+.tbl-wrap td { padding: 9px 10px; border-bottom: 1px solid rgba(30,45,69,.5); color: var(--txt); }
+.tbl-wrap tr:hover td { background: rgba(255,255,255,.02); }
+
+/* ===== EMPLOYEE CARD ===== */
+.emp-card {
+  background: var(--s1);
+  border: 1px solid var(--brd);
+  border-radius: var(--r);
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: all .2s;
+}
+.emp-card:hover { border-color: var(--brd2); transform: translateY(-1px); }
+.emp-avatar {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--grn), #06b6d4);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; color: #080c14;
+  flex-shrink: 0;
+}
+.emp-info { flex: 1; }
+.emp-name { font-weight: 700; font-size: 14px; }
+.emp-meta { font-size: 11px; color: var(--txt2); margin-top: 2px; }
+.emp-sal { font-family: monospace; font-weight: 700; color: var(--grn); font-size: 13px; }
+
+/* ===== BULLETIN CARD ===== */
+.bul-card {
+  background: var(--s1);
+  border: 1px solid var(--brd);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; transition: all .2s;
+}
+.bul-card:hover { border-color: var(--grn); transform: translateY(-1px); box-shadow: var(--glow-grn); }
+.bul-name { font-weight: 600; font-size: 13px; }
+.bul-mois { font-size: 10.5px; color: var(--txt2); margin-top: 2px; }
+.bul-net { font-family: monospace; font-weight: 800; color: var(--grn); font-size: 15px; }
+
+/* ===== MODAL ===== */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.75);
+  backdrop-filter: blur(4px);
+  z-index: 200; align-items: flex-end; justify-content: center;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--s1);
+  border: 1px solid var(--brd2);
+  border-radius: var(--r) var(--r) 0 0;
+  padding: 20px 16px 24px;
+  width: 100%; max-height: 92vh; overflow-y: auto;
+  box-shadow: 0 -20px 60px rgba(0,0,0,.5);
+}
+.modal-handle { width: 36px; height: 4px; background: var(--brd2); border-radius: 2px; margin: 0 auto 16px; }
+.modal-title {
+  font-weight: 800; font-size: 17px;
+  margin-bottom: 18px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.modal-close { cursor: pointer; color: var(--txt2); font-size: 24px; line-height: 1; transition: color .15s; }
+.modal-close:hover { color: var(--txt); }
+
+/* ===== SECTION DIVIDER ===== */
+.section-sep {
+  display: flex; align-items: center; gap: 10px;
+  margin: 16px 0 12px;
+  font-size: 9.5px; color: var(--txt3);
+  text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;
+}
+.section-sep::before, .section-sep::after {
+  content: ''; flex: 1; height: 1px; background: var(--brd);
+}
+
+/* ===== MOTIF SELECT (cessation) ===== */
+.motif-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+.motif-btn {
+  padding: 9px 8px; border-radius: var(--r3);
+  border: 1px solid var(--brd); background: var(--s2);
+  color: var(--txt2); font-size: 11px; cursor: pointer;
+  text-align: center; transition: all .15s; font-weight: 500;
+}
+.motif-btn.selected { border-color: var(--org); background: rgba(245,158,11,.08); color: var(--org); }
+
+/* ===== PRINT STYLES + DOC PROFESSIONNELS ===== */
+.doc-pro { max-width:800px; margin:0 auto; background:white; padding:20px 28px; font-family:'Segoe UI',Arial,sans-serif; color:#1a1a2e; box-sizing:border-box; font-size:11px; line-height:1.6; }
+.doc-pro .dp-header { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #2c5aa0; padding-bottom:12px; margin-bottom:14px; }
+.doc-pro .dp-logo { font-size:15px; font-weight:700; color:#2c5aa0; margin-bottom:4px; }
+.doc-pro .dp-meta { font-size:8.5px; color:#555; line-height:1.7; }
+.doc-pro .dp-ref { text-align:right; font-size:8.5px; color:#555; line-height:1.8; }
+.doc-pro .dp-title { text-align:center; font-size:13px; font-weight:700; color:#2c5aa0; text-transform:uppercase; letter-spacing:1.5px; margin:12px 0 8px; }
+.doc-pro .dp-period { background:#e8f0f8; color:#0c447c; text-align:center; padding:5px 8px; border-radius:4px; font-size:9px; font-weight:600; margin-bottom:12px; }
+.doc-pro .dp-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.doc-pro .dp-box { border:1px solid #dce6f0; border-radius:5px; padding:8px 11px; background:#f7fafd; }
+.doc-pro .dp-box-title { font-size:8px; font-weight:700; color:#2c5aa0; text-transform:uppercase; letter-spacing:1px; border-bottom:1px solid #2c5aa0; padding-bottom:3px; margin-bottom:6px; }
+.doc-pro .dp-row { display:flex; justify-content:space-between; font-size:9px; padding:1.5px 0; }
+.doc-pro .dp-row .lbl { color:#555; }
+.doc-pro .dp-row .val { font-weight:600; color:#1a1a2e; }
+.doc-pro .dp-body { font-size:10.5px; line-height:1.8; color:#1a1a2e; margin:10px 0; }
+.doc-pro .dp-highlight { background:#e8f0f8; border-left:3px solid #2c5aa0; padding:9px 13px; border-radius:0 4px 4px 0; font-size:10.5px; margin:10px 0; line-height:1.7; }
+.doc-pro .dp-warning { background:#fff8e1; border:1px solid #f59e0b; border-radius:5px; padding:8px 12px; font-size:10px; color:#7c4700; margin:10px 0; line-height:1.6; }
+.doc-pro table { width:100%; border-collapse:collapse; margin:10px 0; font-size:9px; }
+.doc-pro table th { background:#2c5aa0; color:white; padding:6px 8px; text-align:left; font-weight:600; text-transform:uppercase; font-size:8px; letter-spacing:0.5px; }
+.doc-pro table th.r,.doc-pro table td.r { text-align:right; }
+.doc-pro table td { padding:5px 8px; border-bottom:1px solid #e8eef4; color:#1a1a2e; }
+.doc-pro table tr:nth-child(even) td { background:#f7fafd; }
+.doc-pro .tbl-total td { background:#e8f0f8 !important; font-weight:700; color:#0c447c; border-top:1.5px solid #2c5aa0; padding:6px 8px; font-size:9.5px; }
+.doc-pro .tbl-net td { background:#2c5aa0 !important; color:white !important; font-weight:700; font-size:10.5px; padding:7px 8px; }
+.doc-pro .dp-sig { display:flex; justify-content:space-between; margin-top:24px; gap:16px; }
+.doc-pro .dp-sig-box { text-align:center; flex:1; }
+.doc-pro .dp-sig-line { border-top:1px solid #aaa; margin-top:50px; margin-bottom:4px; }
+.doc-pro .dp-sig-lbl { font-size:8.5px; color:#555; line-height:1.5; }
+/* dp-stamp replaced by open square zones */
+.doc-pro .dp-footer { font-size:8px; color:#888; text-align:center; border-top:1px solid #e0e0e0; margin-top:14px; padding-top:8px; line-height:1.6; }
+.doc-pro .dp-charges-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px 20px; }
+
+/* ===== DOCUMENT TILES & FORMS ===== */
+.doc-tile {
+  background: var(--s1);
+  border: 1px solid var(--brd);
+  border-radius: var(--r);
+  padding: 14px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  text-align: center; cursor: pointer; transition: all .2s;
+}
+.doc-tile:hover { border-color: var(--grn); transform: translateY(-2px); box-shadow: var(--glow-grn); }
+.doc-tile-name { font-size: 11.5px; font-weight: 600; color: var(--txt); line-height: 1.3; }
+.doc-tile-tag { font-size: 9px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+.doc-form { display: none; background: var(--s1); border: 1px solid var(--brd2); border-radius: var(--r); margin-bottom: 12px; overflow: hidden; }
+.doc-form.active { display: block; }
+.doc-form-title { background: linear-gradient(135deg, var(--s2), var(--s3)); padding: 14px 16px; font-size: 15px; font-weight: 700; border-bottom: 1px solid var(--brd); }
+.doc-form-body { padding: 16px; }
+@media print {
+  @page { size:A4 portrait; margin:8mm 10mm; }
+  html,body { margin:0!important;padding:0!important;background:white!important; }
+  body>*:not(#print-zone) { display:none!important; }
+  #print-zone {
+    display:block!important;
+    visibility:visible!important;
+    position:static!important;
+    width:100%!important;
+    background:white!important;
+  }
+  #print-zone * { visibility:visible!important; }
+  .bp2026 {
+    page-break-inside:avoid;
+    page-break-after:avoid;
+    page-break-before:avoid;
+    break-inside:avoid;
+  }
+  .doc-pro { margin:0!important; padding:6mm 8mm!important; font-size:8px!important; }
+  .doc-pro table { page-break-inside:avoid; }
+  .doc-pro .dp-sig { page-break-inside:avoid; page-break-before:avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">S</div>
+    <div>
+      <div class="logo-txt">Smart<span>PAIE</span> Pro+</div>
+      <div class="logo-sub">Gestion de paie · Maroc</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-pill"><span id="today-date"></span></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content">
+
+  <!-- DASHBOARD -->
+  <div class="view active" id="view-dashboard">
+    <div id="dashboard-alerts"></div>
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-lbl">Employés actifs</div>
+        <div class="stat-val" id="s-emp">0</div>
+        <div class="stat-sub">Inscrits CNSS</div>
+      </div>
+      <div class="stat blu">
+        <div class="stat-lbl">Masse salariale</div>
+        <div class="stat-val" id="s-masse">0</div>
+        <div class="stat-sub">Brut mensuel</div>
+      </div>
+      <div class="stat org">
+        <div class="stat-lbl">Charges patron.</div>
+        <div class="stat-val" id="s-charges">0</div>
+        <div class="stat-sub">CNSS+AMO+TFP</div>
+      </div>
+      <div class="stat red">
+        <div class="stat-lbl">IR total</div>
+        <div class="stat-val" id="s-ir">0</div>
+        <div class="stat-sub">À déclarer DGI</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot org"></span>Évolution masse salariale</div>
+      <canvas id="masseChart" class="chart-container"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot blu"></span>Répartition charges patronales</div>
+      <canvas id="chargesChart" class="chart-container"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Derniers bulletins</div>
+      <div id="dash-bulletins"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot blu"></span>Employés actifs</div>
+      <div id="dash-employes"></div>
+    </div>
+  </div>
+
+  <!-- EMPLOYÉS -->
+  <div class="view" id="view-employes">
+    <button class="btn btn-p" style="margin-bottom:14px" onclick="openModal('addEmp')">＋ Ajouter un employé</button>
+    <div id="emp-list"></div>
+  </div>
+
+  <!-- CALCUL -->
+  <div class="view" id="view-calcul">
+    <div class="alert a-info">ℹ️ Sélectionnez un employé pour pré-remplir automatiquement les champs.</div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Paramètres de paie</div>
+      <div class="fg"><label>Employé</label><select id="c-emp" onchange="fillFromEmp()"><option value="">— Saisie manuelle —</option></select></div>
+      <div class="grid2">
+        <div class="fg"><label>Salaire de base (MAD)</label><input type="number" id="c-brut" value="8000" min="0" oninput="doCalc()"></div>
+        <div class="fg"><label>Personnes à charge</label><select id="c-charges" onchange="doCalc()"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6+</option></select></div>
+      </div>
+      <div class="grid2">
+        <div class="fg"><label>Date embauche</label><input type="date" id="c-date" oninput="doCalc()"></div>
+        <div class="fg"><label>Avances (MAD)</label><input type="number" id="c-avances" value="0" min="0" oninput="doCalc()"></div>
+      </div>
+      <div class="fg"><label>Mois de paie</label><select id="c-mois"></select></div>
+      <div class="section-sep">Variables du mois</div>
+      <div class="grid2">
+        <div class="fg"><label>Primes soumises CNSS</label><input type="number" id="c-primeS" value="0" oninput="doCalc()"></div>
+        <div class="fg"><label>Primes non soumises</label><input type="number" id="c-primeNc" value="0" oninput="doCalc()"></div>
+        <div class="fg"><label>Heures sup 25% (MAD)</label><input type="number" id="c-hs25" value="0" oninput="doCalc()"></div>
+        <div class="fg"><label>Heures sup 50% (MAD)</label><input type="number" id="c-hs50" value="0" oninput="doCalc()"></div>
+        <div class="fg"><label>Indemnités</label><input type="number" id="c-indemnites" value="0" oninput="doCalc()"></div>
+        <div class="fg"><label>Absences (jours)</label><input type="number" id="c-absJours" value="0" oninput="doCalc()"></div>
+      </div>
+      <div id="anc-preview" style="display:none" class="anc-box">
+        <div style="font-size:11px;color:var(--txt2)">🏅 Ancienneté</div>
+        <div style="font-weight:700;color:var(--grn)" id="anc-txt">—</div>
+        <div style="font-size:11px;color:var(--grn)" id="anc-prime">—</div>
+      </div>
+      <button class="btn btn-p" onclick="doCalc()">🧮 Calculer la paie</button>
+    </div>
+    <div class="card" id="result-card" style="display:none">
+      <div class="card-title"><span class="dot blu"></span>Résultat détaillé</div>
+      <div id="result-rows"></div>
+      <div class="tot-box"><span class="tot-label">💳 NET À PAYER</span><span class="tot-value" id="res-net">—</span></div>
+    </div>
+    <div class="card" id="pat-card" style="display:none">
+      <div class="card-title"><span class="dot org"></span>Charges patronales</div>
+      <div id="pat-rows"></div>
+      <div class="tot-box org-box"><span class="tot-label">Total patronal</span><span class="tot-value" id="res-pat">—</span></div>
+    </div>
+    <button class="btn btn-b" id="btn-bulletin" style="display:none;margin-top:4px" onclick="genBulletin()">📄 Générer le bulletin de paie</button>
+  </div>
+
+  <!-- ANCIENNETÉ -->
+  <div class="view" id="view-anciennete">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Barème légal ancienneté (art. 350 CT)</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Ancienneté</th><th>Taux</th><th>Ex. 8 000 DH</th></tr></thead><tbody>
+        <tr><td>&lt; 2 ans</td><td><span class="badge b-gry">0%</span></td><td>—</td></tr>
+        <tr><td>2 – 5 ans</td><td><span class="badge b-blu">5%</span></td><td>400,00 DH</td></tr>
+        <tr><td>5 – 12 ans</td><td><span class="badge b-blu">10%</span></td><td>800,00 DH</td></tr>
+        <tr><td>12 – 20 ans</td><td><span class="badge b-org">15%</span></td><td>1 200,00 DH</td></tr>
+        <tr><td>20 – 25 ans</td><td><span class="badge b-org">20%</span></td><td>1 600,00 DH</td></tr>
+        <tr><td>+ 25 ans</td><td><span class="badge b-grn">25%</span></td><td>2 000,00 DH</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot org"></span>Prime d'ancienneté par employé</div>
+      <div id="anc-table"></div>
+    </div>
+  </div>
+
+  <!-- BULLETINS -->
+  <div class="view" id="view-bulletins">
+    <div id="bulletins-list"></div>
+    <div style="display:flex;gap:10px;margin-top:10px">
+      <button class="btn btn-o" onclick="purgeOldBulletins()">🗑️ Purger &gt;10 ans</button>
+      <button class="btn btn-o" onclick="exportBulletinsCSV()">📎 Exporter CSV</button>
+    </div>
+  </div>
+
+  <!-- CONGÉS -->
+  <div class="view" id="view-conges">
+    <div class="card">
+      <div class="card-title"><span class="dot blu"></span>État des congés</div>
+      <div id="conges-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot org"></span>Enregistrer une absence</div>
+      <div class="grid2">
+        <div class="fg"><label>Employé</label><select id="absence-emp"></select></div>
+        <div class="fg"><label>Type</label><select id="absence-type"><option>Congé payé</option><option>Sans solde</option><option>Maladie</option><option>Absence injustifiée</option></select></div>
+        <div class="fg"><label>Date début</label><input type="date" id="absence-debut"></div>
+        <div class="fg"><label>Nb jours</label><input type="number" id="absence-jours" value="1" min="0.5"></div>
+      </div>
+      <button class="btn btn-p" onclick="addAbsence()">Enregistrer</button>
+    </div>
+  </div>
+
+  <!-- DOCUMENTS -->
+  <div class="view" id="view-documents">
+
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-title"><span class="dot"></span>Employé concerné</div>
+      <div class="fg" style="margin-bottom:0"><label>Sélectionner l'employé</label><select id="doc-emp-global" onchange="syncDocEmp()"></select></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <div class="doc-tile" onclick="openDocForm('form-attest-travail')"><span style="font-size:20px">📋</span><div class="doc-tile-name">Attestation de travail</div><span class="doc-tile-tag" style="background:rgba(16,217,160,.12);color:var(--grn)">RH</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-attest-salaire')"><span style="font-size:20px">💶</span><div class="doc-tile-name">Attestation de salaire</div><span class="doc-tile-tag" style="background:rgba(16,217,160,.12);color:var(--grn)">RH</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-cessation')"><span style="font-size:20px">🚪</span><div class="doc-tile-name">Certificat de cessation</div><span class="doc-tile-tag" style="background:rgba(239,68,68,.12);color:var(--red)">Légal</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-avertissement')"><span style="font-size:20px">⚠️</span><div class="doc-tile-name">Lettre d'avertissement</div><span class="doc-tile-tag" style="background:rgba(245,158,11,.12);color:var(--org)">Disciplinaire</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-licenciement')"><span style="font-size:20px">✉️</span><div class="doc-tile-name">Lettre de licenciement</div><span class="doc-tile-tag" style="background:rgba(239,68,68,.12);color:var(--red)">Légal</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-solde')"><span style="font-size:20px">💸</span><div class="doc-tile-name">Reçu solde tout compte</div><span class="doc-tile-tag" style="background:rgba(59,130,246,.12);color:var(--blu)">Financier</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-cdi')"><span style="font-size:20px">📝</span><div class="doc-tile-name">Contrat CDI</div><span class="doc-tile-tag" style="background:rgba(139,92,246,.12);color:var(--pur)">Contrat</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-cdd')"><span style="font-size:20px">📄</span><div class="doc-tile-name">Contrat CDD</div><span class="doc-tile-tag" style="background:rgba(139,92,246,.12);color:var(--pur)">Contrat</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-avenant')"><span style="font-size:20px">🔁</span><div class="doc-tile-name">Avenant au contrat</div><span class="doc-tile-tag" style="background:rgba(139,92,246,.12);color:var(--pur)">Contrat</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-stage')"><span style="font-size:20px">🎓</span><div class="doc-tile-name">Convention de stage</div><span class="doc-tile-tag" style="background:rgba(16,217,160,.12);color:var(--grn)">Formation</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-conge')"><span style="font-size:20px">📅</span><div class="doc-tile-name">Demande de congé</div><span class="doc-tile-tag" style="background:rgba(59,130,246,.12);color:var(--blu)">Admin</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-mission')"><span style="font-size:20px">🚗</span><div class="doc-tile-name">Ordre de mission</div><span class="doc-tile-tag" style="background:rgba(59,130,246,.12);color:var(--blu)">Admin</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-maladie')"><span style="font-size:20px">🏥</span><div class="doc-tile-name">Attestation maladie</div><span class="doc-tile-tag" style="background:rgba(245,158,11,.12);color:var(--org)">CNSS</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-formation')"><span style="font-size:20px">🏅</span><div class="doc-tile-name">Attestation de formation</div><span class="doc-tile-tag" style="background:rgba(16,217,160,.12);color:var(--grn)">Formation</span></div>
+      <div class="doc-tile" onclick="openDocForm('form-nda')" style="grid-column:span 2"><span style="font-size:20px">🔒</span><div class="doc-tile-name">Accord de confidentialité (NDA)</div><span class="doc-tile-tag" style="background:rgba(139,92,246,.12);color:var(--pur)">Légal</span></div>
+    </div>
+
+    <div class="doc-form" id="form-attest-travail">
+      <div class="doc-form-title">📋 Attestation de travail</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-at-emp"></select></div>
+        <div class="fg"><label>Usage du document</label><select id="f-at-usage"><option>Démarche bancaire</option><option>Démarche administrative</option><option>Location immobilière</option><option>Visa / Ambassade</option><option>Autre</option></select></div>
+        <button class="btn btn-p" onclick="genDoc('attest-travail')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-attest-salaire">
+      <div class="doc-form-title">💶 Attestation de salaire</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-as-emp"></select></div>
+        <div class="fg"><label>Période de référence</label><select id="f-as-mois"></select></div>
+        <div class="fg"><label>Usage du document</label><select id="f-as-usage"><option>Démarche bancaire</option><option>Location immobilière</option><option>Visa / Ambassade</option><option>Autre</option></select></div>
+        <button class="btn btn-p" onclick="genDoc('attest-salaire')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-cessation">
+      <div class="doc-form-title">🚪 Certificat de cessation de contrat</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="cessation-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Date de départ</label><input type="date" id="cessation-date"></div>
+          <div class="fg"><label>Motif</label><select id="cessation-motif"><option>Démission</option><option>Licenciement</option><option>Fin de CDD</option><option>Rupture conventionnelle</option><option>Départ à la retraite</option></select></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Préavis effectué</label><select id="cessation-preavis"><option>Oui</option><option>Non</option></select></div>
+          <div class="fg"><label>Solde tout compte réglé le</label><input type="date" id="cessation-solde"></div>
+        </div>
+        <button class="btn btn-p" onclick="genererCessation()">📋 Générer le certificat</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-avertissement">
+      <div class="doc-form-title">⚠️ Lettre d'avertissement</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-av-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Date des faits</label><input type="date" id="f-av-date-faits"></div>
+          <div class="fg"><label>Date entretien préalable</label><input type="date" id="f-av-date-entretien"></div>
+        </div>
+        <div class="fg"><label>Description des faits reprochés</label><textarea id="f-av-faits" rows="3" style="width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:var(--r3);color:var(--txt);padding:10px 13px;font-size:13px;resize:vertical" placeholder="Décrivez les faits précisément : date, lieu, nature du manquement..."></textarea></div>
+        <div class="fg"><label>Sanction</label><select id="f-av-sanction"><option>Avertissement écrit</option><option>Blâme</option><option>Mise à pied (1 jour)</option><option>Mise à pied (2 jours)</option><option>Mise à pied (3 jours)</option></select></div>
+        <button class="btn btn-p" onclick="genDoc('avertissement')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-licenciement">
+      <div class="doc-form-title">✉️ Lettre de licenciement</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-li-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Type de licenciement</label><select id="f-li-type"><option>Pour faute grave</option><option>Pour faute sérieuse</option><option>Économique</option></select></div>
+          <div class="fg"><label>Date entretien préalable</label><input type="date" id="f-li-date-entretien"></div>
+        </div>
+        <div class="fg"><label>Motif réel et sérieux</label><textarea id="f-li-motif" rows="3" style="width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:var(--r3);color:var(--txt);padding:10px 13px;font-size:13px;resize:vertical" placeholder="Exposez les motifs précis justifiant le licenciement..."></textarea></div>
+        <div class="grid2">
+          <div class="fg"><label>Date de départ effectif</label><input type="date" id="f-li-date-depart"></div>
+          <div class="fg"><label>Préavis</label><select id="f-li-preavis"><option>Effectué</option><option>Dispensé — payé</option><option>Non applicable (faute grave)</option></select></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Indemnité de licenciement (DH)</label><input type="number" id="f-li-indemnite" value="0" min="0"></div>
+          <div class="fg"><label>Congés non pris (jours)</label><input type="number" id="f-li-conges" value="0" min="0"></div>
+        </div>
+        <button class="btn btn-p" onclick="genDoc('licenciement')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-solde">
+      <div class="doc-form-title">💸 Reçu pour solde de tout compte</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-stc-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Date de départ</label><input type="date" id="f-stc-date"></div>
+          <div class="fg"><label>Motif de rupture</label><select id="f-stc-motif"><option>Démission</option><option>Licenciement</option><option>Fin de CDD</option><option>Rupture conventionnelle</option><option>Retraite</option></select></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Salaire dernier mois prorata (DH)</label><input type="number" id="f-stc-salaire" value="0"></div>
+          <div class="fg"><label>Indemnité de licenciement (DH)</label><input type="number" id="f-stc-indemnite" value="0"></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Indemnité de préavis (DH)</label><input type="number" id="f-stc-preavis" value="0"></div>
+          <div class="fg"><label>Congés payés non pris (DH)</label><input type="number" id="f-stc-conges" value="0"></div>
+        </div>
+        <div class="fg"><label>Heures sup non récupérées (DH)</label><input type="number" id="f-stc-hs" value="0"></div>
+        <button class="btn btn-p" onclick="genDoc('solde')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-cdi">
+      <div class="doc-form-title">📝 Contrat de travail CDI</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-cdi-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Date de début</label><input type="date" id="f-cdi-debut"></div>
+          <div class="fg"><label>Durée période essai (mois)</label><input type="number" id="f-cdi-essai" value="3" min="1" max="6"></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Salaire brut (DH)</label><input type="number" id="f-cdi-salaire" value="0"></div>
+          <div class="fg"><label>Horaires / semaine (h)</label><input type="number" id="f-cdi-heures" value="44"></div>
+        </div>
+        <div class="fg"><label>Lieu de travail</label><input type="text" id="f-cdi-lieu" placeholder="Adresse du lieu de travail"></div>
+        <div class="fg"><label>Clause confidentialité post-contrat (mois)</label><input type="number" id="f-cdi-nda" value="12" min="0"></div>
+        <button class="btn btn-p" onclick="genDoc('cdi')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-cdd">
+      <div class="doc-form-title">📄 Contrat de travail CDD</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-cdd-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Date début</label><input type="date" id="f-cdd-debut"></div>
+          <div class="fg"><label>Date fin</label><input type="date" id="f-cdd-fin"></div>
+        </div>
+        <div class="fg"><label>Motif légal du CDD</label><select id="f-cdd-motif"><option>Accroissement temporaire d'activité</option><option>Remplacement d'un salarié absent</option><option>Travaux saisonniers</option><option>Emploi à caractère non durable par nature</option></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Salaire brut (DH)</label><input type="number" id="f-cdd-salaire" value="0"></div>
+          <div class="fg"><label>Renouvelable</label><select id="f-cdd-renouvellement"><option>Oui — une fois</option><option>Non</option></select></div>
+        </div>
+        <div class="fg"><label>Lieu de travail</label><input type="text" id="f-cdd-lieu" placeholder="Adresse du lieu de travail"></div>
+        <button class="btn btn-p" onclick="genDoc('cdd')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-avenant">
+      <div class="doc-form-title">🔁 Avenant au contrat de travail</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-ava-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Date contrat initial</label><input type="date" id="f-ava-date-initial"></div>
+          <div class="fg"><label>Date d'entrée en vigueur</label><input type="date" id="f-ava-date-vigueur"></div>
+        </div>
+        <div class="fg"><label>Nature de la modification</label><select id="f-ava-nature"><option>Augmentation de salaire</option><option>Changement de poste</option><option>Modification des horaires</option><option>Changement de lieu de travail</option><option>Autre</option></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Ancienne valeur</label><input type="text" id="f-ava-ancienne" placeholder="Ex: 8 000 DH / Comptable / 44h..."></div>
+          <div class="fg"><label>Nouvelle valeur</label><input type="text" id="f-ava-nouvelle" placeholder="Ex: 9 500 DH / Chef comptable / 40h..."></div>
+        </div>
+        <div class="fg"><label>Précisions complémentaires</label><textarea id="f-ava-details" rows="2" style="width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:var(--r3);color:var(--txt);padding:10px 13px;font-size:13px;resize:vertical" placeholder="Toute autre information utile à l'avenant..."></textarea></div>
+        <button class="btn btn-p" onclick="genDoc('avenant')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-stage">
+      <div class="doc-form-title">🎓 Convention de stage</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Stagiaire — Nom et prénom</label><input type="text" id="f-st-nom" placeholder="Nom complet du stagiaire"></div>
+        <div class="grid2">
+          <div class="fg"><label>CIN stagiaire</label><input type="text" id="f-st-cin" placeholder="XX000000"></div>
+          <div class="fg"><label>Niveau d'étude</label><input type="text" id="f-st-niveau" placeholder="Ex: Master 2, Licence..."></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Établissement</label><input type="text" id="f-st-ecole" placeholder="Nom de l'école"></div>
+          <div class="fg"><label>Responsable établissement</label><input type="text" id="f-st-resp-ecole" placeholder="Nom du responsable"></div>
+        </div>
+        <div class="fg"><label>Tuteur en entreprise (Nom et poste)</label><input type="text" id="f-st-tuteur" placeholder="Nom et poste du tuteur"></div>
+        <div class="grid2">
+          <div class="fg"><label>Date début</label><input type="date" id="f-st-debut"></div>
+          <div class="fg"><label>Date fin</label><input type="date" id="f-st-fin"></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Gratification mensuelle (DH)</label><input type="number" id="f-st-gratif" value="0"></div>
+          <div class="fg"><label>Spécialité / Filière</label><input type="text" id="f-st-filiere" placeholder="Ex: Finance, Informatique..."></div>
+        </div>
+        <div class="fg"><label>Objet du stage / Missions</label><textarea id="f-st-objet" rows="2" style="width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:var(--r3);color:var(--txt);padding:10px 13px;font-size:13px;resize:vertical" placeholder="Décrivez les missions et objectifs pédagogiques..."></textarea></div>
+        <button class="btn btn-p" onclick="genDoc('stage')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-conge">
+      <div class="doc-form-title">📅 Formulaire de demande de congé</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-dc-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Type de congé</label><select id="f-dc-type"><option>Congé annuel payé</option><option>Congé maladie</option><option>Congé sans solde</option><option>Congé exceptionnel (mariage)</option><option>Congé exceptionnel (naissance)</option><option>Congé exceptionnel (décès)</option></select></div>
+          <div class="fg"><label>Date de demande</label><input type="date" id="f-dc-date-demande"></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Date début</label><input type="date" id="f-dc-debut"></div>
+          <div class="fg"><label>Date fin (inclus)</label><input type="date" id="f-dc-fin"></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Nombre de jours</label><input type="number" id="f-dc-jours" value="1" min="1"></div>
+          <div class="fg"><label>Responsable N+1</label><input type="text" id="f-dc-responsable" placeholder="Nom du responsable hiérarchique"></div>
+        </div>
+        <div class="fg"><label>Motif (si congé exceptionnel)</label><input type="text" id="f-dc-motif" placeholder="Pièces justificatives à joindre"></div>
+        <button class="btn btn-p" onclick="genDoc('conge')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-mission">
+      <div class="doc-form-title">🚗 Ordre de mission</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé missionnaire</label><select id="f-om-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Destination</label><input type="text" id="f-om-destination" placeholder="Ville / Pays"></div>
+          <div class="fg"><label>Moyen de transport</label><select id="f-om-transport"><option>Véhicule personnel</option><option>Véhicule société</option><option>Avion</option><option>Train</option><option>Taxi / VTC</option></select></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Date de départ</label><input type="date" id="f-om-debut"></div>
+          <div class="fg"><label>Date de retour</label><input type="date" id="f-om-fin"></div>
+        </div>
+        <div class="fg"><label>Objet de la mission</label><textarea id="f-om-objet" rows="2" style="width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:var(--r3);color:var(--txt);padding:10px 13px;font-size:13px;resize:vertical" placeholder="Décrivez l'objet et les objectifs de la mission..."></textarea></div>
+        <div class="grid2">
+          <div class="fg"><label>Per diem hébergement (DH/nuit)</label><input type="number" id="f-om-hebergement" value="0"></div>
+          <div class="fg"><label>Per diem repas (DH/jour)</label><input type="number" id="f-om-repas" value="0"></div>
+        </div>
+        <div class="fg"><label>Plafond total frais (DH)</label><input type="number" id="f-om-plafond" value="0"></div>
+        <button class="btn btn-p" onclick="genDoc('mission')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-maladie">
+      <div class="doc-form-title">🏥 Attestation maladie employeur</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-am-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Date début arrêt</label><input type="date" id="f-am-debut"></div>
+          <div class="fg"><label>Date reprise estimée</label><input type="date" id="f-am-reprise"></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Arrêt déclaré CNSS le</label><input type="date" id="f-am-declaration"></div>
+          <div class="fg"><label>Complément employeur (DH/jour)</label><input type="number" id="f-am-complement" value="0" min="0"></div>
+        </div>
+        <div class="fg"><label>Salaire moyen référence 3 mois (DH)</label><input type="number" id="f-am-salaire-ref" value="0"></div>
+        <button class="btn btn-p" onclick="genDoc('maladie')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-formation">
+      <div class="doc-form-title">🏅 Attestation de formation</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé bénéficiaire</label><select id="f-af-emp"></select></div>
+        <div class="fg"><label>Intitulé de la formation</label><input type="text" id="f-af-titre" placeholder="Titre complet de la formation"></div>
+        <div class="fg"><label>Organisme formateur</label><input type="text" id="f-af-organisme" placeholder="Nom de l'organisme ou Interne"></div>
+        <div class="grid2">
+          <div class="fg"><label>Date début</label><input type="date" id="f-af-debut"></div>
+          <div class="fg"><label>Date fin</label><input type="date" id="f-af-fin"></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Durée (heures)</label><input type="number" id="f-af-heures" value="8" min="1"></div>
+          <div class="fg"><label>Résultat</label><select id="f-af-resultat"><option>Validé avec succès</option><option>Participation</option><option>Mention bien</option><option>Mention très bien</option></select></div>
+        </div>
+        <div class="fg"><label>Compétences / modules acquis</label><textarea id="f-af-modules" rows="3" style="width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:var(--r3);color:var(--txt);padding:10px 13px;font-size:13px;resize:vertical" placeholder="Liste des compétences ou modules (une par ligne)..."></textarea></div>
+        <button class="btn btn-p" onclick="genDoc('formation')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="doc-form" id="form-nda">
+      <div class="doc-form-title">🔒 Accord de confidentialité (NDA)</div>
+      <div class="doc-form-body">
+        <div class="fg"><label>Employé</label><select id="f-nda-emp"></select></div>
+        <div class="grid2">
+          <div class="fg"><label>Date de signature</label><input type="date" id="f-nda-date"></div>
+          <div class="fg"><label>Durée post-contrat (mois)</label><input type="number" id="f-nda-duree" value="24" min="6" max="60"></div>
+        </div>
+        <div class="fg"><label>Informations confidentielles concernées</label><textarea id="f-nda-infos" rows="2" style="width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:var(--r3);color:var(--txt);padding:10px 13px;font-size:13px;resize:vertical" placeholder="Ex : données clients, tarifs, procédés techniques, codes sources..."></textarea></div>
+        <div class="fg"><label>Tribunal compétent (ville)</label><input type="text" id="f-nda-tribunal" placeholder="Ex: Casablanca"></div>
+        <button class="btn btn-p" onclick="genDoc('nda')">📄 Générer et imprimer</button>
+        <button class="btn btn-o" style="margin-top:8px" onclick="closeDocForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="card-title"><span class="dot pur"></span>Suivi contrats par employé</div>
+      <div id="documents-list"></div>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- CNSS -->
+  <div class="view" id="view-cnss">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Cotisations du mois — tous employés</div>
+      <div id="cnss-rows"></div>
+      <div class="tot-box"><span class="tot-label">Total à verser CNSS</span><span class="tot-value" id="cnss-total">—</span></div>
+      <button class="btn btn-p" onclick="exportCNSS()" style="margin-top:12px">📤 Exporter fichier CNSS</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot blu"></span>Taux en vigueur 2026</div>
+      <div class="rrow"><span class="rlbl">CNSS salariale</span><span class="rval"><span class="badge b-red">4,48%</span> (plaf. 6 000 DH)</span></div>
+      <div class="rrow"><span class="rlbl">AMO salariale</span><span class="rval"><span class="badge b-red">2,26%</span></span></div>
+      <div class="rrow"><span class="rlbl">CNSS patronale</span><span class="rval"><span class="badge b-org">8,98%</span> (plaf. 6 000 DH)</span></div>
+      <div class="rrow"><span class="rlbl">Alloc. familiales</span><span class="rval"><span class="badge b-org">6,40%</span></span></div>
+      <div class="rrow"><span class="rlbl">AMO patronale</span><span class="rval"><span class="badge b-org">4,11%</span></span></div>
+      <div class="rrow"><span class="rlbl">TFP</span><span class="rval"><span class="badge b-org">1,60%</span></span></div>
+    </div>
+  </div>
+
+  <!-- IR -->
+  <div class="view" id="view-ir">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Barème IR mensuel 2026 (DGI)</div>
+      <div class="tbl-wrap"><table><thead><tr><th>RNI mensuel</th><th>Taux</th><th>Déduction</th></tr></thead><tbody>
+        <tr><td>0 – 3 333 DH</td><td><span class="badge b-grn">0%</span></td><td>0,00</td></tr>
+        <tr><td>3 334 – 5 000</td><td><span class="badge b-blu">10%</span></td><td>333,33</td></tr>
+        <tr><td>5 001 – 6 667</td><td><span class="badge b-blu">20%</span></td><td>833,33</td></tr>
+        <tr><td>6 668 – 8 333</td><td><span class="badge b-org">30%</span></td><td>1 500,00</td></tr>
+        <tr><td>8 334 – 15 000</td><td><span class="badge b-org">34%</span></td><td>1 833,33</td></tr>
+        <tr><td>+ 15 000</td><td><span class="badge b-red">37%</span></td><td>2 283,33</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot blu"></span>État IR mensuel par employé</div>
+      <div id="ir-table"></div>
+      <button class="btn btn-p" onclick="exportIR()" style="margin-top:12px">📤 Exporter déclaration IR (DGI)</button>
+    </div>
+  </div>
+
+  <!-- PARAMÈTRES -->
+  <div class="view" id="view-params">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Paramètres légaux modifiables</div>
+      <div class="alert a-warn">⚠️ Modifier uniquement en cas de changement réglementaire officiel.</div>
+      <div class="section-sep">Cotisations salariales</div>
+      <div class="grid2">
+        <div class="fg"><label>CNSS salariale (%)</label><input type="number" id="p_cnss_sal" step="0.01" value="4.48"></div>
+        <div class="fg"><label>AMO salariale (%)</label><input type="number" id="p_amo_sal" step="0.01" value="2.26"></div>
+      </div>
+      <div class="section-sep">Cotisations patronales</div>
+      <div class="grid2">
+        <div class="fg"><label>CNSS patronale (%)</label><input type="number" id="p_cnss_pat" step="0.01" value="8.98"></div>
+        <div class="fg"><label>AMO patronale (%)</label><input type="number" id="p_amo_pat" step="0.01" value="4.11"></div>
+        <div class="fg"><label>Alloc. familiales (%)</label><input type="number" id="p_alloc_fam" step="0.01" value="6.40"></div>
+        <div class="fg"><label>TFP (%)</label><input type="number" id="p_tfp" step="0.01" value="1.60"></div>
+      </div>
+      <div class="section-sep">Autres</div>
+      <div class="grid2">
+        <div class="fg"><label>Plafond CNSS (MAD)</label><input type="number" id="p_plafond" value="6000"></div>
+        <div class="fg"><label>Réduction famille (MAD/pers)</label><input type="number" id="p_charge" value="50"></div>
+      </div>
+      <button class="btn btn-p" onclick="saveLegalParams()">💾 Sauvegarder les paramètres</button>
+    </div>
+  </div>
+
+  <!-- ENTREPRISE -->
+  <div class="view" id="view-entreprise">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Société active</div>
+      <div class="fg">
+        <label>Changer de société</label>
+        <select id="societeSelect" onchange="switchSociete()"></select>
+        <button class="btn btn-o btn-sm" style="margin-top:8px" onclick="openModal('addSociete')">＋ Nouvelle société</button>
+      </div>
+      <div class="section-sep">Informations légales</div>
+      <div class="fg"><label>Raison sociale</label><input type="text" id="e-nom"></div>
+      <div class="grid2">
+        <div class="fg"><label>ICE</label><input type="text" id="e-ice"></div>
+        <div class="fg"><label>N° CNSS patronal</label><input type="text" id="e-cnss"></div>
+        <div class="fg"><label>Identifiant Fiscal</label><input type="text" id="e-if"></div>
+        <div class="fg"><label>RC</label><input type="text" id="e-rc"></div>
+        <div class="fg"><label>Patente</label><input type="text" id="e-patente"></div>
+        <div class="fg"><label>Ville</label><input type="text" id="e-ville"></div>
+      </div>
+      <div class="fg"><label>Adresse complète</label><input type="text" id="e-adresse"></div>
+      <button class="btn btn-p" onclick="saveEntreprise()">💾 Enregistrer société</button>
+    </div>
+  </div>
+
+  <!-- AUDIT -->
+  <div class="view" id="view-audit">
+    <div class="card">
+      <div class="card-title"><span class="dot org"></span>Journal des actions</div>
+      <div id="auditLog" style="max-height:420px;overflow-y:auto;font-family:monospace;font-size:11px;line-height:1.8"></div>
+      <button class="btn btn-o" style="margin-top:12px" onclick="clearAudit()">🗑️ Vider l'historique</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV BOTTOM -->
+<nav class="nav-bottom">
+  <button class="nav-btn active" onclick="nav('dashboard',this)"><span class="ico">📊</span>Tableau</button>
+  <button class="nav-btn" onclick="nav('employes',this)"><span class="ico">👥</span>Employés</button>
+  <button class="nav-btn" onclick="nav('calcul',this)"><span class="ico">🧮</span>Calcul</button>
+  <button class="nav-btn" onclick="nav('anciennete',this)"><span class="ico">🏅</span>Ancien.</button>
+  <button class="nav-btn" onclick="nav('bulletins',this)"><span class="ico">📄</span>Bulletins</button>
+  <button class="nav-btn" onclick="nav('conges',this)"><span class="ico">🏖️</span>Congés</button>
+  <button class="nav-btn" onclick="nav('documents',this)"><span class="ico">📑</span>Docs</button>
+  <button class="nav-btn" onclick="nav('cnss',this)"><span class="ico">🏛️</span>CNSS</button>
+  <button class="nav-btn" onclick="nav('ir',this)"><span class="ico">📋</span>IR</button>
+  <button class="nav-btn" onclick="nav('params',this)"><span class="ico">⚙️</span>Taux</button>
+  <button class="nav-btn" onclick="nav('entreprise',this)"><span class="ico">🏢</span>Société</button>
+  <button class="nav-btn" onclick="nav('audit',this)"><span class="ico">📜</span>Audit</button>
+</nav>
+
+<!-- MODAL AJOUT EMPLOYÉ -->
+<div class="modal-bg" id="modal-addEmp">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Ajouter un employé <span class="modal-close" onclick="closeModal('addEmp')">×</span></div>
+    <div class="section-sep">Identité</div>
+    <div class="grid2">
+      <div class="fg"><label>Prénom</label><input type="text" id="m-prenom"></div>
+      <div class="fg"><label>Nom</label><input type="text" id="m-nom"></div>
+      <div class="fg"><label>CIN</label><input type="text" id="m-cin"></div>
+      <div class="fg"><label>N° CNSS</label><input type="text" id="m-cnss"></div>
+    </div>
+    <div class="section-sep">Poste</div>
+    <div class="grid2">
+      <div class="fg"><label>Poste</label><input type="text" id="m-poste"></div>
+      <div class="fg"><label>Département</label><input type="text" id="m-dept"></div>
+      <div class="fg"><label>Salaire base (MAD)</label><input type="number" id="m-salaire"></div>
+      <div class="fg"><label>Date embauche</label><input type="date" id="m-date"></div>
+      <div class="fg"><label>Pers. à charge</label><select id="m-charges"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+      <div class="fg"><label>Contrat</label><select id="m-contrat"><option>CDI</option><option>CDD</option><option>Stage</option></select></div>
+      <div class="fg"><label>Fin contrat (CDD)</label><input type="date" id="m-fincontrat"></div>
+      <div class="fg"><label>Fin période essai</label><input type="date" id="m-finEssai"></div>
+    </div>
+    <div class="section-sep">Informations complémentaires</div>
+    <div class="grid2">
+      <div class="fg"><label>Solde congés initial</label><input type="number" id="m-conges" value="0"></div>
+      <div class="fg"><label>Situation fam.</label><select id="m-sit"><option>Célibataire</option><option>Marié(e)</option><option>Divorcé(e)</option></select></div>
+      <div class="fg"><label>Email</label><input type="email" id="m-email"></div>
+      <div class="fg"><label>Téléphone</label><input type="text" id="m-tel"></div>
+      <div class="fg"><label>RIB</label><input type="text" id="m-rib"></div>
+      <div class="fg"><label>Adresse</label><input type="text" id="m-adresse"></div>
+    </div>
+    <div class="fg"><label>URL document</label><input type="text" id="m-docUrl" placeholder="https://..."></div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-p" onclick="addEmploye()">✅ Enregistrer</button>
+      <button class="btn btn-o" onclick="closeModal('addEmp')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOUVELLE SOCIÉTÉ -->
+<div class="modal-bg" id="modal-addSociete">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Nouvelle société <span class="modal-close" onclick="closeModal('addSociete')">×</span></div>
+    <div class="fg"><label>Nom de la société</label><input type="text" id="newSocieteNom"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-p" onclick="addSociete()">Créer</button>
+      <button class="btn btn-o" onclick="closeModal('addSociete')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL BULLETIN -->
+<div class="modal-bg" id="modal-bulletin">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Bulletin de paie <span class="modal-close" onclick="closeModal('bulletin')">×</span></div>
+    <div style="background:var(--s2);border:1px solid var(--brd);border-radius:var(--r2);padding:12px;display:flex;gap:10px;margin-bottom:12px">
+      <select id="print-mois" style="flex:1" onchange="updateBulletinPeriod()"></select>
+      <button class="btn btn-p btn-sm" onclick="printBulletin()">🖨️ Imprimer</button>
+    </div>
+    <div id="bulletin-content"></div>
+    <button class="btn btn-o" style="margin-top:12px" onclick="closeModal('bulletin')">Fermer</button>
+  </div>
+</div>
+
+<div id="print-zone" style="display:none;"></div>
+
+<script>
+// ======================== DONNÉES & PERSISTANCE ========================
+let employes = [];
+let bulletins = [];
+let entreprises = {};
+let currentSociete = "Mon Entreprise";
+let audit = [];
+let legalParams = { cnss_sal:4.48, cnss_pat:8.98, amo_sal:2.26, amo_pat:4.11, alloc_fam:6.40, tfp:1.60, plafond:6000, charge:50 };
+let lastCalc = null;
+let chartMasse, chartCharges;
+let currentBulletinData = null;
+
+function saveAll() { localStorage.setItem('sp_employes', JSON.stringify(employes)); localStorage.setItem('sp_bulletins', JSON.stringify(bulletins)); localStorage.setItem('sp_entreprises', JSON.stringify(entreprises)); localStorage.setItem('sp_currentSociete', currentSociete); localStorage.setItem('sp_audit', JSON.stringify(audit)); localStorage.setItem('sp_legalParams', JSON.stringify(legalParams)); }
+function loadAll() {
+  const e = localStorage.getItem('sp_employes'); if(e) employes = JSON.parse(e);
+  const b = localStorage.getItem('sp_bulletins'); if(b) bulletins = JSON.parse(b);
+  const ent = localStorage.getItem('sp_entreprises'); if(ent) entreprises = JSON.parse(ent);
+  const cur = localStorage.getItem('sp_currentSociete'); if(cur) currentSociete = cur;
+  const a = localStorage.getItem('sp_audit'); if(a) audit = JSON.parse(a);
+  const lp = localStorage.getItem('sp_legalParams'); if(lp) legalParams = JSON.parse(lp);
+  if(Object.keys(entreprises).length===0) entreprises["Mon Entreprise"] = { nom:"Mon Entreprise", ice:"", cnss:"", if:"", ville:"Casablanca", adresse:"", rc:"", patente:"" };
+  if(!entreprises[currentSociete]) currentSociete = Object.keys(entreprises)[0];
+  applyLegalParamsToUI(); refreshSocieteSelect(); loadSocieteToUI();
+}
+function addAudit(action, details) { audit.unshift({ date:new Date().toISOString(), action, details }); if(audit.length>500) audit.pop(); saveAll(); if(window.refreshAudit) refreshAudit(); }
+function applyLegalParamsToUI() {
+  ['cnss_sal','cnss_pat','amo_sal','amo_pat','alloc_fam','tfp','plafond','charge'].forEach(k => { const el = document.getElementById('p_'+k); if(el) el.value = legalParams[k]; });
+}
+function saveLegalParams() {
+  legalParams = { cnss_sal:parseFloat(document.getElementById('p_cnss_sal').value), cnss_pat:parseFloat(document.getElementById('p_cnss_pat').value), amo_sal:parseFloat(document.getElementById('p_amo_sal').value), amo_pat:parseFloat(document.getElementById('p_amo_pat').value), alloc_fam:parseFloat(document.getElementById('p_alloc_fam').value), tfp:parseFloat(document.getElementById('p_tfp').value), plafond:parseFloat(document.getElementById('p_plafond').value), charge:parseFloat(document.getElementById('p_charge').value) };
+  saveAll(); addAudit("MODIFICATION","Paramètres légaux mis à jour"); alert("Paramètres sauvegardés ✅");
+}
+function refreshSocieteSelect() { const sel = document.getElementById('societeSelect'); if(sel) sel.innerHTML = Object.keys(entreprises).map(n=>`<option value="${n}" ${n===currentSociete?'selected':''}>${n}</option>`).join(''); }
+function switchSociete() { currentSociete = document.getElementById('societeSelect').value; loadSocieteToUI(); saveAll(); refreshAll(); addAudit("CHANGE SOCIETE", currentSociete); }
+function loadSocieteToUI() { const s = entreprises[currentSociete]||{}; ['nom','ice','cnss','if','ville','adresse','rc','patente'].forEach(k=>{ const el=document.getElementById('e-'+k); if(el) el.value=s[k]||''; }); }
+function saveEntreprise() {
+  entreprises[currentSociete] = { nom:document.getElementById('e-nom').value, ice:document.getElementById('e-ice').value, cnss:document.getElementById('e-cnss').value, if:document.getElementById('e-if').value, ville:document.getElementById('e-ville').value, adresse:document.getElementById('e-adresse').value, rc:document.getElementById('e-rc').value, patente:document.getElementById('e-patente').value };
+  saveAll(); addAudit("ENTREPRISE",`Modifiée: ${currentSociete}`); alert("Société enregistrée ✅");
+}
+function addSociete() { const nom=document.getElementById('newSocieteNom').value.trim(); if(!nom) return; entreprises[nom]={nom,ice:"",cnss:"",if:"",ville:"",adresse:"",rc:"",patente:""}; currentSociete=nom; saveAll(); refreshSocieteSelect(); loadSocieteToUI(); closeModal('addSociete'); addAudit("SOCIETE",`Créée: ${nom}`); refreshAll(); }
+function populateAllEmployeeSelects() {
+  const cEmp=document.getElementById('c-emp'); if(cEmp){const cur=cEmp.value; cEmp.innerHTML='<option value="">— Saisie manuelle —</option>'+employes.filter(e=>e.statut!=='Inactif').map(e=>`<option value="${e.id}">${e.prenom} ${e.nom}</option>`).join(''); if(cur && [...cEmp.options].some(o=>o.value==cur)) cEmp.value=cur;}
+  ['absence-emp','attest-emp','cessation-emp','f-at-emp','f-as-emp','f-av-emp','f-li-emp','f-stc-emp','f-cdi-emp','f-cdd-emp','f-ava-emp','f-dc-emp','f-om-emp','f-am-emp','f-af-emp','f-nda-emp','doc-emp-global'].forEach(id=>{ const s=document.getElementById(id); if(s) s.innerHTML=employes.map(e=>`<option value="${e.id}">${e.prenom} ${e.nom}</option>`).join(''); });
+}
+
+// ======================== CALCULS PAIE ========================
+const r = n => Math.round(n*100)/100;
+const mad = n => r(n).toLocaleString('fr-MA',{minimumFractionDigits:2,maximumFractionDigits:2})+' DH';
+function calcAnciennete(dateEmbauche, refDate) {
+  if(!dateEmbauche) return { ans:0, mois:0, taux:0, prime:0, label:'' };
+  const ref = refDate ? new Date(refDate) : new Date();
+  const emb = new Date(dateEmbauche);
+  let mois = (ref.getFullYear()-emb.getFullYear())*12 + (ref.getMonth()-emb.getMonth());
+  if(ref.getDate()<emb.getDate()) mois--;
+  const ans = Math.floor(mois/12);
+  const ans_total = ans + (mois%12)/12;
+  let taux = 0;
+  if(ans_total>=25) taux=0.25; else if(ans_total>=20) taux=0.20; else if(ans_total>=12) taux=0.15; else if(ans_total>=5) taux=0.10; else if(ans_total>=2) taux=0.05;
+  return { ans, mois:mois%12, taux, prime:0, label:`${ans} a ${mois%12} m` };
+}
+function calcPaie(brutBase, charges, avances, variables, dateEmbauche, moisPaie) {
+  const anc = calcAnciennete(dateEmbauche, moisPaie ? new Date(moisPaie) : null);
+  const primeAnc = r(brutBase * anc.taux);
+  const brut = r(brutBase + primeAnc + (variables.primesS||0) + (variables.hs25||0) + (variables.hs50||0) + (variables.indemnites||0));
+  let brutFinal = brut;
+  if(variables.absJours>0 && brutBase>0) brutFinal = Math.max(0, r(brut - r((brutBase/30)*variables.absJours)));
+  const assiette = Math.min(brutFinal, legalParams.plafond);
+  const cnss_sal = r(assiette*(legalParams.cnss_sal/100));
+  const amo_sal = r(brutFinal*(legalParams.amo_sal/100));
+  const baseIR = r(brutFinal - cnss_sal - amo_sal);
+  const fp_taux = brutFinal<=6500 ? 0.35 : 0.25;
+  const fp_plaf = brutFinal<=6500 ? 2500 : 2916.67;
+  const abat = r(Math.min(baseIR*fp_taux, fp_plaf));
+  const rni = r(Math.max(0, baseIR-abat));
+  let ir_brut = 0;
+  const bar = [{min:0,max:3333.33,taux:0,ded:0},{min:3333.34,max:5000,taux:.10,ded:333.33},{min:5000.01,max:6666.67,taux:.20,ded:833.33},{min:6666.68,max:8333.33,taux:.30,ded:1500},{min:8333.34,max:15000,taux:.34,ded:1833.33},{min:15000.01,max:Infinity,taux:.37,ded:2283.33}];
+  for(const t of bar) if(rni>=t.min && rni<=t.max){ir_brut=r(Math.max(0,rni*t.taux-t.ded));break;}
+  const nb_ch = Math.min(charges,6);
+  const reduc = Math.min(nb_ch*legalParams.charge, 300);
+  const ir_net = r(Math.max(0, ir_brut-reduc));
+  const net = r(brutFinal - cnss_sal - amo_sal - ir_net - (avances||0) - (variables.acompte||0));
+  const cnss_pat = r(assiette*(legalParams.cnss_pat/100));
+  const alloc = r(brutFinal*(legalParams.alloc_fam/100));
+  const amo_pat = r(brutFinal*(legalParams.amo_pat/100));
+  const tfp = r(brutFinal*(legalParams.tfp/100));
+  const tot_pat = r(cnss_pat+alloc+amo_pat+tfp);
+  return { brut:brutFinal, cnss_sal, amo_sal, baseIR, abat, rni, ir_brut, reduc, ir_net, net, primeAnc, ancTaux:anc.taux, salaireBase:brutBase, cnss_pat, alloc, amo_pat, tfp, tot_pat, charges, variables };
+}
+function doCalc() {
+  const brutBase=parseFloat(document.getElementById('c-brut').value)||0;
+  const charges=parseInt(document.getElementById('c-charges').value)||0;
+  const avances=parseFloat(document.getElementById('c-avances').value)||0;
+  const dateEmb=document.getElementById('c-date').value;
+  const moisPaie=document.getElementById('c-mois').value;
+  const variables={primesS:parseFloat(document.getElementById('c-primeS').value)||0, hs25:parseFloat(document.getElementById('c-hs25').value)||0, hs50:parseFloat(document.getElementById('c-hs50').value)||0, indemnites:parseFloat(document.getElementById('c-indemnites').value)||0, absJours:parseFloat(document.getElementById('c-absJours').value)||0, acompte:0};
+  const anc=calcAnciennete(dateEmb, moisPaie);
+  if(dateEmb){document.getElementById('anc-preview').style.display='flex';document.getElementById('anc-txt').innerHTML=`${anc.ans} an(s) ${anc.mois} mois — Taux : ${anc.taux*100}%`;document.getElementById('anc-prime').innerHTML=`Prime : ${mad(brutBase*anc.taux)}`;}
+  else document.getElementById('anc-preview').style.display='none';
+  const c=calcPaie(brutBase,charges,avances,variables,dateEmb,moisPaie);
+  lastCalc={...c, dateEmbauche:dateEmb, mois:moisPaie};
+  const rows=[
+    ['Salaire de base', mad(brutBase), ''],
+    c.primeAnc>0 ? [`Prime ancienneté (${anc.taux*100}%)`, '+ '+mad(c.primeAnc), 'grn'] : null,
+    variables.primesS>0 ? ['Primes soumises CNSS', '+ '+mad(variables.primesS), 'grn'] : null,
+    variables.hs25>0 ? ['Heures sup 25%', '+ '+mad(variables.hs25), 'grn'] : null,
+    variables.hs50>0 ? ['Heures sup 50%', '+ '+mad(variables.hs50), 'grn'] : null,
+    variables.indemnites>0 ? ['Indemnités', '+ '+mad(variables.indemnites), 'grn'] : null,
+    variables.absJours>0 ? ['Absences déduites', '- '+mad((brutBase/30)*variables.absJours), 'red'] : null,
+    ['Salaire brut total', mad(c.brut), ''],
+    ['CNSS salariale ('+legalParams.cnss_sal+'%)', '- '+mad(c.cnss_sal), 'red'],
+    ['AMO salariale ('+legalParams.amo_sal+'%)', '- '+mad(c.amo_sal), 'red'],
+    ['Frais professionnels', '- '+mad(c.abat), 'red'],
+    ['RNI (base IR)', mad(c.rni), ''],
+    ['IR brut (barème)', '- '+mad(c.ir_brut), 'red'],
+    [`Réduction famille (${Math.round(c.reduc/legalParams.charge)}×${legalParams.charge} DH)`, '+ '+mad(c.reduc), 'grn'],
+    ['IR net', '- '+mad(c.ir_net), 'red'],
+    avances>0 ? ['Avances', '- '+mad(avances), 'red'] : null,
+  ].filter(Boolean);
+  document.getElementById('result-rows').innerHTML=rows.map(([l,v,cl])=>`<div class="rrow"><span class="rlbl">${l}</span><span class="rval ${cl}">${v}</span></div>`).join('');
+  document.getElementById('res-net').innerHTML=mad(c.net);
+  document.getElementById('result-card').style.display='block';
+  document.getElementById('pat-rows').innerHTML=[['CNSS patronale', mad(c.cnss_pat)],['Alloc. familiales', mad(c.alloc)],['AMO patronale', mad(c.amo_pat)],['TFP', mad(c.tfp)]].map(([l,v])=>`<div class="rrow"><span class="rlbl">${l}</span><span class="rval org">${v}</span></div>`).join('');
+  document.getElementById('res-pat').innerHTML=mad(c.tot_pat);
+  document.getElementById('pat-card').style.display='block';
+  document.getElementById('btn-bulletin').style.display='block';
+}
+
+// ======================== BULLETIN DE PAIE 2026 — NOUVEAU MODÈLE ========================
+function buildBulletinHTML(b, emp, ent, mois, c) {
+  const anc  = calcAnciennete(b.dateEmbauche, mois ? new Date(mois) : new Date());
+  const sB   = c.salaireBase||b.salaireBase||0;
+  const bT   = c.brut;
+  const av   = c.variables?.acompte||0;
+  const totR = r(c.cnss_sal+c.amo_sal+c.ir_net+av);
+  const nom  = emp ? `${emp.prenom} ${emp.nom}` : (b.emp||'Employé');
+  const now  = new Date().toLocaleDateString('fr-FR');
+  const ref  = `BP-${new Date().getFullYear()}-${String(b.id||Date.now()).slice(-4)}`;
+  const ent2 = ent || entreprises[currentSociete] || {};
+  const jA   = c.variables?.absJours||0;
+  const nCh  = c.charges||0;
+  const v    = mois||b.mois||'';
+  // ── YTD : cumul Jan→mois du bulletin INCLUS, même année ─────────────────
+  // Pour chaque mois de Jan au mois courant :
+  //   si bulletin sauvegardé → valeurs réelles
+  //   si pas de bulletin     → calcul estimé sur base du salaire employé
+  const MOIS_FR=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const _vParts=v.split(' ');
+  const _annee=parseInt(_vParts[_vParts.length-1])||new Date().getFullYear();
+  const _moisIdx=MOIS_FR.indexOf(_vParts[0]); // 0=Jan, 4=Mai, etc.
+  let ytdB=0,ytdC=0,ytdI=0,ytdN=0;
+  for(let _mi=0;_mi<=(_moisIdx>=0?_moisIdx:11);_mi++){
+    const _mLabel=MOIS_FR[_mi]+' '+_annee;
+    if(_mi===_moisIdx){
+      // Mois courant : valeurs fraîches du calcul en cours
+      ytdB=r(ytdB+bT); ytdC=r(ytdC+c.cnss_sal); ytdI=r(ytdI+c.ir_net); ytdN=r(ytdN+c.net);
+    } else {
+      // Mois précédent : chercher bulletin sauvegardé
+      const _bSaved=bulletins.find(x=>x.emp===nom && x.mois===_mLabel);
+      if(_bSaved){
+        ytdB=r(ytdB+(_bSaved.brut||0)); ytdC=r(ytdC+(_bSaved.cnss_sal||0));
+        ytdI=r(ytdI+(_bSaved.ir_net||0)); ytdN=r(ytdN+(_bSaved.net||0));
+      } else {
+        // Pas de bulletin sauvegardé → estimer depuis salaire employé actuel
+        const _empRef=emp||employes.find(e=>`${e.prenom} ${e.nom}`===nom);
+        if(_empRef){
+          const _cEst=calcPaie(_empRef.salaire,_empRef.charges||0,0,{primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0},_empRef.date,`${_mLabel}`);
+          ytdB=r(ytdB+_cEst.brut); ytdC=r(ytdC+_cEst.cnss_sal);
+          ytdI=r(ytdI+_cEst.ir_net); ytdN=r(ytdN+_cEst.net);
+        }
+      }
+    }
+  }
+  return `<div class="bp2026" style="font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e;font-size:9.5px;line-height:1.5;background:white;max-width:750px;margin:0 auto">
+<div style="background:linear-gradient(135deg,#1a3a6e 0%,#2c5aa0 100%);padding:10px 14px;display:flex;justify-content:space-between;align-items:flex-start">
+  <div>
+    <div style="color:white;font-size:14px;font-weight:700;letter-spacing:-.3px">${ent2.nom||'—'}</div>
+    <div style="color:rgba(255,255,255,.7);font-size:7.5px;margin-top:2px;line-height:1.6">${ent2.adresse||'—'}<br>ICE : ${ent2.ice||'—'} · RC : ${ent2.rc||'—'} · IF : ${ent2['if']||'—'} · CNSS : ${ent2.cnss||'—'}</div>
+  </div>
+  <div style="text-align:right;color:rgba(255,255,255,.8);font-size:7.5px;line-height:1.7">Réf. : ${ref}<br>Établi le : ${now}<br>Paiement : ${now}</div>
+</div>
+<div style="background:#f0f4fa;border-bottom:2px solid #2c5aa0;padding:6px 14px;display:flex;justify-content:space-between;align-items:center">
+  <div style="font-size:12px;font-weight:700;color:#1a3a6e;text-transform:uppercase;letter-spacing:1.5px">Bulletin de paie</div>
+  <div style="background:#2c5aa0;color:white;padding:3px 10px;border-radius:20px;font-size:8px;font-weight:600">Période : ${v}</div>
+</div>
+<div style="padding:8px 14px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+  <div style="background:#f7fafd;border:0.5px solid #dce6f0;border-radius:5px;padding:7px 10px">
+    <div style="font-size:7px;font-weight:700;color:#2c5aa0;text-transform:uppercase;letter-spacing:.8px;padding-bottom:3px;margin-bottom:4px;border-bottom:0.5px solid #dce6f0">Salarié</div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">Nom &amp; prénom</span><span style="font-weight:700">${nom}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">CIN</span><span style="font-weight:700">${emp?.cin||'—'}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">N° CNSS</span><span style="font-weight:700">${emp?.cnss||'—'}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">Situation fam.</span><span style="font-weight:700">${emp?.sitfam||'—'} — ${nCh} ch.</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">RIB</span><span style="font-weight:700">${emp?.rib||'—'}</span></div>
+  </div>
+  <div style="background:#f7fafd;border:0.5px solid #dce6f0;border-radius:5px;padding:7px 10px">
+    <div style="font-size:7px;font-weight:700;color:#2c5aa0;text-transform:uppercase;letter-spacing:.8px;padding-bottom:3px;margin-bottom:4px;border-bottom:0.5px solid #dce6f0">Poste &amp; contrat</div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">Poste</span><span style="font-weight:700">${emp?.poste||'—'}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">Département</span><span style="font-weight:700">${emp?.dept||'—'}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">Contrat</span><span style="font-weight:700">${emp?.contrat||'CDI'}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">Date embauche</span><span style="font-weight:700">${b.dateEmbauche?new Date(b.dateEmbauche).toLocaleDateString('fr-FR'):'—'}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">Ancienneté</span><span style="font-weight:700">${anc.ans} an(s) ${anc.mois} mois (${anc.taux*100}%)</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8px;padding:1px 0"><span style="color:#666">Jours travaillés</span><span style="font-weight:700">${Math.max(0,26-jA)} / 26</span></div>
+  </div>
+</div>
+<table style="width:100%;border-collapse:collapse;font-size:8px;margin-bottom:6px">
+  <thead>
+    <tr>
+      <th style="background:#2c5aa0;color:white;padding:4px 6px;text-align:left;font-size:7px;text-transform:uppercase;letter-spacing:.5px;width:36%">Rubrique</th>
+      <th style="background:#2c5aa0;color:white;padding:4px 6px;text-align:right;font-size:7px;text-transform:uppercase;width:14%">Base (DH)</th>
+      <th style="background:#2c5aa0;color:white;padding:4px 6px;text-align:right;font-size:7px;text-transform:uppercase;width:10%">Taux</th>
+      <th style="background:#2c5aa0;color:white;padding:4px 6px;text-align:right;font-size:7px;text-transform:uppercase;width:20%">Gains (DH)</th>
+      <th style="background:#2c5aa0;color:white;padding:4px 6px;text-align:right;font-size:7px;text-transform:uppercase;width:20%">Retenues (DH)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td colspan="5" style="background:#e8f0f8;color:#1a3a6e;font-weight:700;font-size:7px;text-transform:uppercase;letter-spacing:.5px;padding:3px 6px">Éléments de rémunération</td></tr>
+    <tr style="border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Salaire de base</td><td style="padding:3.5px 6px;text-align:right">191 h</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right;color:#1a7a4a;font-weight:600">${mad(sB)}</td><td style="padding:3.5px 6px;text-align:right"></td></tr>
+    ${c.primeAnc>0?`<tr style="background:#f7fafd;border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Prime d'ancienneté</td><td style="padding:3.5px 6px;text-align:right">${mad(sB)}</td><td style="padding:3.5px 6px;text-align:right">${anc.taux*100}%</td><td style="padding:3.5px 6px;text-align:right;color:#1a7a4a;font-weight:600">${mad(c.primeAnc)}</td><td style="padding:3.5px 6px;text-align:right"></td></tr>`:''}
+    ${(c.variables?.hs25||0)>0?`<tr style="border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Heures sup. (25%)</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right">25%</td><td style="padding:3.5px 6px;text-align:right;color:#1a7a4a;font-weight:600">${mad(c.variables.hs25)}</td><td style="padding:3.5px 6px;text-align:right"></td></tr>`:''}
+    ${(c.variables?.hs50||0)>0?`<tr style="background:#f7fafd;border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Heures sup. (50%)</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right">50%</td><td style="padding:3.5px 6px;text-align:right;color:#1a7a4a;font-weight:600">${mad(c.variables.hs50)}</td><td style="padding:3.5px 6px;text-align:right"></td></tr>`:''}
+    ${(c.variables?.primesS||0)>0?`<tr style="border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Primes soumises CNSS</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right;color:#1a7a4a;font-weight:600">${mad(c.variables.primesS)}</td><td style="padding:3.5px 6px;text-align:right"></td></tr>`:''}
+    ${(c.variables?.indemnites||0)>0?`<tr style="background:#f7fafd;border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Indemnités diverses</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right;color:#1a7a4a;font-weight:600">${mad(c.variables.indemnites)}</td><td style="padding:3.5px 6px;text-align:right"></td></tr>`:''}
+    ${jA>0?`<tr style="border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Absences (${jA} jours)</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right"></td><td style="padding:3.5px 6px;text-align:right;color:#9b2020;font-weight:600">- ${mad(r((sB/30)*jA))}</td></tr>`:''}
+    <tr style="background:#dce8f5;border-top:1px solid #2c5aa0"><td colspan="3" style="padding:4px 6px;font-weight:700;color:#0c447c;font-size:8.5px">Total brut imposable</td><td style="padding:4px 6px;text-align:right;font-weight:700;color:#0c447c;font-size:8.5px">${mad(bT)}</td><td style="padding:4px 6px;text-align:right"></td></tr>
+    <tr><td colspan="5" style="background:#e8f0f8;color:#1a3a6e;font-weight:700;font-size:7px;text-transform:uppercase;letter-spacing:.5px;padding:3px 6px">Cotisations &amp; impôts</td></tr>
+    <tr style="border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">CNSS salariale</td><td style="padding:3.5px 6px;text-align:right">${mad(Math.min(bT,legalParams.plafond))}</td><td style="padding:3.5px 6px;text-align:right">${legalParams.cnss_sal}%</td><td style="padding:3.5px 6px;text-align:right"></td><td style="padding:3.5px 6px;text-align:right;color:#9b2020;font-weight:600">- ${mad(c.cnss_sal)}</td></tr>
+    <tr style="background:#f7fafd;border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">AMO salariale</td><td style="padding:3.5px 6px;text-align:right">${mad(bT)}</td><td style="padding:3.5px 6px;text-align:right">${legalParams.amo_sal}%</td><td style="padding:3.5px 6px;text-align:right"></td><td style="padding:3.5px 6px;text-align:right;color:#9b2020;font-weight:600">- ${mad(c.amo_sal)}</td></tr>
+    <tr style="border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Abattement frais prof.</td><td style="padding:3.5px 6px;text-align:right">Base IR</td><td style="padding:3.5px 6px;text-align:right">${bT<=6500?'35%':'25%'}</td><td style="padding:3.5px 6px;text-align:right;color:#1a7a4a;font-weight:600">- ${mad(c.abat)}</td><td style="padding:3.5px 6px;text-align:right"></td></tr>
+    <tr style="background:#f7fafd;border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">RNI (base imposition)</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right;font-weight:600">${mad(c.rni)}</td><td style="padding:3.5px 6px;text-align:right"></td></tr>
+    <tr style="border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">IR retenu à la source</td><td style="padding:3.5px 6px;text-align:right">RNI</td><td style="padding:3.5px 6px;text-align:right">Barème</td><td style="padding:3.5px 6px;text-align:right"></td><td style="padding:3.5px 6px;text-align:right;color:#9b2020;font-weight:600">- ${mad(c.ir_net)}</td></tr>
+    ${c.reduc>0?`<tr style="background:#f7fafd;border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Déduction famille (${nCh} pers. × ${legalParams.charge} DH)</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right;color:#1a7a4a;font-weight:600">+ ${mad(c.reduc)}</td><td style="padding:3.5px 6px;text-align:right"></td></tr>`:''}
+    ${av>0?`<tr style="border-bottom:.5px solid #eef2f8"><td style="padding:3.5px 6px">Avances / Acomptes</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right">—</td><td style="padding:3.5px 6px;text-align:right"></td><td style="padding:3.5px 6px;text-align:right;color:#9b2020;font-weight:600">- ${mad(av)}</td></tr>`:''}
+    <tr style="background:#dce8f5;border-top:1px solid #2c5aa0"><td colspan="3" style="padding:4px 6px;font-weight:700;color:#0c447c;font-size:8.5px">Total retenues</td><td style="padding:4px 6px;text-align:right"></td><td style="padding:4px 6px;text-align:right;font-weight:700;color:#9b2020;font-size:8.5px">- ${mad(totR)}</td></tr>
+  </tbody>
+</table>
+<div style="background:linear-gradient(135deg,#1a3a6e,#2c5aa0);border-radius:5px;padding:9px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <div style="color:rgba(255,255,255,.85);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Net à payer</div>
+  <div style="color:white;font-size:18px;font-weight:700;font-family:monospace">${mad(c.net)}</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+  <div style="background:#fff8ed;border:.5px solid #f0c060;border-radius:5px;padding:7px 10px">
+    <div style="font-size:7px;font-weight:700;color:#7c4d00;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Charges patronales (informatives)</div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;padding:1px 0"><span style="color:#7c4d00">CNSS patronale (${legalParams.cnss_pat}%)</span><span style="font-weight:600;color:#7c4d00">${mad(c.cnss_pat)}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;padding:1px 0"><span style="color:#7c4d00">Alloc. familiales (${legalParams.alloc_fam}%)</span><span style="font-weight:600;color:#7c4d00">${mad(c.alloc)}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;padding:1px 0"><span style="color:#7c4d00">AMO patronale (${legalParams.amo_pat}%)</span><span style="font-weight:600;color:#7c4d00">${mad(c.amo_pat)}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;padding:1px 0"><span style="color:#7c4d00">TFP (${legalParams.tfp}%)</span><span style="font-weight:600;color:#7c4d00">${mad(c.tfp)}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:8.5px;font-weight:700;color:#7c4d00;border-top:.5px solid #f0c060;padding-top:4px;margin-top:4px"><span>Total patronal</span><span>${mad(c.tot_pat)}</span></div>
+  </div>
+  <div style="background:#f0f8f4;border:.5px solid #90d0a8;border-radius:5px;padding:7px 10px">
+    <div style="font-size:7px;font-weight:700;color:#0f5c2a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Cumuls annuels Jan → ${_moisIdx>=0?MOIS_FR[_moisIdx]:"Déc"} ${_annee}</div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;padding:1px 0"><span style="color:#0f5c2a">Brut cumulé</span><span style="font-weight:600;color:#0f5c2a">${mad(ytdB)}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;padding:1px 0"><span style="color:#0f5c2a">CNSS cumulé</span><span style="font-weight:600;color:#0f5c2a">${mad(ytdC)}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;padding:1px 0"><span style="color:#0f5c2a">IR cumulé</span><span style="font-weight:600;color:#0f5c2a">${mad(ytdI)}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;padding:1px 0"><span style="color:#0f5c2a">Net cumulé</span><span style="font-weight:600;color:#0f5c2a">${mad(ytdN)}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:7.5px;padding-top:4px;margin-top:4px;border-top:.5px solid #90d0a8"><span style="color:#0f5c2a">Solde congés</span><span style="font-weight:600;color:#0f5c2a">${(()=>{
+  const _sc=emp?.soldeConges;
+  if(_sc!=null && _sc!==undefined && _sc!=='') return _sc+' jours';
+  // Calcul légal : 1.5 j/mois depuis Jan jusqu'au mois du bulletin (inclus)
+  const _nMois=(_moisIdx>=0?_moisIdx+1:new Date().getMonth()+1);
+  return r(_nMois*1.5)+' jours (calculé)';
+})()} </span></div>
+  </div>
+</div>
+<div style="border-top:.5px solid #dce6f0;padding:10px 0 4px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px">
+  <div style="text-align:center;flex:1">
+    <div style="height:50px;border-bottom:.5px solid #aaa;margin-bottom:4px"></div>
+    <div style="font-size:7px;color:#888;line-height:1.5">Signature du salarié<br><em>Lu et approuvé — reçu le ${now}</em></div>
+  </div>
+  <div style="text-align:center;flex:1.4">
+    <div style="height:50px;border:.5px dashed #ccc;border-radius:4px;margin-bottom:4px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px">
+      <span style="font-size:6.5px;color:#ccc">Cachet de l'employeur</span>
+    </div>
+    <div style="font-size:7px;color:#888;line-height:1.5">Cachet &amp; signature de l'employeur<br><em>${ent2.nom||'—'}</em></div>
+  </div>
+  <div style="text-align:center;flex:1">
+    <div style="height:50px;border-bottom:.5px solid #aaa;margin-bottom:4px"></div>
+    <div style="font-size:7px;color:#888;line-height:1.5">Signature du représentant légal<br><em>[Nom &amp; qualité]</em></div>
+  </div>
+</div>
+<div style="background:#f7fafd;border-top:.5px solid #dce6f0;padding:4px 0;font-size:7px;color:#888;display:flex;justify-content:space-between">
+  <span>Bulletin établi conformément à la Loi 65-99 et à la législation fiscale DGI 2026 — à conserver sans limitation de durée.</span>
+  <span>Brut : ${mad(bT)} · Net : ${mad(c.net)} · IR : ${mad(c.ir_net)}</span>
+</div>
+</div>
+</div>`;
+}
+function genBulletin() {
+  if(!lastCalc) return;
+  const empId=parseInt(document.getElementById('c-emp').value);
+  const emp=employes.find(e=>e.id===empId);
+  const b={id:Date.now(), emp:emp?`${emp.prenom} ${emp.nom}`:'Saisie manuelle', mois:document.getElementById('c-mois').value, ...lastCalc, salaireBase:parseFloat(document.getElementById('c-brut').value)||0, dateEmbauche:document.getElementById('c-date').value};
+  bulletins.unshift(b); saveAll(); addAudit("BULLETIN",`${b.emp} - ${b.mois}`); refreshBulletins(); refreshDashboard(); openBulletinModal(b,emp);
+}
+function openBulletinModal(b, emp) {
+  const ent=entreprises[currentSociete];
+  document.getElementById('bulletin-content').innerHTML=buildBulletinHTML(b,emp,ent,b.mois,b);
+  currentBulletinData={b,emp,ent};
+  const pmSel=document.getElementById('print-mois');
+  if(pmSel){pmSel.innerHTML=''; const ML=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre']; const curY=new Date().getFullYear(); for(let y=curY-2;y<=curY+1;y++) ML.forEach(m=>{const o=document.createElement('option'); o.value=`${m} ${y}`; o.textContent=`${m} ${y}`; if(o.value===b.mois) o.selected=true; pmSel.appendChild(o);});}
+  openModal('bulletin');
+}
+function updateBulletinPeriod() {
+  if(!currentBulletinData) return;
+  const newMois=document.getElementById('print-mois').value;
+  const {b,emp,ent}=currentBulletinData;
+  document.getElementById('bulletin-content').innerHTML=buildBulletinHTML({...b,mois:newMois},emp,ent,newMois,b);
+}
+function printBulletin() {
+  const html=document.getElementById('bulletin-content').innerHTML;
+  if(!html){alert("Aucun bulletin à imprimer.");return;}
+  const win=window.open('','_blank','width=900,height=700');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bulletin de paie</title><style>@page{size:A4 portrait;margin:8mm 10mm}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial,sans-serif;background:white;padding:0}</style></head><body>${html}</body></html>`);
+  win.document.close();
+  win.onload=()=>{win.focus();win.print();};
+}
+
+
+// ======================== DOCUMENTS — SYSTÈME 15 DOCS ========================
+function openDocForm(id) {
+  document.querySelectorAll('.doc-form').forEach(f => f.classList.remove('active'));
+  const form = document.getElementById(id);
+  if (form) { form.classList.add('active'); form.scrollIntoView({behavior:'smooth',block:'start'}); }
+  syncDocEmp();
+}
+function closeDocForm() {
+  document.querySelectorAll('.doc-form').forEach(f => f.classList.remove('active'));
+}
+function syncDocEmp() {
+  const globalEmpId = document.getElementById('doc-emp-global')?.value;
+  const empSelects = ['f-at-emp','f-as-emp','cessation-emp','f-av-emp','f-li-emp','f-stc-emp','f-cdi-emp','f-cdd-emp','f-ava-emp','f-dc-emp','f-om-emp','f-am-emp','f-af-emp','f-nda-emp'];
+  empSelects.forEach(id => {
+    const sel = document.getElementById(id);
+    if (sel && globalEmpId) sel.value = globalEmpId;
+  });
+  const moisSel = document.getElementById('f-as-mois');
+  if (moisSel && !moisSel.options.length) {
+    const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+    const yr = new Date().getFullYear();
+    for (let y = yr-2; y <= yr+1; y++) MOIS.forEach((m,i) => {
+      const o = document.createElement('option'); o.value = `${m} ${y}`; o.textContent = `${m} ${y}`;
+      if (y === yr && i === new Date().getMonth()) o.selected = true;
+      moisSel.appendChild(o);
+    });
+  }
+}
+
+function printDoc(html) {
+  const win=window.open('','_blank','width=900,height=700');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Document</title><style>@page{size:A4 portrait;margin:8mm 12mm}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial,sans-serif;background:white}.doc-pro{max-width:100%;font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e;font-size:9px;line-height:1.6}.dp-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #2c5aa0;padding-bottom:12px;margin-bottom:14px}.dp-logo{font-size:14px;font-weight:700;color:#2c5aa0;margin-bottom:4px}.dp-meta{font-size:8px;color:#555;line-height:1.7}.dp-ref{text-align:right;font-size:8px;color:#555;line-height:1.8}.dp-title{text-align:center;font-size:13px;font-weight:700;color:#2c5aa0;text-transform:uppercase;letter-spacing:1.5px;margin:12px 0 8px}.dp-period{background:#e8f0f8;color:#0c447c;text-align:center;padding:5px 8px;border-radius:4px;font-size:9px;font-weight:600;margin-bottom:12px}.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.dp-box{border:1px solid #dce6f0;border-radius:5px;padding:8px 11px;background:#f7fafd}.dp-box-title{font-size:8px;font-weight:700;color:#2c5aa0;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #2c5aa0;padding-bottom:3px;margin-bottom:6px}.dp-row{display:flex;justify-content:space-between;font-size:9px;padding:1.5px 0}.dp-row .lbl{color:#555}.dp-row .val{font-weight:600;color:#1a1a2e}.dp-body{font-size:10px;line-height:1.8;color:#1a1a2e;margin:10px 0}.dp-highlight{background:#e8f0f8;border-left:3px solid #2c5aa0;padding:9px 13px;border-radius:0 4px 4px 0;font-size:10px;margin:10px 0;line-height:1.7}.dp-warning{background:#fff8e1;border:1px solid #f59e0b;border-radius:5px;padding:8px 12px;font-size:10px;color:#7c4700;margin:10px 0;line-height:1.6}table{width:100%;border-collapse:collapse;margin:10px 0;font-size:9px}th{background:#2c5aa0;color:white;padding:6px 8px;text-align:left;font-weight:600;text-transform:uppercase;font-size:8px;letter-spacing:.5px}.r{text-align:right}td{padding:5px 8px;border-bottom:1px solid #e8eef4;color:#1a1a2e}tr:nth-child(even) td{background:#f7fafd}.tbl-total td{background:#e8f0f8!important;font-weight:700;color:#0c447c;border-top:1.5px solid #2c5aa0;padding:6px 8px;font-size:9.5px}.tbl-net td{background:#2c5aa0!important;color:white!important;font-weight:700;font-size:10.5px;padding:7px 8px}.dp-sig{display:flex;justify-content:space-between;margin-top:24px;gap:16px}.dp-sig-box{text-align:center;flex:1}.dp-sig-line{border-top:1px solid #aaa;margin-top:50px;margin-bottom:4px}.dp-sig-lbl{font-size:8.5px;color:#555;line-height:1.5}.dp-stamp{width:60px;height:60px;border:1.5px dashed #aaa;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 4px}.dp-stamp-txt{font-size:7.5px;color:#aaa;text-align:center}.dp-footer{font-size:8px;color:#888;text-align:center;border-top:1px solid #e0e0e0;margin-top:14px;padding-top:8px;line-height:1.6}.dp-charges-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px}</style></head><body>${html.replace(/`/g,"'")}</body></html>`);
+  win.document.close();
+  win.onload=()=>{win.focus();win.print();};
+}
+
+function dpHeader(ent, ref) {
+  return `<div class="dp-header"><div><div class="dp-logo">${ent.nom||'—'}</div><div class="dp-meta">Adresse : ${ent.adresse||'—'}<br>ICE : ${ent.ice||'—'} · RC : ${ent.rc||'—'} · IF : ${ent['if']||'—'}<br>CNSS : ${ent.cnss||'—'}</div></div><div class="dp-ref">Réf. : ${ref}<br>Date : ${new Date().toLocaleDateString('fr-FR')}<br>Ville : ${ent.ville||'Casablanca'}</div></div>`;
+}
+function dpSig(salarieLabel, employeurLabel, ville) {
+  return `<div class="dp-sig"><div class="dp-sig-box"><div class="dp-sig-line"></div><div class="dp-sig-lbl">${salarieLabel}</div></div><div class="dp-sig-box"><div style="width:70px;height:70px;border:1px dashed #bbb;border-radius:4px;margin:0 auto 3px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px"><span style="font-size:6px;color:#ccc">Cachet</span></div><div class="dp-sig-line"></div><div class="dp-sig-lbl">${employeurLabel}<br><em>Fait à ${ville||'Casablanca'}, le ${new Date().toLocaleDateString('fr-FR')}</em></div></div></div>`;
+}
+
+function genDoc(type) {
+  const ent = entreprises[currentSociete] || {};
+  const now = new Date().toLocaleDateString('fr-FR');
+  const ref = id => `${id.toUpperCase()}-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
+  const v = id => (document.getElementById(id)||{}).value || '';
+  const n = id => parseFloat(v(id)) || 0;
+  let empId, emp, anc, corps = '';
+
+  if (type === 'attest-travail') {
+    empId = parseInt(v('f-at-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    anc = calcAnciennete(emp.date, new Date());
+    const usage = v('f-at-usage');
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('AT'))}<div class="dp-title">Attestation de travail</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Identité du salarié</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div><div class="dp-row"><span class="lbl">Situation fam.</span><span class="val">${emp.sitfam||'—'}</span></div></div><div class="dp-box"><div class="dp-box-title">Poste &amp; contrat</div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div><div class="dp-row"><span class="lbl">Département</span><span class="val">${emp.dept||'—'}</span></div><div class="dp-row"><span class="lbl">Contrat</span><span class="val">${emp.contrat||'CDI'}</span></div><div class="dp-row"><span class="lbl">Date embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div><div class="dp-row"><span class="lbl">Ancienneté</span><span class="val">${anc.ans} an(s) ${anc.mois} mois</span></div></div></div><div class="dp-body">Je soussigné(e), représentant légal de la société <strong>${ent.nom}</strong>, immatriculée sous le numéro ICE ${ent.ice||'—'}, atteste par la présente que :</div><div class="dp-highlight">M./Mme <strong>${emp.prenom} ${emp.nom}</strong>, titulaire de la CIN N° ${emp.cin||'—'}, est employé(e) au sein de notre entreprise en qualité de <strong>${emp.poste||'—'}</strong> depuis le <strong>${new Date(emp.date).toLocaleDateString('fr-FR')}</strong>, dans le cadre d'un contrat ${emp.contrat==='CDI'?'à durée indéterminée (CDI)':'à durée déterminée (CDD)'}.</div><div class="dp-body">Le/La salarié(e) est toujours en activité à ce jour. La présente attestation lui est délivrée à sa demande pour <strong>${usage.toLowerCase()}</strong>, pour servir et valoir ce que de droit.</div>${dpSig('Signature du salarié<br><em>Lu et approuvé</em>','Le représentant légal',ent.ville)}<div class="dp-footer">Document établi conformément au Code du Travail marocain (Loi 65-99).</div></div>`;
+    addAudit('DOCUMENT', `Attestation de travail — ${emp.prenom} ${emp.nom}`);
+  }
+
+  else if (type === 'attest-salaire') {
+    empId = parseInt(v('f-as-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    anc = calcAnciennete(emp.date, new Date());
+    const moisRef = v('f-as-mois') || now;
+    const usage = v('f-as-usage');
+    const ancPrime = r(emp.salaire * anc.taux);
+    const brutRef = r(emp.salaire + ancPrime);
+    const cRef = calcPaie(emp.salaire, emp.charges||0, 0, {primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0}, emp.date, new Date().toISOString());
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('AS'))}<div class="dp-title">Attestation de salaire</div><div class="dp-period">Période de référence : ${moisRef}</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Identité du salarié</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div><div class="dp-row"><span class="lbl">Ancienneté</span><span class="val">${anc.ans} an(s) ${anc.mois} mois</span></div></div><div class="dp-box"><div class="dp-box-title">Poste &amp; contrat</div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div><div class="dp-row"><span class="lbl">Contrat</span><span class="val">${emp.contrat||'CDI'}</span></div><div class="dp-row"><span class="lbl">Date embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div></div></div><table><thead><tr><th>Élément de rémunération</th><th class="r">Montant (DH)</th></tr></thead><tbody><tr><td>Salaire de base</td><td class="r">${mad(emp.salaire)}</td></tr>${ancPrime>0?`<tr><td>Prime d'ancienneté (${anc.taux*100}%)</td><td class="r">${mad(ancPrime)}</td></tr>`:''}<tr class="tbl-total"><td><strong>Total brut mensuel</strong></td><td class="r"><strong>${mad(brutRef)}</strong></td></tr><tr><td>CNSS salariale (${legalParams.cnss_sal}%)</td><td class="r" style="color:#a32d2d">- ${mad(cRef.cnss_sal)}</td></tr><tr><td>AMO salariale (${legalParams.amo_sal}%)</td><td class="r" style="color:#a32d2d">- ${mad(cRef.amo_sal)}</td></tr><tr><td>IR net retenu à la source</td><td class="r" style="color:#a32d2d">- ${mad(cRef.ir_net)}</td></tr><tr class="tbl-net"><td><strong>Net mensuel à percevoir</strong></td><td class="r"><strong>${mad(cRef.net)}</strong></td></tr></tbody></table><div class="dp-body">Attestation délivrée à la demande de l'intéressé(e) pour <strong>${usage.toLowerCase()}</strong>, pour servir et valoir ce que de droit.</div>${dpSig('Signature du salarié<br><em>Lu et approuvé</em>','Le représentant légal',ent.ville)}<div class="dp-footer">Document établi conformément au Code du Travail marocain (Loi 65-99) et à la législation fiscale en vigueur.</div></div>`;
+    addAudit('DOCUMENT', `Attestation de salaire — ${emp.prenom} ${emp.nom}`);
+  }
+
+  else if (type === 'avertissement') {
+    empId = parseInt(v('f-av-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    const dateFaits = v('f-av-date-faits') ? new Date(v('f-av-date-faits')).toLocaleDateString('fr-FR') : '—';
+    const dateEntretien = v('f-av-date-entretien') ? new Date(v('f-av-date-entretien')).toLocaleDateString('fr-FR') : '—';
+    const faits = v('f-av-faits') || '[Description des faits reprochés]';
+    const sanction = v('f-av-sanction');
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('AV'))}<div class="dp-title">Lettre d'avertissement</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Destinataire</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div></div><div class="dp-box"><div class="dp-box-title">Références</div><div class="dp-row"><span class="lbl">Date des faits</span><span class="val">${dateFaits}</span></div><div class="dp-row"><span class="lbl">Date entretien</span><span class="val">${dateEntretien}</span></div><div class="dp-row"><span class="lbl">Sanction</span><span class="val">${sanction}</span></div></div></div><div class="dp-body">Suite à l'entretien du ${dateEntretien} au cours duquel vous avez été entendu(e) sur les faits reprochés survenus le ${dateFaits}, nous vous notifions par la présente le présent <strong>${sanction.toLowerCase()}</strong>.</div><div class="dp-highlight" style="background:#fff1f0;border-left-color:#e24b4a">${faits.replace(/\n/g,'<br>')}</div><div class="dp-body">Ces faits constituent un manquement à vos obligations professionnelles. Tout renouvellement pourra entraîner une sanction plus grave conformément à l'art. 37 de la Loi 65-99.</div><div class="dp-body">Vous disposez d'un délai de 8 jours pour nous faire parvenir vos observations écrites.</div>${dpSig('Signature du salarié<br><em>Lu et approuvé — le ${now}</em>','Le représentant légal',ent.ville)}<div class="dp-footer">Document établi conformément à l'art. 37 du Code du Travail marocain (Loi 65-99) — remis en main propre contre signature.</div></div>`;
+    addAudit('DOCUMENT', `Avertissement — ${emp.prenom} ${emp.nom}`);
+  }
+
+  else if (type === 'licenciement') {
+    empId = parseInt(v('f-li-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    anc = calcAnciennete(emp.date, new Date());
+    const typeLic = v('f-li-type');
+    const dateEntretien = v('f-li-date-entretien') ? new Date(v('f-li-date-entretien')).toLocaleDateString('fr-FR') : '—';
+    const motif = v('f-li-motif') || '[Motif réel et sérieux]';
+    const dateDepart = v('f-li-date-depart') ? new Date(v('f-li-date-depart')).toLocaleDateString('fr-FR') : '—';
+    const preavis = v('f-li-preavis');
+    const indemnite = n('f-li-indemnite');
+    const congesNP = n('f-li-conges');
+    const salaireJour = r((emp.salaire||0) / 26);
+    const congesVal = r(congesNP * salaireJour);
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('LI'))}<div class="dp-title">Lettre de licenciement</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Salarié concerné</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div><div class="dp-row"><span class="lbl">Date embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div></div><div class="dp-box"><div class="dp-box-title">Conditions</div><div class="dp-row"><span class="lbl">Type</span><span class="val">${typeLic}</span></div><div class="dp-row"><span class="lbl">Entretien préalable</span><span class="val">${dateEntretien}</span></div><div class="dp-row"><span class="lbl">Départ effectif</span><span class="val">${dateDepart}</span></div><div class="dp-row"><span class="lbl">Préavis</span><span class="val">${preavis}</span></div></div></div><div class="dp-body">Suite à l'entretien préalable du ${dateEntretien}, nous vous informons de notre décision de procéder à votre licenciement pour le motif suivant :</div><div class="dp-highlight" style="background:#fff1f0;border-left-color:#e24b4a">${motif.replace(/\n/g,'<br>')}</div>${indemnite>0||congesVal>0?`<div class="dp-box" style="margin:10px 0"><div class="dp-box-title">Indemnités légales (art. 52 Loi 65-99)</div>${indemnite>0?`<div class="dp-row"><span class="lbl">Indemnité de licenciement</span><span class="val">${mad(indemnite)}</span></div>`:''}${congesVal>0?`<div class="dp-row"><span class="lbl">Congés payés non pris (${congesNP} j.)</span><span class="val">${mad(congesVal)}</span></div>`:''}${indemnite>0&&congesVal>0?`<div class="dp-row" style="margin-top:4px;padding-top:4px;border-top:1px solid #dce6f0"><span class="lbl"><strong>Total</strong></span><span class="val" style="color:#2c5aa0"><strong>${mad(r(indemnite+congesVal))}</strong></span></div>`:''}</div>`:''}<div class="dp-body">Vous êtes tenu(e) de restituer l'ensemble du matériel de la société avant votre départ effectif. Un reçu pour solde de tout compte vous sera remis à la date de départ.</div>${dpSig('Signature du salarié<br><em>Reçu le ${now}</em>','Le représentant légal',ent.ville)}<div class="dp-footer">Lettre notifiée par recommandé avec AR — Loi 65-99, art. 62 à 67.</div></div>`;
+    addAudit('DOCUMENT', `Licenciement — ${emp.prenom} ${emp.nom}`);
+  }
+
+  else if (type === 'solde') {
+    empId = parseInt(v('f-stc-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    anc = calcAnciennete(emp.date, new Date());
+    const dateDepart = v('f-stc-date') ? new Date(v('f-stc-date')).toLocaleDateString('fr-FR') : now;
+    const motif = v('f-stc-motif');
+    const sal = n('f-stc-salaire'), indemnite = n('f-stc-indemnite'), preavis = n('f-stc-preavis'), conges = n('f-stc-conges'), hs = n('f-stc-hs');
+    const totalBrut = r(sal+indemnite+preavis+conges+hs);
+    const cRef = calcPaie(sal, emp.charges||0, 0, {primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0}, emp.date, new Date().toISOString());
+    const retenues = r(cRef.cnss_sal + cRef.amo_sal + cRef.ir_net);
+    const netFinal = r(totalBrut - retenues);
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('STC'))}<div class="dp-title">Reçu pour solde de tout compte</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Salarié</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div><div class="dp-row"><span class="lbl">Date de départ</span><span class="val">${dateDepart}</span></div></div><div class="dp-box"><div class="dp-box-title">Motif de rupture</div><div class="dp-row"><span class="lbl">Nature</span><span class="val">${motif}</span></div><div class="dp-row"><span class="lbl">Ancienneté</span><span class="val">${anc.ans} an(s) ${anc.mois} mois</span></div></div></div><table><thead><tr><th>Élément</th><th class="r">Montant (DH)</th></tr></thead><tbody>${sal>0?`<tr><td>Salaire dernier mois (prorata)</td><td class="r">${mad(sal)}</td></tr>`:''} ${indemnite>0?`<tr><td>Indemnité de licenciement</td><td class="r">${mad(indemnite)}</td></tr>`:''} ${preavis>0?`<tr><td>Indemnité de préavis</td><td class="r">${mad(preavis)}</td></tr>`:''} ${conges>0?`<tr><td>Congés payés non pris</td><td class="r">${mad(conges)}</td></tr>`:''} ${hs>0?`<tr><td>Heures sup. non récupérées</td><td class="r">${mad(hs)}</td></tr>`:''}<tr class="tbl-total"><td><strong>Total brut</strong></td><td class="r"><strong>${mad(totalBrut)}</strong></td></tr><tr><td>Retenues légales (CNSS / AMO / IR)</td><td class="r" style="color:#a32d2d">- ${mad(retenues)}</td></tr><tr class="tbl-net"><td><strong>Net à percevoir</strong></td><td class="r"><strong>${mad(netFinal)}</strong></td></tr></tbody></table><div class="dp-warning">⚠️ Ce reçu peut être dénoncé dans les 60 jours suivant sa signature (art. 74 Loi 65-99). Passé ce délai, il est définitif.</div>${dpSig('Le salarié<br><em>Reçu la somme de ${mad(netFinal)}<br>Bon pour solde de tout compte</em>','Le représentant légal',ent.ville)}<div class="dp-footer">Document établi en vertu de l'art. 74 du Code du Travail marocain (Loi 65-99).</div></div>`;
+    addAudit('DOCUMENT', `Solde de tout compte — ${emp.prenom} ${emp.nom}`);
+  }
+
+  else if (type === 'cdi') {
+    empId = parseInt(v('f-cdi-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    const debut = v('f-cdi-debut') ? new Date(v('f-cdi-debut')).toLocaleDateString('fr-FR') : '—';
+    const essai = v('f-cdi-essai') || '3';
+    const salaire = n('f-cdi-salaire') || emp.salaire;
+    const heures = v('f-cdi-heures') || '44';
+    const lieu = v('f-cdi-lieu') || ent.adresse || '—';
+    const nda = v('f-cdi-nda') || '12';
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('CDI'))}<div class="dp-title">Contrat de travail à durée indéterminée</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">L'employeur</div><div class="dp-row"><span class="lbl">Société</span><span class="val">${ent.nom||'—'}</span></div><div class="dp-row"><span class="lbl">ICE</span><span class="val">${ent.ice||'—'}</span></div><div class="dp-row"><span class="lbl">CNSS</span><span class="val">${ent.cnss||'—'}</span></div></div><div class="dp-box"><div class="dp-box-title">Le salarié</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div></div></div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 1 — Engagement :</strong> La société engage M./Mme ${emp.prenom} ${emp.nom} en qualité de <strong>${emp.poste||'—'}</strong>, département ${emp.dept||'—'}, à compter du <strong>${debut}</strong>, pour une durée indéterminée.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 2 — Période d'essai :</strong> Durée de <strong>${essai} mois</strong> renouvelable une fois (art. 14 Loi 65-99). Durant cette période, chaque partie peut rompre le contrat sans indemnité.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 3 — Rémunération :</strong> Salaire brut mensuel : <strong>${mad(salaire)}</strong>. Prime d'ancienneté selon barème légal (art. 350 CT). Révision annuelle selon performances.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 4 — Horaires &amp; lieu :</strong> <strong>${heures}h/semaine</strong> conformément au Code du Travail. Lieu de travail : <strong>${lieu}</strong>. Toute modification fera l'objet d'un avenant signé.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 5 — Confidentialité :</strong> Le salarié s'engage à respecter la confidentialité des informations de l'entreprise pendant la durée du contrat et <strong>${nda} mois</strong> après sa rupture.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 6 — Loi applicable :</strong> Le présent contrat est régi par le Code du Travail marocain (Loi 65-99) et ses textes d'application. Tout litige sera soumis aux tribunaux compétents de ${ent.ville||'Casablanca'}.</div>${dpSig('Le salarié<br><em>Lu, approuvé et signé</em>','Pour la société<br><em>[Nom &amp; qualité]</em>',ent.ville)}<div class="dp-footer">Contrat établi en deux exemplaires originaux — un pour chaque partie — conformément à la Loi 65-99.</div></div>`;
+    addAudit('DOCUMENT', `Contrat CDI — ${emp.prenom} ${emp.nom}`);
+  }
+
+  else if (type === 'cdd') {
+    empId = parseInt(v('f-cdd-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    const debut = v('f-cdd-debut') ? new Date(v('f-cdd-debut')).toLocaleDateString('fr-FR') : '—';
+    const fin = v('f-cdd-fin') ? new Date(v('f-cdd-fin')).toLocaleDateString('fr-FR') : '—';
+    const motif = v('f-cdd-motif');
+    const salaire = n('f-cdd-salaire') || emp.salaire;
+    const renouvellement = v('f-cdd-renouvellement');
+    const lieu = v('f-cdd-lieu') || ent.adresse || '—';
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('CDD'))}<div class="dp-title">Contrat de travail à durée déterminée</div><div class="dp-period">Du ${debut} au ${fin}</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">L'employeur</div><div class="dp-row"><span class="lbl">Société</span><span class="val">${ent.nom||'—'}</span></div><div class="dp-row"><span class="lbl">ICE</span><span class="val">${ent.ice||'—'}</span></div></div><div class="dp-box"><div class="dp-box-title">Le salarié</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div></div></div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 1 — Motif légal (art. 16 Loi 65-99) :</strong> <strong>${motif}</strong>.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 2 — Poste &amp; rémunération :</strong> Poste de <strong>${emp.poste||'—'}</strong> — Salaire brut mensuel : <strong>${mad(salaire)}</strong>. Lieu de travail : ${lieu}.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 3 — Renouvellement :</strong> Le contrat peut être renouvelé : <strong>${renouvellement}</strong>. À l'échéance, si la relation se poursuit sans acte exprès, le CDD se transforme en CDI de plein droit.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 4 — Indemnité de fin de contrat :</strong> À l'échéance, une indemnité de fin de CDD de <strong>6%</strong> du total des salaires bruts perçus est versée si le contrat n'est pas transformé en CDI.</div><div class="dp-warning">⚠️ La rupture anticipée d'un CDD sans accord bilatéral engage la responsabilité de la partie à l'origine de la rupture (art. 33 Loi 65-99).</div>${dpSig('Le salarié<br><em>Lu, approuvé et signé</em>','Pour la société',ent.ville)}<div class="dp-footer">Contrat en deux exemplaires — Loi 65-99, art. 16 à 18.</div></div>`;
+    addAudit('DOCUMENT', `Contrat CDD — ${emp.prenom} ${emp.nom}`);
+  }
+
+  else if (type === 'avenant') {
+    empId = parseInt(v('f-ava-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    const dateInitial = v('f-ava-date-initial') ? new Date(v('f-ava-date-initial')).toLocaleDateString('fr-FR') : '—';
+    const dateVigueur = v('f-ava-date-vigueur') ? new Date(v('f-ava-date-vigueur')).toLocaleDateString('fr-FR') : '—';
+    const nature = v('f-ava-nature');
+    const ancienne = v('f-ava-ancienne') || '—';
+    const nouvelle = v('f-ava-nouvelle') || '—';
+    const details = v('f-ava-details');
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('AVT'))}<div class="dp-title">Avenant au contrat de travail</div><div class="dp-period">Modifie le contrat du ${dateInitial} — en vigueur à compter du ${dateVigueur}</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Salarié</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div></div><div class="dp-box"><div class="dp-box-title">Nature de la modification</div><div class="dp-row"><span class="lbl">Type</span><span class="val">${nature}</span></div><div class="dp-row"><span class="lbl">Accord bilatéral</span><span class="val">Oui — signé par les deux parties</span></div></div></div><div class="dp-body">Les parties conviennent de modifier le contrat de travail initial dans les conditions suivantes :</div><table><thead><tr><th>Clause modifiée</th><th>Ancienne valeur</th><th>Nouvelle valeur</th></tr></thead><tbody><tr><td>${nature}</td><td>${ancienne}</td><td><strong>${nouvelle}</strong></td></tr></tbody></table>${details?`<div class="dp-body">${details}</div>`:''}<div class="dp-body">Toutes les autres clauses du contrat initial demeurent inchangées et pleinement applicables. Le présent avenant annule et remplace les clauses modifiées ci-dessus.</div>${dpSig('Le salarié<br><em>Lu, approuvé et signé</em>','Pour la société',ent.ville)}<div class="dp-footer">Avenant en deux exemplaires — toute modification substantielle du contrat requiert l'accord écrit du salarié (art. 24 Loi 65-99).</div></div>`;
+    addAudit('DOCUMENT', `Avenant — ${emp.prenom} ${emp.nom} — ${nature}`);
+  }
+
+  else if (type === 'stage') {
+    const nomStagiaire = v('f-st-nom') || '[NOM STAGIAIRE]';
+    const cinStagiaire = v('f-st-cin') || '—';
+    const niveau = v('f-st-niveau') || '—';
+    const ecole = v('f-st-ecole') || '—';
+    const respEcole = v('f-st-resp-ecole') || '—';
+    const tuteur = v('f-st-tuteur') || '—';
+    const debut = v('f-st-debut') ? new Date(v('f-st-debut')).toLocaleDateString('fr-FR') : '—';
+    const fin = v('f-st-fin') ? new Date(v('f-st-fin')).toLocaleDateString('fr-FR') : '—';
+    const gratif = n('f-st-gratif');
+    const filiere = v('f-st-filiere') || '—';
+    const objet = v('f-st-objet') || '[Description des missions]';
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('ST'))}<div class="dp-title">Convention de stage</div><div class="dp-period">Du ${debut} au ${fin}</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px"><div class="dp-box"><div class="dp-box-title">L'entreprise</div><div class="dp-row"><span class="lbl">Société</span><span class="val">${ent.nom||'—'}</span></div><div class="dp-row"><span class="lbl">Tuteur</span><span class="val">${tuteur}</span></div></div><div class="dp-box"><div class="dp-box-title">Le stagiaire</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${nomStagiaire}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${cinStagiaire}</span></div><div class="dp-row"><span class="lbl">Niveau</span><span class="val">${niveau}</span></div><div class="dp-row"><span class="lbl">Filière</span><span class="val">${filiere}</span></div></div><div class="dp-box"><div class="dp-box-title">L'établissement</div><div class="dp-row"><span class="lbl">Nom</span><span class="val">${ecole}</span></div><div class="dp-row"><span class="lbl">Responsable</span><span class="val">${respEcole}</span></div></div></div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Objet du stage :</strong> ${objet.replace(/\n/g,'<br>')}</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Gratification :</strong> ${gratif>0?`<strong>${mad(gratif)}/mois</strong>`:'Non rémunéré'}${gratif>0?' — exonérée de cotisations CNSS si ≤ SMIG mensuel':''}</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Assurance :</strong> Le stagiaire est couvert par l'assurance responsabilité civile de l'entreprise pendant toute la durée du stage.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Confidentialité :</strong> Le stagiaire s'engage à respecter la confidentialité des informations auxquelles il aura accès pendant le stage.</div><div class="dp-sig"><div class="dp-sig-box"><div class="dp-sig-line"></div><div class="dp-sig-lbl">Le stagiaire<br>${nomStagiaire}</div></div><div class="dp-sig-box"><div class="dp-stamp"><div class="dp-stamp-txt">Cachet<br>école</div></div><div class="dp-sig-line"></div><div class="dp-sig-lbl">L'établissement<br>${ecole}</div></div><div class="dp-sig-box"><div class="dp-stamp"><div class="dp-stamp-txt">Cachet<br>société</div></div><div class="dp-sig-line"></div><div class="dp-sig-lbl">Pour la société<br>${ent.nom||'—'}</div></div></div><div class="dp-footer">Convention tripartite — trois exemplaires originaux, un pour chaque partie signataire.</div></div>`;
+    addAudit('DOCUMENT', `Convention de stage — ${nomStagiaire}`);
+  }
+
+  else if (type === 'conge') {
+    empId = parseInt(v('f-dc-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    const typeConge = v('f-dc-type');
+    const dateDemande = v('f-dc-date-demande') ? new Date(v('f-dc-date-demande')).toLocaleDateString('fr-FR') : now;
+    const dateDebut = v('f-dc-debut') ? new Date(v('f-dc-debut')).toLocaleDateString('fr-FR') : '—';
+    const dateFin = v('f-dc-fin') ? new Date(v('f-dc-fin')).toLocaleDateString('fr-FR') : '—';
+    const jours = v('f-dc-jours') || '1';
+    const responsable = v('f-dc-responsable') || '[Responsable N+1]';
+    const motif = v('f-dc-motif');
+    const solde = emp.soldeConges || 0;
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('DC'))}<div class="dp-title">Demande de congé</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Salarié demandeur</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">Poste / Département</span><span class="val">${emp.poste||'—'} / ${emp.dept||'—'}</span></div><div class="dp-row"><span class="lbl">Solde disponible</span><span class="val">${solde} jours</span></div><div class="dp-row"><span class="lbl">Date de demande</span><span class="val">${dateDemande}</span></div></div><div class="dp-box"><div class="dp-box-title">Détail du congé</div><div class="dp-row"><span class="lbl">Type</span><span class="val">${typeConge}</span></div><div class="dp-row"><span class="lbl">Du</span><span class="val">${dateDebut}</span></div><div class="dp-row"><span class="lbl">Au (inclus)</span><span class="val">${dateFin}</span></div><div class="dp-row"><span class="lbl">Nombre de jours</span><span class="val">${jours} jour(s) ouvrable(s)</span></div></div></div>${motif?`<div class="dp-box" style="margin-bottom:10px"><div class="dp-box-title">Motif</div><div class="dp-body" style="margin:0;font-size:9px">${motif}</div></div>`:''}<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="dp-box"><div class="dp-box-title">Demandeur</div><div style="min-height:36px"></div><div class="dp-sig-line" style="border-top:0.5px solid #aaa;margin-top:8px;margin-bottom:3px"></div><div style="font-size:7.5px;color:#555">${emp.prenom} ${emp.nom}<br>${dateDemande}</div></div><div class="dp-box"><div class="dp-box-title">Visa N+1</div><div style="display:flex;gap:8px;margin:6px 0;font-size:8px"><span>☐ Accordé</span><span>☐ Refusé</span></div><div class="dp-sig-line" style="border-top:0.5px solid #aaa;margin-top:14px;margin-bottom:3px"></div><div style="font-size:7.5px;color:#555">${responsable}<br>......./......./${new Date().getFullYear()}</div></div><div class="dp-box"><div class="dp-box-title">Validation RH</div><div style="font-size:8px;color:#555;margin:6px 0">Solde après : <strong>${Math.max(0,solde-parseInt(jours))} jours</strong></div><div class="dp-sig-line" style="border-top:0.5px solid #aaa;margin-top:8px;margin-bottom:3px"></div><div style="font-size:7.5px;color:#555">RH / DRH<br>......./......./${new Date().getFullYear()}</div></div></div><div class="dp-footer">Formulaire à soumettre 15 jours ouvrables avant le départ — Congé légal : 1,5 jour/mois travaillé (art. 231 Loi 65-99).</div></div>`;
+    addAudit('DOCUMENT', `Demande de congé — ${emp.prenom} ${emp.nom} — ${jours}j`);
+  }
+
+  else if (type === 'mission') {
+    empId = parseInt(v('f-om-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    const destination = v('f-om-destination') || '—';
+    const transport = v('f-om-transport');
+    const debut = v('f-om-debut') ? new Date(v('f-om-debut')).toLocaleDateString('fr-FR') : '—';
+    const fin = v('f-om-fin') ? new Date(v('f-om-fin')).toLocaleDateString('fr-FR') : '—';
+    const objet = v('f-om-objet') || '[Objet de la mission]';
+    const heberg = n('f-om-hebergement'), repas = n('f-om-repas'), plafond = n('f-om-plafond');
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('OM'))}<div class="dp-title">Ordre de mission</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Missionnaire</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div></div><div class="dp-box"><div class="dp-box-title">Mission</div><div class="dp-row"><span class="lbl">Destination</span><span class="val">${destination}</span></div><div class="dp-row"><span class="lbl">Du</span><span class="val">${debut}</span></div><div class="dp-row"><span class="lbl">Au</span><span class="val">${fin}</span></div><div class="dp-row"><span class="lbl">Transport</span><span class="val">${transport}</span></div></div></div><div class="dp-highlight"><strong>Objet de la mission :</strong><br>${objet.replace(/\n/g,'<br>')}</div><div class="dp-box" style="margin:10px 0"><div class="dp-box-title">Frais autorisés</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">${heberg>0?`<div class="dp-row"><span class="lbl">Per diem hébergement</span><span class="val">${mad(heberg)}/nuit</span></div>`:''} ${repas>0?`<div class="dp-row"><span class="lbl">Per diem repas</span><span class="val">${mad(repas)}/jour</span></div>`:''} ${plafond>0?`<div class="dp-row"><span class="lbl">Plafond total</span><span class="val">${mad(plafond)}</span></div>`:''}<div class="dp-row"><span class="lbl">Autres frais</span><span class="val">Sur justificatifs originaux</span></div></div></div><div class="dp-body">Le missionnaire devra remettre un rapport de mission et les justificatifs de frais dans les 5 jours ouvrables suivant son retour.</div>${dpSig('Le missionnaire<br><em>Lu et pris connaissance</em>','Le responsable hiérarchique',ent.ville)}<div class="dp-footer">Ordre de mission valable uniquement pour la période et la destination indiquées — à présenter à toute demande.</div></div>`;
+    addAudit('DOCUMENT', `Ordre de mission — ${emp.prenom} ${emp.nom} — ${destination}`);
+  }
+
+  else if (type === 'maladie') {
+    empId = parseInt(v('f-am-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    const debut = v('f-am-debut') ? new Date(v('f-am-debut')).toLocaleDateString('fr-FR') : '—';
+    const reprise = v('f-am-reprise') ? new Date(v('f-am-reprise')).toLocaleDateString('fr-FR') : '—';
+    const declaration = v('f-am-declaration') ? new Date(v('f-am-declaration')).toLocaleDateString('fr-FR') : now;
+    const complement = n('f-am-complement');
+    const salaireRef = n('f-am-salaire-ref') || emp.salaire;
+    const sjr = r(salaireRef / 26);
+    const ij = r(sjr * 2/3);
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('AM'))}<div class="dp-title">Attestation d'arrêt maladie — déclaration employeur</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Salarié concerné</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div><div class="dp-row"><span class="lbl">Date embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div></div><div class="dp-box"><div class="dp-box-title">Arrêt de travail</div><div class="dp-row"><span class="lbl">Date début arrêt</span><span class="val">${debut}</span></div><div class="dp-row"><span class="lbl">Date reprise estimée</span><span class="val">${reprise}</span></div><div class="dp-row"><span class="lbl">Arrêt déclaré CNSS le</span><span class="val">${declaration}</span></div></div></div><div class="dp-body">Je soussigné(e), représentant légal de la société <strong>${ent.nom}</strong>, certifie que M./Mme <strong>${emp.prenom} ${emp.nom}</strong>, immatriculé(e) à la CNSS sous le N° ${emp.cnss||'—'}, est en arrêt de travail pour raison médicale depuis le ${debut}.</div><div class="dp-highlight">Le poste est maintenu. La société s'engage à compléter les indemnités journalières CNSS conformément à la législation en vigueur.</div><div class="dp-box" style="margin:10px 0"><div class="dp-box-title">Salaire de référence — calcul indemnités journalières</div><div class="dp-row"><span class="lbl">Salaire moyen référence (3 mois)</span><span class="val">${mad(salaireRef)}</span></div><div class="dp-row"><span class="lbl">Salaire journalier de référence (SJR)</span><span class="val">${mad(sjr)}</span></div><div class="dp-row"><span class="lbl">Indemnité journalière CNSS (2/3 du SJR)</span><span class="val">${mad(ij)}/jour</span></div>${complement>0?`<div class="dp-row"><span class="lbl">Complément employeur</span><span class="val">${mad(complement)}/jour</span></div>`:''}</div>${dpSig('','Le représentant légal',ent.ville)}<div class="dp-footer">Attestation à transmettre à la CNSS dans les 48h suivant la connaissance de l'arrêt de travail.</div></div>`;
+    addAudit('DOCUMENT', `Attestation maladie — ${emp.prenom} ${emp.nom}`);
+  }
+
+  else if (type === 'formation') {
+    empId = parseInt(v('f-af-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    const titre = v('f-af-titre') || '[Intitulé formation]';
+    const organisme = v('f-af-organisme') || 'Interne';
+    const debut = v('f-af-debut') ? new Date(v('f-af-debut')).toLocaleDateString('fr-FR') : '—';
+    const fin = v('f-af-fin') ? new Date(v('f-af-fin')).toLocaleDateString('fr-FR') : '—';
+    const heures = v('f-af-heures') || '—';
+    const resultat = v('f-af-resultat');
+    const modules = v('f-af-modules') || '';
+    const modulesHTML = modules ? modules.split('\n').filter(m=>m.trim()).map(m=>`<div style="font-size:8.5px;margin:2px 0;padding-left:8px;border-left:2px solid #e8eef4">• ${m.trim()}</div>`).join('') : '';
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('AF'))}<div class="dp-title">Attestation de participation à une formation</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Bénéficiaire</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div></div><div class="dp-box"><div class="dp-box-title">Formation</div><div class="dp-row"><span class="lbl">Intitulé</span><span class="val">${titre}</span></div><div class="dp-row"><span class="lbl">Organisme</span><span class="val">${organisme}</span></div><div class="dp-row"><span class="lbl">Du / Au</span><span class="val">${debut} → ${fin}</span></div><div class="dp-row"><span class="lbl">Durée</span><span class="val">${heures} heures</span></div><div class="dp-row"><span class="lbl">Résultat</span><span class="val">${resultat}</span></div></div></div><div class="dp-body">Je soussigné(e), représentant légal de la société <strong>${ent.nom}</strong>, atteste que M./Mme <strong>${emp.prenom} ${emp.nom}</strong> a participé et obtenu le résultat suivant : <strong>${resultat}</strong> à la formation :</div><div class="dp-highlight"><strong>${titre}</strong><br>Dispensée par : ${organisme} — du ${debut} au ${fin} — soit <strong>${heures} heures</strong> de formation.</div>${modulesHTML?`<div class="dp-box" style="margin:8px 0"><div class="dp-box-title">Compétences / Modules validés</div>${modulesHTML}</div>`:''}<div class="dp-body">La présente attestation est délivrée à la demande de l'intéressé(e), pour servir et valoir ce que de droit.</div>${dpSig('Signature du bénéficiaire<br><em>Lu et approuvé</em>','Le représentant légal',ent.ville)}<div class="dp-footer">Attestation valable pour toute démarche professionnelle — Loi 13-00 portant statut de la formation professionnelle.</div></div>`;
+    addAudit('DOCUMENT', `Attestation formation — ${emp.prenom} ${emp.nom} — ${titre}`);
+  }
+
+  else if (type === 'nda') {
+    empId = parseInt(v('f-nda-emp')); emp = employes.find(e=>e.id===empId);
+    if (!emp) return alert('Sélectionnez un employé');
+    const dateSign = v('f-nda-date') ? new Date(v('f-nda-date')).toLocaleDateString('fr-FR') : now;
+    const duree = v('f-nda-duree') || '24';
+    const infos = v('f-nda-infos') || 'données clients, tarifs, procédés techniques, codes sources, informations financières';
+    const tribunal = v('f-nda-tribunal') || ent.ville || 'Casablanca';
+    corps = `<div class="doc-pro">${dpHeader(ent,ref('NDA'))}<div class="dp-title">Accord de confidentialité et de non-divulgation</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Partie divulgatrice (employeur)</div><div class="dp-row"><span class="lbl">Société</span><span class="val">${ent.nom||'—'}</span></div><div class="dp-row"><span class="lbl">ICE</span><span class="val">${ent.ice||'—'}</span></div></div><div class="dp-box"><div class="dp-box-title">Partie réceptrice (salarié)</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div></div></div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 1 — Informations confidentielles :</strong> Sont considérées comme confidentielles : ${infos}, et tout document expressément marqué « confidentiel ».</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 2 — Obligations du salarié :</strong> Le salarié s'engage à ne pas divulguer, reproduire, transmettre ou utiliser à des fins personnelles les informations confidentielles, pendant la durée du contrat et <strong>${duree} mois</strong> après sa rupture, quelle qu'en soit la cause.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 3 — Exclusions :</strong> L'obligation de confidentialité ne s'applique pas aux informations déjà dans le domaine public, divulguées par un tiers autorisé, ou dont la divulgation est requise par une autorité judiciaire compétente.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 4 — Sanctions :</strong> Tout manquement au présent accord pourra entraîner une sanction disciplinaire pouvant aller jusqu'au licenciement pour faute grave, sans préjudice des poursuites civiles et pénales.</div><div class="dp-body" style="border-left:2px solid #2c5aa0;padding-left:10px;margin:6px 0"><strong>Art. 5 — Restitution :</strong> À la fin du contrat, le salarié s'engage à restituer ou détruire tout support contenant des informations confidentielles de la société.</div>${dpSig('Le salarié<br><em>Lu, approuvé et signé — le ${dateSign}</em>','Pour la société<br><em>[Nom &amp; qualité]</em>',ent.ville)}<div class="dp-footer">Accord soumis au droit marocain — tout litige relève de la compétence des tribunaux de ${tribunal}.</div></div>`;
+    addAudit('DOCUMENT', `NDA — ${emp.prenom} ${emp.nom}`);
+  }
+
+  if (corps) printDoc(corps);
+  closeDocForm();
+}
+
+
+// ======================== ATTESTATION DE TRAVAIL & SALAIRE ========================
+function genererAttestation() {
+  const empId=parseInt(document.getElementById('attest-emp').value);
+  const emp=employes.find(e=>e.id===empId);
+  if(!emp) return alert("Sélectionnez un employé");
+  const type=document.getElementById('attest-type').value;
+  const ent=entreprises[currentSociete];
+  const now=new Date().toLocaleDateString('fr-FR');
+  const refNum=`${type==='Attestation de travail'?'AT':'AS'}-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
+  const ancData=calcAnciennete(emp.date, new Date());
+  let corps="";
+  if(type==="Attestation de travail") {
+    corps=`<div class="doc-pro">
+  <div class="dp-header">
+    <div><div class="dp-logo">${ent.nom}</div><div class="dp-meta">Adresse : ${ent.adresse||'—'}<br>ICE : ${ent.ice||'—'} &nbsp;·&nbsp; RC : ${ent.rc||'—'} &nbsp;·&nbsp; IF : ${ent['if']||'—'}<br>CNSS : ${ent.cnss||'—'}</div></div>
+    <div class="dp-ref">Réf. : ${refNum}<br>Date : ${now}<br>Ville : ${ent.ville||'Casablanca'}</div>
+  </div>
+  <div class="dp-title">Attestation de travail</div>
+  <div class="dp-grid">
+    <div class="dp-box">
+      <div class="dp-box-title">Identité du salarié</div>
+      <div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div>
+      <div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">Situation fam.</span><span class="val">${emp.sitfam||'—'}</span></div>
+    </div>
+    <div class="dp-box">
+      <div class="dp-box-title">Poste &amp; contrat</div>
+      <div class="dp-row"><span class="lbl">Poste occupé</span><span class="val">${emp.poste||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">Département</span><span class="val">${emp.dept||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">Type de contrat</span><span class="val">${emp.contrat||'CDI'}</span></div>
+      <div class="dp-row"><span class="lbl">Date d'embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div>
+      <div class="dp-row"><span class="lbl">Ancienneté</span><span class="val">${ancData.ans} an(s) ${ancData.mois} mois</span></div>
+    </div>
+  </div>
+  <div class="dp-body">Je soussigné(e), représentant légal de la société <strong>${ent.nom}</strong>, immatriculée sous le numéro ICE ${ent.ice||'—'}, atteste par la présente que :</div>
+  <div class="dp-highlight">M./Mme <strong>${emp.prenom} ${emp.nom}</strong>, titulaire de la CIN N° ${emp.cin||'—'}, est employé(e) au sein de notre entreprise en qualité de <strong>${emp.poste||'—'}</strong>, département <strong>${emp.dept||'—'}</strong>, depuis le <strong>${new Date(emp.date).toLocaleDateString('fr-FR')}</strong>, dans le cadre d'un contrat à durée ${emp.contrat==='CDI'?'indéterminée (CDI)':'déterminée (CDD)'}.</div>
+  <div class="dp-body">Le/La salarié(e) est toujours en activité à ce jour. La présente attestation lui est délivrée à sa demande, pour servir et valoir ce que de droit, notamment pour toute démarche administrative, bancaire ou autre.</div>
+  <div class="dp-sig">
+    <div class="dp-sig-box"><div class="dp-sig-line"></div><div class="dp-sig-lbl">Signature du salarié<br><em>Lu et approuvé</em></div></div>
+    <div class="dp-sig-box"><div style="width:70px;height:70px;border:1px dashed #bbb;border-radius:4px;margin:0 auto 3px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px"><span style="font-size:6px;color:#ccc">Cachet</span></div><div class="dp-sig-line"></div><div class="dp-sig-lbl">Le représentant légal<br><em>Fait à ${ent.ville||'Casablanca'}, le ${now}</em></div></div>
+  </div>
+  <div class="dp-footer">Document établi conformément aux dispositions du Code du Travail marocain (Loi 65-99).</div>
+</div>`;
+  } else {
+    const dernierBulletin=bulletins.find(b=>b.emp===`${emp.prenom} ${emp.nom}`);
+    const cRef=calcPaie(emp.salaire,emp.charges||0,0,{primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0},emp.date,dernierBulletin?.mois||new Date().toISOString());
+    const ancPrime=r(emp.salaire*ancData.taux);
+    const brutRef=r(emp.salaire+ancPrime);
+    corps=`<div class="doc-pro">
+  <div class="dp-header">
+    <div><div class="dp-logo">${ent.nom}</div><div class="dp-meta">Adresse : ${ent.adresse||'—'}<br>ICE : ${ent.ice||'—'} &nbsp;·&nbsp; RC : ${ent.rc||'—'} &nbsp;·&nbsp; IF : ${ent['if']||'—'}<br>CNSS : ${ent.cnss||'—'}</div></div>
+    <div class="dp-ref">Réf. : ${refNum}<br>Date : ${now}<br>Ville : ${ent.ville||'Casablanca'}</div>
+  </div>
+  <div class="dp-title">Attestation de salaire</div>
+  <div class="dp-period">Période de référence : ${dernierBulletin?.mois||new Date().toLocaleString('fr',{month:'long',year:'numeric'})}</div>
+  <div class="dp-grid">
+    <div class="dp-box">
+      <div class="dp-box-title">Identité du salarié</div>
+      <div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div>
+      <div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">Ancienneté</span><span class="val">${ancData.ans} an(s) ${ancData.mois} mois</span></div>
+    </div>
+    <div class="dp-box">
+      <div class="dp-box-title">Poste &amp; contrat</div>
+      <div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">Département</span><span class="val">${emp.dept||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">Contrat</span><span class="val">${emp.contrat||'CDI'}</span></div>
+      <div class="dp-row"><span class="lbl">Date embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th>Élément de rémunération</th><th class="r">Montant (DH)</th></tr></thead>
+    <tbody>
+      <tr><td>Salaire de base</td><td class="r">${mad(emp.salaire)}</td></tr>
+      ${ancPrime>0?`<tr><td>Prime d'ancienneté (${ancData.taux*100}%)</td><td class="r">${mad(ancPrime)}</td></tr>`:''}
+      <tr class="tbl-total"><td><strong>Total brut mensuel</strong></td><td class="r"><strong>${mad(brutRef)}</strong></td></tr>
+      <tr><td>CNSS salariale (${legalParams.cnss_sal}%)</td><td class="r" style="color:#a32d2d">- ${mad(cRef.cnss_sal)}</td></tr>
+      <tr><td>AMO salariale (${legalParams.amo_sal}%)</td><td class="r" style="color:#a32d2d">- ${mad(cRef.amo_sal)}</td></tr>
+      <tr><td>IR net retenu à la source</td><td class="r" style="color:#a32d2d">- ${mad(cRef.ir_net)}</td></tr>
+      <tr class="tbl-net"><td><strong>Net mensuel à percevoir</strong></td><td class="r"><strong>${mad(cRef.net)}</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="dp-body">Je soussigné(e), représentant légal de la société <strong>${ent.nom}</strong>, certifie que M./Mme <strong>${emp.prenom} ${emp.nom}</strong> perçoit une rémunération mensuelle brute de <strong>${mad(brutRef)}</strong>, soit un net mensuel à percevoir de <strong>${mad(cRef.net)}</strong>, pour l'exercice de ses fonctions en tant que ${emp.poste||'employé(e)'}.</div>
+  <div class="dp-body">La présente attestation est délivrée à la demande de l'intéressé(e), pour servir et valoir ce que de droit, notamment dans le cadre de démarches bancaires, administratives ou de location.</div>
+  <div class="dp-sig">
+    <div class="dp-sig-box"><div class="dp-sig-line"></div><div class="dp-sig-lbl">Signature du salarié<br><em>Lu et approuvé</em></div></div>
+    <div class="dp-sig-box"><div style="width:70px;height:70px;border:1px dashed #bbb;border-radius:4px;margin:0 auto 3px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px"><span style="font-size:6px;color:#ccc">Cachet</span></div><div class="dp-sig-line"></div><div class="dp-sig-lbl">Le représentant légal<br><em>Fait à ${ent.ville||'Casablanca'}, le ${now}</em></div></div>
+  </div>
+  <div class="dp-footer">Document établi conformément aux dispositions du Code du Travail marocain (Loi 65-99) et à la législation fiscale en vigueur.</div>
+</div>`;
+  }
+  const pz=document.getElementById('print-zone'); pz.innerHTML=corps; pz.style.display='block';
+  window.print();
+  setTimeout(()=>{pz.style.display='none';pz.innerHTML='';},100);
+  addAudit("DOCUMENT",`${type} — ${emp.prenom} ${emp.nom}`);
+}
+
+// ======================== CERTIFICAT DE CESSATION ========================
+function genererCessation() {
+  const empId=parseInt(document.getElementById('cessation-emp').value);
+  const emp=employes.find(e=>e.id===empId);
+  if(!emp) return alert("Sélectionnez un employé");
+  const dateDepart=document.getElementById('cessation-date').value;
+  if(!dateDepart) return alert("Date de départ requise");
+  const motif=document.getElementById('cessation-motif').value;
+  const preavis=document.getElementById('cessation-preavis').value;
+  const soldeDateRaw=document.getElementById('cessation-solde').value;
+  const soldeDate=soldeDateRaw?new Date(soldeDateRaw).toLocaleDateString('fr-FR'):now;
+  const ent=entreprises[currentSociete];
+  const now=new Date().toLocaleDateString('fr-FR');
+  const ancData=calcAnciennete(emp.date, new Date(dateDepart));
+  const refNum=`CC-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
+  const corps=`<div class="doc-pro">
+  <div class="dp-header">
+    <div><div class="dp-logo">${ent.nom}</div><div class="dp-meta">Adresse : ${ent.adresse||'—'}<br>ICE : ${ent.ice||'—'} &nbsp;·&nbsp; RC : ${ent.rc||'—'} &nbsp;·&nbsp; IF : ${ent['if']||'—'}<br>CNSS : ${ent.cnss||'—'}</div></div>
+    <div class="dp-ref">Réf. : ${refNum}<br>Date : ${now}<br>Ville : ${ent.ville||'Casablanca'}</div>
+  </div>
+  <div class="dp-title">Certificat de cessation de contrat</div>
+  <div class="dp-grid">
+    <div class="dp-box">
+      <div class="dp-box-title">Identité du salarié</div>
+      <div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div>
+      <div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">Situation fam.</span><span class="val">${emp.sitfam||'—'}</span></div>
+    </div>
+    <div class="dp-box">
+      <div class="dp-box-title">Contrat &amp; ancienneté</div>
+      <div class="dp-row"><span class="lbl">Poste occupé</span><span class="val">${emp.poste||'—'}</span></div>
+      <div class="dp-row"><span class="lbl">Date d'embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div>
+      <div class="dp-row"><span class="lbl">Date de départ</span><span class="val">${new Date(dateDepart).toLocaleDateString('fr-FR')}</span></div>
+      <div class="dp-row"><span class="lbl">Ancienneté totale</span><span class="val">${ancData.ans} an(s) ${ancData.mois} mois</span></div>
+    </div>
+  </div>
+  <div class="dp-body">Je soussigné(e), représentant légal de la société <strong>${ent.nom}</strong>, immatriculée sous le numéro ICE ${ent.ice||'—'}, certifie par la présente que :</div>
+  <div class="dp-highlight">M./Mme <strong>${emp.prenom} ${emp.nom}</strong>, titulaire de la CIN N° ${emp.cin||'—'}, employé(e) en qualité de <strong>${emp.poste||'—'}</strong> depuis le <strong>${new Date(emp.date).toLocaleDateString('fr-FR')}</strong>, a définitivement quitté les effectifs de notre entreprise à la date du <strong>${new Date(dateDepart).toLocaleDateString('fr-FR')}</strong>.</div>
+  <div class="dp-box" style="margin:10px 0">
+    <div class="dp-box-title">Motif &amp; conditions de cessation</div>
+    <div class="dp-row"><span class="lbl">Motif</span><span class="val">${motif}</span></div>
+    <div class="dp-row"><span class="lbl">Préavis effectué</span><span class="val">${preavis}</span></div>
+    <div class="dp-row"><span class="lbl">Solde de tout compte réglé le</span><span class="val">${soldeDate}</span></div>
+    <div class="dp-row"><span class="lbl">Indemnité de licenciement</span><span class="val">${motif==='Licenciement'?'Oui — calculée selon Loi 65-99':'Non applicable'}</span></div>
+  </div>
+  <div class="dp-warning">⚠️ Le solde de tout compte, l'indemnité de préavis et/ou de licenciement ont été réglés conformément aux dispositions du Code du Travail marocain (Loi 65-99, art. 41 et suivants).</div>
+  <div class="dp-body">La présente attestation est délivrée à l'intéressé(e) pour lui servir de justificatif auprès de la CNSS (prestations de chômage), de l'ANAPEC, ou de tout autre organisme compétent.</div>
+  <div class="dp-sig">
+    <div class="dp-sig-box"><div class="dp-sig-line"></div><div class="dp-sig-lbl">Signature du salarié<br><em>Remise reconnue</em></div></div>
+    <div class="dp-sig-box"><div style="width:70px;height:70px;border:1px dashed #bbb;border-radius:4px;margin:0 auto 3px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px"><span style="font-size:6px;color:#ccc">Cachet</span></div><div class="dp-sig-line"></div><div class="dp-sig-lbl">Le représentant légal<br><em>Fait à ${ent.ville||'Casablanca'}, le ${now}</em></div></div>
+  </div>
+  <div class="dp-footer">Document établi conformément aux dispositions du Code du Travail marocain (Loi 65-99) — à remettre obligatoirement au salarié à la date de départ.</div>
+</div>`;
+  const pz=document.getElementById('print-zone'); pz.innerHTML=corps; pz.style.display='block';
+  window.print();
+  setTimeout(()=>{pz.style.display='none';pz.innerHTML='';},100);
+  addAudit("CESSATION",`${emp.prenom} ${emp.nom} — ${motif} — ${new Date(dateDepart).toLocaleDateString('fr-FR')}`);
+}
+
+// ======================== CONGÉS ========================
+function addAbsence() {
+  const empId=parseInt(document.getElementById('absence-emp').value);
+  const emp=employes.find(e=>e.id===empId);
+  if(!emp) return alert("Sélectionnez un employé");
+  const type=document.getElementById('absence-type').value;
+  const debut=document.getElementById('absence-debut').value;
+  const jours=parseFloat(document.getElementById('absence-jours').value);
+  if(!debut||isNaN(jours)||jours<=0) return alert("Date début et nb jours valides");
+  if(!emp.absences) emp.absences=[];
+  emp.absences.push({date:debut,jours,type});
+  if(type==="Congé payé") emp.soldeConges=(emp.soldeConges||0)-jours;
+  saveAll(); addAudit("ABSENCE",`${emp.prenom} ${emp.nom} - ${type} ${jours}j`); refreshCongesList(); updateAbsencesFieldForMonth();
+}
+function updateAbsencesFieldForMonth() {
+  const empId=parseInt(document.getElementById('c-emp').value); if(!empId) return;
+  const emp=employes.find(e=>e.id===empId); if(!emp||!emp.absences) return;
+  const moisSel=document.getElementById('c-mois').value;
+  const [moisNom,annee]=moisSel.split(' ');
+  const moisIndex=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'].indexOf(moisNom);
+  if(moisIndex!==-1){let total=0; emp.absences.forEach(a=>{const ad=new Date(a.date); if(ad.getFullYear()==parseInt(annee)&&ad.getMonth()==moisIndex&&(a.type==="Sans solde"||a.type==="Absence injustifiée")) total+=a.jours;}); document.getElementById('c-absJours').value=total; doCalc();}
+}
+function refreshCongesList() {
+  const div=document.getElementById('conges-list');
+  if(!employes.length){div.innerHTML='<div style="color:var(--txt2);padding:12px">Aucun employé</div>';return;}
+  div.innerHTML=employes.map(e=>`
+    <div style="padding:10px 0;border-bottom:1px solid var(--brd)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong>${e.prenom} ${e.nom}</strong>
+        <span class="badge b-grn">${e.soldeConges||0} jours</span>
+      </div>
+      <div style="font-size:11px;color:var(--txt2);margin-top:4px">${(e.absences||[]).map(a=>`${a.type} : ${a.jours}j — ${a.date}`).join(' · ')||'Aucune absence enregistrée'}</div>
+    </div>`).join('');
+}
+
+// ======================== DASHBOARD & AUTRES ========================
+function refreshDocumentsList() {
+  const div=document.getElementById('documents-list');
+  if(!employes.length){div.innerHTML='<div style="color:var(--txt2)">Aucun employé</div>';return;}
+  div.innerHTML=employes.map(e=>`
+    <div style="padding:10px 0;border-bottom:1px solid var(--brd)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong>${e.prenom} ${e.nom}</strong>
+        <span class="badge ${e.contrat==='CDI'?'b-grn':'b-org'}">${e.contrat||'CDI'}</span>
+      </div>
+      <div style="font-size:11px;color:var(--txt2);margin-top:3px">
+        Fin contrat : ${e.dateFinContrat?new Date(e.dateFinContrat).toLocaleDateString('fr-FR'):'CDI — indéterminé'}
+        &nbsp;·&nbsp; Fin essai : ${e.dateFinEssai?new Date(e.dateFinEssai).toLocaleDateString('fr-FR'):'Terminée'}
+      </div>
+      ${e.docUrl?`<a href="${e.docUrl}" target="_blank" style="font-size:11px;color:var(--blu)">📄 Voir le document</a>`:''}
+    </div>`).join('');
+  populateAllEmployeeSelects();
+}
+function refreshEmpList() {
+  const div=document.getElementById('emp-list');
+  if(!employes.length){div.innerHTML='<div class="card" style="color:var(--txt2);text-align:center;padding:30px">Aucun employé — cliquez sur Ajouter</div>';return;}
+  div.innerHTML=employes.map(e=>{
+    const initials=(e.prenom[0]||'')+(e.nom[0]||'');
+    const anc=calcAnciennete(e.date, new Date());
+    return `<div class="emp-card">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="emp-avatar">${initials}</div>
+        <div class="emp-info">
+          <div class="emp-name">${e.prenom} ${e.nom}</div>
+          <div class="emp-meta">${e.poste||'—'} · ${e.dept||'—'} · <span class="badge b-${e.contrat==='CDI'?'grn':'org'}" style="font-size:9px">${e.contrat}</span></div>
+          <div class="emp-meta" style="margin-top:2px">Ancienneté : ${anc.ans} a ${anc.mois} m</div>
+        </div>
+        <div style="text-align:right">
+          <div class="emp-sal">${mad(e.salaire)}</div>
+          <div style="display:flex;gap:5px;margin-top:6px;justify-content:flex-end">
+            <button class="btn btn-o btn-sm" onclick="quickCalc(${e.id})">🧮</button>
+            <button class="btn btn-d btn-sm" onclick="deleteEmploye(${e.id})">🗑</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function deleteEmploye(id){if(confirm('Supprimer cet employé ?')){employes=employes.filter(e=>e.id!==id);saveAll();addAudit("SUPPRESSION",`ID ${id}`);refreshAll();}}
+function quickCalc(id){const e=employes.find(x=>x.id===id);if(!e)return;document.getElementById('c-emp').value=id;document.getElementById('c-brut').value=e.salaire;document.getElementById('c-charges').value=Math.min(e.charges||0,6);document.getElementById('c-date').value=e.date||'';doCalc();nav('calcul',document.querySelectorAll('.nav-btn')[2]);}
+function fillFromEmp(){const id=parseInt(document.getElementById('c-emp').value);const e=employes.find(x=>x.id===id);if(e){document.getElementById('c-brut').value=e.salaire;document.getElementById('c-charges').value=Math.min(e.charges||0,6);document.getElementById('c-date').value=e.date||'';doCalc();updateAbsencesFieldForMonth();}}
+function addEmploye(){
+  const prenom=document.getElementById('m-prenom').value.trim(),nom=document.getElementById('m-nom').value.trim(),sal=parseFloat(document.getElementById('m-salaire').value)||0;
+  if(!prenom||!nom||!sal){alert('Prénom, nom et salaire requis');return;}
+  employes.push({id:Date.now(),prenom,nom,cin:document.getElementById('m-cin').value,cnss:document.getElementById('m-cnss').value,poste:document.getElementById('m-poste').value,dept:document.getElementById('m-dept').value,salaire:sal,date:document.getElementById('m-date').value,charges:parseInt(document.getElementById('m-charges').value)||0,contrat:document.getElementById('m-contrat').value,dateFinContrat:document.getElementById('m-fincontrat').value||null,dateFinEssai:document.getElementById('m-finEssai').value||null,soldeConges:parseFloat(document.getElementById('m-conges').value)||0,email:document.getElementById('m-email').value,tel:document.getElementById('m-tel').value,adresse:document.getElementById('m-adresse').value,rib:document.getElementById('m-rib').value,sitfam:document.getElementById('m-sit').value,docUrl:document.getElementById('m-docUrl').value,absences:[],statut:'Actif'});
+  saveAll();addAudit("AJOUT",`${prenom} ${nom}`);closeModal('addEmp');refreshAll();
+}
+function refreshBulletins(){
+  const div=document.getElementById('bulletins-list');
+  if(!bulletins.length){div.innerHTML='<div class="card" style="color:var(--txt2);text-align:center;padding:30px">Aucun bulletin généré</div>';return;}
+  div.innerHTML=bulletins.map((b,i)=>`<div class="bul-card" onclick="openBulletinModal(b_${i}, employes.find(e=>e.id===${b.empId}))">
+    <div><div class="bul-name">${b.emp}</div><div class="bul-mois">${b.mois}</div></div>
+    <div class="bul-net">${mad(b.net)}</div>
+  </div>`).join('');
+  // Recréer les éléments correctement avec data
+  div.innerHTML='';
+  bulletins.forEach((b,i)=>{
+    const el=document.createElement('div');
+    el.className='bul-card';
+    el.innerHTML=`<div><div class="bul-name">${b.emp}</div><div class="bul-mois">${b.mois}</div></div><div class="bul-net">${mad(b.net)}</div>`;
+    el.onclick=()=>openBulletinModal(b, employes.find(e=>`${e.prenom} ${e.nom}`===b.emp));
+    div.appendChild(el);
+  });
+}
+function purgeOldBulletins(){const limit=new Date();limit.setFullYear(limit.getFullYear()-10);const newB=bulletins.filter(b=>new Date(b.mois)>limit);if(newB.length<bulletins.length){bulletins=newB;saveAll();addAudit("PURGE","Bulletins >10 ans supprimés");refreshBulletins();}}
+function exportBulletinsCSV(){let csv="Employé,Mois,Net DH\n"+bulletins.map(b=>`${b.emp},${b.mois},${b.net}`).join("\n");downloadFile("bulletins.csv",csv);}
+function refreshCNSS(){
+  const actifs=employes.filter(e=>e.statut!=='Inactif');
+  let ass=0,masse=0;
+  actifs.forEach(e=>{const anc=calcAnciennete(e.date,new Date());const b=e.salaire+anc.prime;ass+=Math.min(b,legalParams.plafond);masse+=b;});
+  const cs=ass*legalParams.cnss_sal/100,cp=ass*legalParams.cnss_pat/100,amo=masse*legalParams.amo_sal/100,alloc=masse*legalParams.alloc_fam/100,amoPat=masse*legalParams.amo_pat/100,tfp=masse*legalParams.tfp/100,total=cs+cp+amo+alloc+amoPat+tfp;
+  document.getElementById('cnss-rows').innerHTML=`<div class="rrow"><span class="rlbl">Masse salariale brute</span><span class="rval">${mad(masse)}</span></div><div class="rrow"><span class="rlbl">CNSS salariale</span><span class="rval red">- ${mad(cs)}</span></div><div class="rrow"><span class="rlbl">CNSS patronale</span><span class="rval org">${mad(cp)}</span></div><div class="rrow"><span class="rlbl">AMO salariale</span><span class="rval red">- ${mad(amo)}</span></div><div class="rrow"><span class="rlbl">Alloc. familiales</span><span class="rval org">${mad(alloc)}</span></div><div class="rrow"><span class="rlbl">AMO patronale</span><span class="rval org">${mad(amoPat)}</span></div><div class="rrow"><span class="rlbl">TFP</span><span class="rval org">${mad(tfp)}</span></div>`;
+  document.getElementById('cnss-total').innerHTML=mad(total);
+}
+function refreshIR(){
+  const actifs=employes.filter(e=>e.statut!=='Inactif');
+  const div=document.getElementById('ir-table');
+  if(!actifs.length){div.innerHTML='<div style="color:var(--txt2)">Aucun employé actif</div>';return;}
+  div.innerHTML=actifs.map(e=>{const anc=calcAnciennete(e.date,new Date());const c=calcPaie(e.salaire+anc.prime,e.charges||0,0,{primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0},e.date,new Date().toISOString());return `<div style="padding:10px 0;border-bottom:1px solid var(--brd)"><div style="display:flex;justify-content:space-between"><strong>${e.prenom} ${e.nom}</strong><span class="badge b-red">IR : ${mad(c.ir_net)}</span></div><div style="font-size:11px;color:var(--txt2);margin-top:3px">RNI : ${mad(c.rni)}</div></div>`;}).join('');
+}
+function refreshAnciennete(){
+  const div=document.getElementById('anc-table');
+  if(!employes.length){div.innerHTML='<div style="color:var(--txt2)">Aucun employé</div>';return;}
+  div.innerHTML=employes.map(e=>{const anc=calcAnciennete(e.date,new Date());const prime=e.salaire*anc.taux;return `<div style="padding:10px 0;border-bottom:1px solid var(--brd)"><div style="display:flex;justify-content:space-between;align-items:center"><strong>${e.prenom} ${e.nom}</strong><span class="badge b-grn">Prime : ${mad(prime)}</span></div><div style="font-size:11px;color:var(--txt2);margin-top:3px">${anc.ans} an(s) ${anc.mois} mois — Taux : ${anc.taux*100}%</div></div>`;}).join('');
+}
+function refreshAudit(){const div=document.getElementById('auditLog');if(div) div.innerHTML=audit.map(a=>`<div style="padding:4px 0;border-bottom:1px solid var(--brd);color:var(--txt2)"><span style="color:var(--txt3)">${new Date(a.date).toLocaleString()}</span> — <span style="color:var(--grn)">${a.action}</span> : ${a.details}</div>`).join('')||'<div style="color:var(--txt3)">Aucune action</div>';}
+function clearAudit(){audit=[];saveAll();refreshAudit();}
+function exportCNSS(){
+  const actifs=employes.filter(e=>e.statut!=='Inactif');
+  let lignes="",tot=0;
+  for(let e of actifs){const anc=calcAnciennete(e.date,document.getElementById('c-mois')?.value);const brut=e.salaire+anc.prime;const ass=Math.min(brut,legalParams.plafond);const cs=ass*legalParams.cnss_sal/100;const cp=ass*legalParams.cnss_pat/100;tot+=cs+cp;lignes+=`${e.cnss||''};${e.prenom} ${e.nom};${brut.toFixed(2)};${ass.toFixed(2)};${cs.toFixed(2)};${cp.toFixed(2)}\n`;}
+  downloadFile("declaration_cnss.txt","CNSS;EMPLOYE;BRUT;ASSIETTE;COTIS_SAL;COTIS_PAT\n"+lignes+"\nTOTAL:"+tot.toFixed(2));
+  addAudit("EXPORT CNSS","Fichier généré");
+}
+function exportIR(){
+  const actifs=employes.filter(e=>e.statut!=='Inactif');
+  let lignes="";
+  for(let e of actifs){const anc=calcAnciennete(e.date,document.getElementById('c-mois')?.value);const c=calcPaie(e.salaire+anc.prime,e.charges||0,0,{primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0},e.date,document.getElementById('c-mois')?.value);lignes+=`${e.cin||''};${e.prenom} ${e.nom};${c.rni.toFixed(2)};${c.ir_net.toFixed(2)}\n`;}
+  downloadFile("declaration_ir.csv","CIN;NOM;RNI;IR_NET\n"+lignes);
+  addAudit("EXPORT IR","Fichier généré");
+}
+function downloadFile(name,content){const a=document.createElement('a');const blob=new Blob([content],{type:'text/plain'});a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
+function initCharts(){
+  const ctx1=document.getElementById('masseChart').getContext('2d');
+  const ctx2=document.getElementById('chargesChart').getContext('2d');
+  chartMasse=new Chart(ctx1,{type:'line',data:{labels:[],datasets:[{label:'Masse salariale (MAD)',data:[],borderColor:'#10d9a0',backgroundColor:'rgba(16,217,160,.08)',fill:true,tension:.4,pointBackgroundColor:'#10d9a0',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#4e6080',font:{size:10}},grid:{color:'rgba(30,45,69,.5)'}},y:{ticks:{color:'#4e6080',font:{size:10}},grid:{color:'rgba(30,45,69,.5)'}}}}});
+  chartCharges=new Chart(ctx2,{type:'doughnut',data:{labels:['CNSS pat.','Alloc. fam.','AMO pat.','TFP'],datasets:[{data:[0,0,0,0],backgroundColor:['#f59e0b','#3b82f6','#ef4444','#10d9a0'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{size:11},padding:12}}}}});
+}
+function updateCharts(){
+  if(!chartMasse) return;
+  const moisLabels=[],masses=[];
+  for(let i=11;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);const m=d.toLocaleString('fr',{month:'short',year:'numeric'});moisLabels.push(m);let total=0;bulletins.filter(b=>b.mois===m).forEach(b=>total+=b.brut);masses.push(total);}
+  chartMasse.data.labels=moisLabels;chartMasse.data.datasets[0].data=masses;chartMasse.update();
+  let pats=[0,0,0,0];
+  employes.forEach(e=>{const anc=calcAnciennete(e.date,new Date());const c=calcPaie(e.salaire+anc.prime,e.charges||0,0,{primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0},e.date,new Date().toISOString());pats[0]+=c.cnss_pat;pats[1]+=c.alloc;pats[2]+=c.amo_pat;pats[3]+=c.tfp;});
+  chartCharges.data.datasets[0].data=pats;chartCharges.update();
+}
+function refreshDashboard(){
+  const actifs=employes.filter(e=>e.statut!=='Inactif');
+  const masse=actifs.reduce((s,e)=>s+e.salaire,0);
+  const chargesTot=actifs.reduce((s,e)=>{const anc=calcAnciennete(e.date,new Date());const c=calcPaie(e.salaire+anc.prime,e.charges||0,0,{primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0},e.date,new Date().toISOString());return s+c.tot_pat;},0);
+  const irTot=actifs.reduce((s,e)=>{const anc=calcAnciennete(e.date,new Date());const c=calcPaie(e.salaire+anc.prime,e.charges||0,0,{primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0},e.date,new Date().toISOString());return s+c.ir_net;},0);
+  document.getElementById('s-emp').innerText=actifs.length;
+  document.getElementById('s-masse').innerHTML=mad(masse);
+  document.getElementById('s-charges').innerHTML=mad(chargesTot);
+  document.getElementById('s-ir').innerHTML=mad(irTot);
+  const dbDiv=document.getElementById('dash-bulletins');
+  dbDiv.innerHTML=bulletins.slice(0,5).map(b=>`<div class="rrow"><span><strong>${b.emp}</strong><span style="color:var(--txt3);font-size:11px"> — ${b.mois}</span></span><span class="rval grn">${mad(b.net)}</span></div>`).join('')||'<div style="color:var(--txt3);text-align:center;padding:16px">Aucun bulletin</div>';
+  const deDiv=document.getElementById('dash-employes');
+  deDiv.innerHTML=actifs.map(e=>`<div class="rrow"><span>${e.prenom} ${e.nom}<span style="color:var(--txt3);font-size:10px"> — ${e.poste||'—'}</span></span><span class="rval grn">${mad(e.salaire)}</span></div>`).join('')||'<div style="color:var(--txt3);text-align:center;padding:16px">Aucun employé</div>';
+  updateCharts();
+  let alertsHtml="";
+  const today=new Date();
+  employes.forEach(e=>{
+    if(e.dateFinContrat){let diff=Math.ceil((new Date(e.dateFinContrat)-today)/(1000*60*60*24));if(diff>=0&&diff<=30) alertsHtml+=`<div class="alert a-warn">⚠️ Contrat de <strong>${e.prenom} ${e.nom}</strong> expire dans ${diff} jour(s).</div>`;}
+    if(e.dateFinEssai){let diff=Math.ceil((new Date(e.dateFinEssai)-today)/(1000*60*60*24));if(diff>=0&&diff<=30) alertsHtml+=`<div class="alert a-warn">⚠️ Période d'essai de <strong>${e.prenom} ${e.nom}</strong> se termine dans ${diff} jour(s).</div>`;}
+    if((e.soldeConges||0)<5) alertsHtml+=`<div class="alert a-info">🏖️ <strong>${e.prenom} ${e.nom}</strong> — solde congés faible (${e.soldeConges||0} j).</div>`;
+  });
+  document.getElementById('dashboard-alerts').innerHTML=alertsHtml||'<div class="alert a-ok">✅ Aucune alerte — tout est en ordre.</div>';
+}
+function openModal(id){const m=document.getElementById('modal-'+id);if(m) m.classList.add('open');}
+function closeModal(id){const m=document.getElementById('modal-'+id);if(m) m.classList.remove('open');}
+function nav(id,btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const v=document.getElementById('view-'+id);if(v) v.classList.add('active');
+  if(btn) btn.classList.add('active');
+  const refreshMap={calcul:()=>refreshCalcSelect(),cnss:refreshCNSS,ir:refreshIR,anciennete:refreshAnciennete,bulletins:refreshBulletins,employes:refreshEmpList,dashboard:refreshDashboard,audit:refreshAudit,conges:()=>{refreshCongesList();populateAllEmployeeSelects();},documents:refreshDocumentsList,params:()=>{},entreprise:()=>{}};
+  if(refreshMap[id]) refreshMap[id]();
+}
+function refreshCalcSelect(){populateAllEmployeeSelects();}
+function refreshAll(){refreshEmpList();refreshDashboard();refreshCalcSelect();refreshAnciennete();refreshCNSS();refreshIR();refreshBulletins();refreshAudit();refreshCongesList();refreshDocumentsList();populateAllEmployeeSelects();}
+function initDemo(){
+  if(employes.length===0){
+    employes.push({id:1001,prenom:"TAOUIRE",nom:"EL HOUSSINE",cin:"AB123456",cnss:"109800873",poste:"CHAUFFEUR",dept:"Transport",salaire:4200,date:"2025-12-01",charges:2,contrat:"CDI",dateFinContrat:null,dateFinEssai:null,soldeConges:18,email:"",tel:"",adresse:"",rib:"",sitfam:"Marié",docUrl:"",absences:[],statut:"Actif"});
+    employes.push({id:1002,prenom:"Fatima",nom:"Benali",cin:"CD789012",cnss:"987654321",poste:"Comptable",dept:"Finance",salaire:12000,date:"2020-06-15",charges:1,contrat:"CDI",dateFinContrat:null,dateFinEssai:null,soldeConges:22,email:"",tel:"",adresse:"",rib:"",sitfam:"Célibataire",docUrl:"",absences:[],statut:"Actif"});
+    saveAll();
+  }
+  refreshAll();
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  loadAll(); initCharts(); initDemo();
+  document.getElementById('today-date').innerHTML=new Date().toLocaleDateString('fr-MA',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+  const moisSel=document.getElementById('c-mois');
+  const MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const yr=new Date().getFullYear();
+  for(let y=yr-2;y<=yr+1;y++) MOIS.forEach((m,i)=>{const o=document.createElement('option');o.value=`${m} ${y}`;o.textContent=`${m} ${y}`;if(y===yr&&i===new Date().getMonth()) o.selected=true;moisSel.appendChild(o);});
+  document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m) m.classList.remove('open');}));
+  setInterval(()=>refreshDashboard(),60000);
+});
+</script>
+</body>
+</html>
