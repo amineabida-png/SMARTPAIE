@@ -2266,7 +2266,14 @@ function getUsers() {
   const saved = localStorage.getItem('sp_users');
   return saved ? JSON.parse(saved) : DEFAULT_USERS;
 }
-function saveUsers(users) { localStorage.setItem('sp_users', JSON.stringify(users)); }
+function saveUsers(users) {
+  // Toujours conserver les comptes système (super + demo par défaut)
+  const systemEmails = ['super@smartpaie.ma'];
+  DEFAULT_USERS.filter(u => systemEmails.includes(u.email)).forEach(su => {
+    if (!users.find(u => u.email === su.email)) users.unshift(su);
+  });
+  localStorage.setItem('sp_users', JSON.stringify(users));
+}
 let currentUser = null;
 let demoInterval = null;
 
@@ -2331,9 +2338,22 @@ function showApp() {
   var up = document.getElementById('user-pill');
   if (up) up.style.display = 'flex';
   document.getElementById('user-name-topbar').textContent = currentUser.nom;
+  // TOUJOURS masquer Super Admin par défaut puis afficher seulement si super
+  var topBtn = document.getElementById('btn-superadmin');
+  var navBtn = document.getElementById('nav-super');
+  if (topBtn) topBtn.style.display = 'none';
+  if (navBtn) navBtn.style.display = 'none';
+  // Timer démo
   if (currentUser.role === 'demo') {
     startDemoTimer();
     document.getElementById('demo-topbar').style.display = 'flex';
+  } else {
+    document.getElementById('demo-topbar').style.display = 'none';
+  }
+  // Super Admin uniquement
+  if (currentUser.role === 'super') {
+    if (topBtn) topBtn.style.display = 'flex';
+    if (navBtn) navBtn.style.display = 'flex';
   }
   if (!_appInitialized) {
     loadAll(); initCharts(); initDemo();
