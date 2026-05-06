@@ -1124,6 +1124,7 @@ select option { background: var(--s2); }
       <div class="section-sep">Informations légales</div>
       <div class="fg"><label>Raison sociale</label><input type="text" id="e-nom"></div>
       <div class="grid2">
+        <div class="fg"><label>Forme juridique</label><input type="text" id="e-forme" placeholder="SARL, SA, SNC..."></div>
         <div class="fg"><label>ICE</label><input type="text" id="e-ice"></div>
         <div class="fg"><label>N° CNSS patronal</label><input type="text" id="e-cnss"></div>
         <div class="fg"><label>Identifiant Fiscal</label><input type="text" id="e-if"></div>
@@ -1132,6 +1133,15 @@ select option { background: var(--s2); }
         <div class="fg"><label>Ville</label><input type="text" id="e-ville"></div>
       </div>
       <div class="fg"><label>Adresse complète</label><input type="text" id="e-adresse"></div>
+      <div class="grid2">
+        <div class="fg"><label>Téléphone</label><input type="text" id="e-tel-ent" placeholder="+212 5 22 XX XX XX"></div>
+        <div class="fg"><label>Email</label><input type="email" id="e-email-ent" placeholder="contact@entreprise.ma"></div>
+      </div>
+      <div class="section-sep">Représentant légal (pour documents)</div>
+      <div class="grid2">
+        <div class="fg"><label>Nom & prénom du représentant</label><input type="text" id="e-rep" placeholder="M. Ahmed Benali"></div>
+        <div class="fg"><label>Qualité / Titre</label><input type="text" id="e-qualite" placeholder="Directeur Général"></div>
+      </div>
       <button class="btn btn-p" onclick="saveEntreprise()">💾 Enregistrer société</button>
     </div>
   </div>
@@ -1310,9 +1320,9 @@ function saveLegalParams() {
 }
 function refreshSocieteSelect() { const sel = document.getElementById('societeSelect'); if(sel) sel.innerHTML = Object.keys(entreprises).map(n=>`<option value="${n}" ${n===currentSociete?'selected':''}>${n}</option>`).join(''); }
 function switchSociete() { currentSociete = document.getElementById('societeSelect').value; loadSocieteToUI(); saveAll(); refreshAll(); addAudit("CHANGE SOCIETE", currentSociete); }
-function loadSocieteToUI() { const s = entreprises[currentSociete]||{}; ['nom','ice','cnss','if','ville','adresse','rc','patente'].forEach(k=>{ const el=document.getElementById('e-'+k); if(el) el.value=s[k]||''; }); }
+function loadSocieteToUI() { const s = entreprises[currentSociete]||{}; ['nom','ice','cnss','if','ville','adresse','rc','patente'].forEach(k=>{ const el=document.getElementById('e-'+k); if(el) el.value=s[k]||''; }); ['rep','qualite'].forEach(k=>{ const el=document.getElementById('e-'+k); if(el) el.value=s[k]||''; }); const tet=document.getElementById('e-tel-ent'); if(tet) tet.value=s.tel||''; const eet=document.getElementById('e-email-ent'); if(eet) eet.value=s.email||''; const fet=document.getElementById('e-forme'); if(fet) fet.value=s.forme||'SARL'; }
 function saveEntreprise() {
-  entreprises[currentSociete] = { nom:document.getElementById('e-nom').value, ice:document.getElementById('e-ice').value, cnss:document.getElementById('e-cnss').value, if:document.getElementById('e-if').value, ville:document.getElementById('e-ville').value, adresse:document.getElementById('e-adresse').value, rc:document.getElementById('e-rc').value, patente:document.getElementById('e-patente').value };
+  entreprises[currentSociete] = { nom:document.getElementById('e-nom').value, ice:document.getElementById('e-ice').value, cnss:document.getElementById('e-cnss').value, if:document.getElementById('e-if').value, ville:document.getElementById('e-ville').value, adresse:document.getElementById('e-adresse').value, rc:document.getElementById('e-rc').value, patente:document.getElementById('e-patente').value, rep:document.getElementById('e-rep').value||'', qualite:document.getElementById('e-qualite').value||'', tel:document.getElementById('e-tel-ent').value||'', email:document.getElementById('e-email-ent').value||'', forme:document.getElementById('e-forme').value||'SARL' };
   saveAll(); addAudit("ENTREPRISE",`Modifiée: ${currentSociete}`); alert("Société enregistrée ✅");
 }
 function addSociete() { const nom=document.getElementById('newSocieteNom').value.trim(); if(!nom) return; entreprises[nom]={nom,ice:"",cnss:"",if:"",ville:"",adresse:"",rc:"",patente:""}; currentSociete=nom; saveAll(); refreshSocieteSelect(); loadSocieteToUI(); closeModal('addSociete'); addAudit("SOCIETE",`Créée: ${nom}`); refreshAll(); }
@@ -1683,24 +1693,122 @@ function genDoc(type) {
     empId = parseInt(v('f-at-emp')); emp = employes.find(e=>e.id===empId);
     if (!emp) return alert('Sélectionnez un employé');
     anc = calcAnciennete(emp.date, new Date());
-    const usage = v('f-at-usage');
-    corps = `<div class="doc-pro">${dpHeader(ent,ref())}<div class="dp-title">Attestation de travail</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Identité du salarié</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div><div class="dp-row"><span class="lbl">Situation fam.</span><span class="val">${emp.sitfam||'—'}</span></div></div><div class="dp-box"><div class="dp-box-title">Poste &amp; contrat</div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div><div class="dp-row"><span class="lbl">Département</span><span class="val">${emp.dept||'—'}</span></div><div class="dp-row"><span class="lbl">Contrat</span><span class="val">${emp.contrat||'CDI'}</span></div><div class="dp-row"><span class="lbl">Date embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div><div class="dp-row"><span class="lbl">Ancienneté</span><span class="val">${anc.ans} an(s) ${anc.mois} mois</span></div></div></div><div class="dp-body">Je soussigné(e), représentant légal de la société <strong>${ent.nom}</strong>, immatriculée sous le numéro ICE ${ent.ice||'—'}, atteste par la présente que :</div><div class="dp-highlight">M./Mme <strong>${emp.prenom} ${emp.nom}</strong>, titulaire de la CIN N° ${emp.cin||'—'}, est employé(e) au sein de notre entreprise en qualité de <strong>${emp.poste||'—'}</strong> depuis le <strong>${new Date(emp.date).toLocaleDateString('fr-FR')}</strong>, dans le cadre d'un contrat ${emp.contrat==='CDI'?'à durée indéterminée (CDI)':'à durée déterminée (CDD)'}.</div><div class="dp-body">Le/La salarié(e) est toujours en activité à ce jour. La présente attestation lui est délivrée à sa demande pour <strong>${usage.toLowerCase()}</strong>, pour servir et valoir ce que de droit.</div>${dpSig('Signature du salarié<br><em>Lu et approuvé</em>','Le représentant légal',ent.ville)}<div class="dp-footer">Document établi conformément au Code du Travail marocain (Loi 65-99).</div></div>`;
+    const ent2 = ent;
+    const emb = emp.date ? new Date(emp.date).toLocaleDateString('fr-FR') : '—';
+    corps = `<div style="font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e;font-size:10px;line-height:1.6;max-width:700px;margin:0 auto;padding:20px">
+<div style="text-align:center;border-bottom:2px solid #1a1a2e;padding-bottom:12px;margin-bottom:18px">
+  <div style="font-size:17px;font-weight:700">${ent.nom||'[NOM DE L\'ENTREPRISE]'}</div>
+  <div style="font-size:8.5px;color:#555;margin-top:4px">${ent.forme||'SARL'} · ICE : ${ent.ice||'000000000000000'} · RC : ${ent.rc||'—'} · CNSS : ${ent.cnss||'—'}</div>
+  <div style="font-size:8.5px;color:#555">${ent.adresse||'—'}</div>
+  <div style="font-size:8.5px;color:#555">Tél : ${ent.tel||''} · ${ent.email||''}</div>
+</div>
+<div style="text-align:center;margin:16px 0 8px">
+  <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Attestation de Travail</div>
+  <div style="font-size:8.5px;color:#888;font-style:italic;margin-top:4px">Réf. : ATT-${new Date().getFullYear()}-${String(Date.now()).slice(-3)}  |  Loi n°65-99 du Code du Travail Marocain</div>
+</div>
+<div style="margin:14px 0;font-size:10px;line-height:1.9">
+  Je soussigné(e), <strong>${ent.rep||'[NOM & PRÉNOM DU RESPONSABLE]'}</strong>, agissant en qualité de <strong>${ent.qualite||'Directeur(trice) Général(e)'}</strong> de la société <strong>${ent.nom||'[NOM DE L\'ENTREPRISE]'}</strong>, certifie par la présente que :
+</div>
+<div style="border:1px solid #ddd;border-radius:4px;padding:14px 18px;margin:14px 0;line-height:2.2">
+  <div><span style="display:inline-block;width:200px;font-weight:600">Nom &amp; Prénom :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.prenom} ${emp.nom}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Numéro CIN :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.cin||'—'}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">N° CNSS salarié :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.cnss||'—'}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Poste / Fonction :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.poste||'—'}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Département :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.dept||'—'}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Date d'embauche :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emb}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Type de contrat :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.contrat||'CDI'}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Durée de travail :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">44 heures par semaine (Art. 184 du Code du Travail)</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Statut actuel :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">En activité — Toujours en poste à ce jour</span></div>
+</div>
+<div style="font-size:9px;font-style:italic;color:#555;margin:12px 0">
+  Cette attestation est délivrée à la demande de l'intéressé(e) et pour faire valoir ce que de droit, sans préjudice de nos droits et recours.
+</div>
+<table style="width:100%;border-collapse:collapse;margin-top:30px;font-size:9px">
+  <tr>
+    <td style="width:50%;padding:10px;border:1px solid #ccc;vertical-align:top">
+      <div style="font-weight:600">Fait à : ${ent.ville||ent.adresse||'Casablanca'}, le :</div>
+      <div style="margin-top:8px">_______ / _______ / 20_____</div>
+    </td>
+    <td style="width:50%;padding:10px;border:1px solid #ccc;text-align:center;vertical-align:top">
+      <div style="font-weight:600">La Direction</div>
+      <div style="font-style:italic;margin-top:4px">${ent.rep||'[Nom & Prénom — Qualité]'}</div>
+      <div style="margin-top:8px">
+        <div style="width:80px;height:80px;border:1px dashed #aaa;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px">
+          <span style="font-size:7px;color:#bbb">Cachet &amp; Signature</span>
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>
+<div style="margin-top:14px;font-size:8px;color:#888;font-style:italic;border-top:1px solid #ddd;padding-top:8px;text-align:center">
+  Base légale : Loi n°65-99 (Code du Travail marocain) · Décret n°2-04-469 · CNSS (Dahir n°1-72-184)<br>
+  Document confidentiel — Délivré à la demande de l'intéressé(e) et pour faire valoir ce que de droit.
+</div>
+</div>`;
     addAudit('DOCUMENT', `Attestation de travail — ${emp.prenom} ${emp.nom}`);
   }
-
   else if (type === 'attest-salaire') {
     empId = parseInt(v('f-as-emp')); emp = employes.find(e=>e.id===empId);
     if (!emp) return alert('Sélectionnez un employé');
     anc = calcAnciennete(emp.date, new Date());
-    const moisRef = v('f-as-mois') || now;
-    const usage = v('f-as-usage');
     const ancPrime = r(emp.salaire * anc.taux);
     const brutRef = r(emp.salaire + ancPrime);
     const cRef = calcPaie(emp.salaire, emp.charges||0, 0, {primesS:0,hs25:0,hs50:0,indemnites:0,absJours:0,acompte:0}, emp.date, new Date().toISOString());
-    corps = `<div class="doc-pro">${dpHeader(ent,ref())}<div class="dp-title">Attestation de salaire</div><div class="dp-period">Période de référence : ${moisRef}</div><div class="dp-grid"><div class="dp-box"><div class="dp-box-title">Identité du salarié</div><div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div><div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div><div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div><div class="dp-row"><span class="lbl">Ancienneté</span><span class="val">${anc.ans} an(s) ${anc.mois} mois</span></div></div><div class="dp-box"><div class="dp-box-title">Poste &amp; contrat</div><div class="dp-row"><span class="lbl">Poste</span><span class="val">${emp.poste||'—'}</span></div><div class="dp-row"><span class="lbl">Contrat</span><span class="val">${emp.contrat||'CDI'}</span></div><div class="dp-row"><span class="lbl">Date embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div></div></div><table><thead><tr><th>Élément de rémunération</th><th class="r">Montant (DH)</th></tr></thead><tbody><tr><td>Salaire de base</td><td class="r">${mad(emp.salaire)}</td></tr>${ancPrime>0?`<tr><td>Prime d'ancienneté (${anc.taux*100}%)</td><td class="r">${mad(ancPrime)}</td></tr>`:''}<tr class="tbl-total"><td><strong>Total brut mensuel</strong></td><td class="r"><strong>${mad(brutRef)}</strong></td></tr><tr><td>CNSS salariale (${legalParams.cnss_sal}%)</td><td class="r" style="color:#a32d2d">- ${mad(cRef.cnss_sal)}</td></tr><tr><td>AMO salariale (${legalParams.amo_sal}%)</td><td class="r" style="color:#a32d2d">- ${mad(cRef.amo_sal)}</td></tr><tr><td>IR net retenu à la source</td><td class="r" style="color:#a32d2d">- ${mad(cRef.ir_net)}</td></tr><tr class="tbl-net"><td><strong>Net mensuel à percevoir</strong></td><td class="r"><strong>${mad(cRef.net)}</strong></td></tr></tbody></table><div class="dp-body">Attestation délivrée à la demande de l'intéressé(e) pour <strong>${usage.toLowerCase()}</strong>, pour servir et valoir ce que de droit.</div>${dpSig('Signature du salarié<br><em>Lu et approuvé</em>','Le représentant légal',ent.ville)}<div class="dp-footer">Document établi conformément au Code du Travail marocain (Loi 65-99) et à la législation fiscale en vigueur.</div></div>`;
+    const moisRef = v('f-as-mois') || new Date().toLocaleString('fr',{month:'long',year:'numeric'});
+    const emb = emp.date ? new Date(emp.date).toLocaleDateString('fr-FR') : '—';
+    const ancStr = anc.ans + ' an(s) ' + anc.mois + ' mois';
+    const dh = n => (+n||0).toLocaleString('fr-MA',{minimumFractionDigits:2,maximumFractionDigits:2})+' MAD';
+    corps = `<div style="font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e;font-size:10px;line-height:1.6;max-width:700px;margin:0 auto;padding:20px">
+<div style="text-align:center;border-bottom:2px solid #1a1a2e;padding-bottom:12px;margin-bottom:18px">
+  <div style="font-size:17px;font-weight:700">${ent.nom||'[NOM DE L\'ENTREPRISE]'}</div>
+  <div style="font-size:8.5px;color:#555;margin-top:4px">${ent.forme||'SARL'} · ICE : ${ent.ice||'000000000000000'} · RC : ${ent.rc||'—'} · CNSS : ${ent.cnss||'—'}</div>
+  <div style="font-size:8.5px;color:#555">${ent.adresse||'—'}</div>
+  <div style="font-size:8.5px;color:#555">Tél : ${ent.tel||''} · ${ent.email||''}</div>
+</div>
+<div style="text-align:center;margin:16px 0 8px">
+  <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Attestation de Salaire</div>
+  <div style="font-size:8.5px;color:#888;font-style:italic;margin-top:4px">Réf. : SAL-${new Date().getFullYear()}-${String(Date.now()).slice(-3)}  |  Loi n°65-99 du Code du Travail Marocain</div>
+</div>
+<div style="margin:14px 0;font-size:10px;line-height:1.9">
+  Je soussigné(e), <strong>${ent.rep||'[NOM & PRÉNOM DU RESPONSABLE]'}</strong>, agissant en qualité de <strong>${ent.qualite||'Directeur(trice) Général(e)'}</strong> de la société <strong>${ent.nom||'[NOM DE L\'ENTREPRISE]'}</strong>, certifie par la présente que :
+</div>
+<div style="border:1px solid #ddd;border-radius:4px;padding:14px 18px;margin:14px 0;line-height:2.2">
+  <div><span style="display:inline-block;width:200px;font-weight:600">Nom &amp; Prénom :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.prenom} ${emp.nom}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Numéro CIN :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.cin||'—'}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">N° CNSS salarié :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.cnss||'—'}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Poste / Fonction :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.poste||'—'}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Type de contrat :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.contrat||'CDI'}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Date d'embauche :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emb}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Ancienneté :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${ancStr}</span></div>
+  <div><span style="display:inline-block;width:200px;font-weight:600">Salaire Net Mensuel :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px;font-weight:700;font-size:11px">${dh(cRef.net)}</span></div>
+</div>
+<div style="font-size:9px;font-style:italic;color:#555;margin:12px 0">
+  Cette attestation est délivrée à la demande de l'intéressé(e), pour faire valoir ce que de droit, notamment auprès des établissements de crédit, organismes sociaux et administrations publiques.
+</div>
+<table style="width:100%;border-collapse:collapse;margin-top:30px;font-size:9px">
+  <tr>
+    <td style="width:50%;padding:10px;border:1px solid #ccc;vertical-align:top">
+      <div style="font-weight:600">Fait à : ${ent.ville||ent.adresse||'Casablanca'}, le :</div>
+      <div style="margin-top:8px">_______ / _______ / 20_____</div>
+    </td>
+    <td style="width:50%;padding:10px;border:1px solid #ccc;text-align:center;vertical-align:top">
+      <div style="font-weight:600">La Direction</div>
+      <div style="font-style:italic;margin-top:4px">${ent.rep||'[Nom & Prénom — Qualité]'}</div>
+      <div style="margin-top:8px">
+        <div style="width:80px;height:80px;border:1px dashed #aaa;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px">
+          <span style="font-size:7px;color:#bbb">Cachet &amp; Signature</span>
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>
+<div style="margin-top:14px;font-size:8px;color:#888;font-style:italic;border-top:1px solid #ddd;padding-top:8px;text-align:center">
+  Base légale : Loi n°65-99 (Code du Travail marocain) · Décret n°2-04-469 · CNSS (Dahir n°1-72-184)<br>
+  Document confidentiel — Délivré à la demande de l'intéressé(e) et pour faire valoir ce que de droit.
+</div>
+</div>`;
     addAudit('DOCUMENT', `Attestation de salaire — ${emp.prenom} ${emp.nom}`);
   }
-
   else if (type === 'avertissement') {
     empId = parseInt(v('f-av-emp')); emp = employes.find(e=>e.id===empId);
     if (!emp) return alert('Sélectionnez un employé');
@@ -1981,57 +2089,76 @@ function genererCessation() {
   const motif=document.getElementById('cessation-motif').value;
   const preavis=document.getElementById('cessation-preavis').value;
   const soldeDateRaw=document.getElementById('cessation-solde').value;
-  const soldeDate=soldeDateRaw?new Date(soldeDateRaw).toLocaleDateString('fr-FR'):now;
+  const soldeDate=soldeDateRaw?new Date(soldeDateRaw).toLocaleDateString('fr-FR'):'—';
   const ent=entreprises[currentSociete];
-  var _cMeta = getDocMeta('form-cessation', 'CC');
-  const now = _cMeta.date;
+  const now=new Date().toLocaleDateString('fr-FR');
   const ancData=calcAnciennete(emp.date, new Date(dateDepart));
-  const refNum = _cMeta.ref;
-  const corps=`<div class="doc-pro">
-  <div class="dp-header">
-    <div><div class="dp-logo">${ent.nom}</div><div class="dp-meta">Adresse : ${ent.adresse||'—'}<br>ICE : ${ent.ice||'—'} &nbsp;·&nbsp; RC : ${ent.rc||'—'} &nbsp;·&nbsp; IF : ${ent['if']||'—'}<br>CNSS : ${ent.cnss||'—'}</div></div>
-    <div class="dp-ref">Réf. : ${refNum}<br>Date : ${now}<br>Ville : ${ent.ville||'Casablanca'}</div>
-  </div>
-  <div class="dp-title">Certificat de cessation de contrat</div>
-  <div class="dp-grid">
-    <div class="dp-box">
-      <div class="dp-box-title">Identité du salarié</div>
-      <div class="dp-row"><span class="lbl">Nom &amp; prénom</span><span class="val">${emp.prenom} ${emp.nom}</span></div>
-      <div class="dp-row"><span class="lbl">CIN</span><span class="val">${emp.cin||'—'}</span></div>
-      <div class="dp-row"><span class="lbl">N° CNSS</span><span class="val">${emp.cnss||'—'}</span></div>
-      <div class="dp-row"><span class="lbl">Situation fam.</span><span class="val">${emp.sitfam||'—'}</span></div>
-    </div>
-    <div class="dp-box">
-      <div class="dp-box-title">Contrat &amp; ancienneté</div>
-      <div class="dp-row"><span class="lbl">Poste occupé</span><span class="val">${emp.poste||'—'}</span></div>
-      <div class="dp-row"><span class="lbl">Date d'embauche</span><span class="val">${new Date(emp.date).toLocaleDateString('fr-FR')}</span></div>
-      <div class="dp-row"><span class="lbl">Date de départ</span><span class="val">${new Date(dateDepart).toLocaleDateString('fr-FR')}</span></div>
-      <div class="dp-row"><span class="lbl">Ancienneté totale</span><span class="val">${ancData.ans} an(s) ${ancData.mois} mois</span></div>
-    </div>
-  </div>
-  <div class="dp-body">Je soussigné(e), représentant légal de la société <strong>${ent.nom}</strong>, immatriculée sous le numéro ICE ${ent.ice||'—'}, certifie par la présente que :</div>
-  <div class="dp-highlight">M./Mme <strong>${emp.prenom} ${emp.nom}</strong>, titulaire de la CIN N° ${emp.cin||'—'}, employé(e) en qualité de <strong>${emp.poste||'—'}</strong> depuis le <strong>${new Date(emp.date).toLocaleDateString('fr-FR')}</strong>, a définitivement quitté les effectifs de notre entreprise à la date du <strong>${new Date(dateDepart).toLocaleDateString('fr-FR')}</strong>.</div>
-  <div class="dp-box" style="margin:10px 0">
-    <div class="dp-box-title">Motif &amp; conditions de cessation</div>
-    <div class="dp-row"><span class="lbl">Motif</span><span class="val">${motif}</span></div>
-    <div class="dp-row"><span class="lbl">Préavis effectué</span><span class="val">${preavis}</span></div>
-    <div class="dp-row"><span class="lbl">Solde de tout compte réglé le</span><span class="val">${soldeDate}</span></div>
-    <div class="dp-row"><span class="lbl">Indemnité de licenciement</span><span class="val">${motif==='Licenciement'?'Oui — calculée selon Loi 65-99':'Non applicable'}</span></div>
-  </div>
-  <div class="dp-warning">⚠️ Le solde de tout compte, l'indemnité de préavis et/ou de licenciement ont été réglés conformément aux dispositions du Code du Travail marocain (Loi 65-99, art. 41 et suivants).</div>
-  <div class="dp-body">La présente attestation est délivrée à l'intéressé(e) pour lui servir de justificatif auprès de la CNSS (prestations de chômage), de l'ANAPEC, ou de tout autre organisme compétent.</div>
-  <div class="dp-sig">
-    <div class="dp-sig-box"><div class="dp-sig-line"></div><div class="dp-sig-lbl">Signature du salarié<br><em>Remise reconnue</em></div></div>
-    <div class="dp-sig-box"><div style="width:70px;height:70px;border:1px dashed #bbb;border-radius:4px;margin:0 auto 3px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px"><span style="font-size:6px;color:#ccc">Cachet</span></div><div class="dp-sig-line"></div><div class="dp-sig-lbl">Le représentant légal<br><em>Fait à ${ent.ville||'Casablanca'}, le ${now}</em></div></div>
-  </div>
-  <div class="dp-footer">Document établi conformément aux dispositions du Code du Travail marocain (Loi 65-99) — à remettre obligatoirement au salarié à la date de départ.</div>
-</div>`;
-  const pz=document.getElementById('print-zone'); pz.innerHTML=corps; pz.style.display='block';
-  window.print();
-  setTimeout(()=>{pz.style.display='none';pz.innerHTML='';},100);
-  addAudit("CESSATION",`${emp.prenom} ${emp.nom} — ${motif} — ${new Date(dateDepart).toLocaleDateString('fr-FR')}`);
-}
+  const ancStr=ancData.ans+' an(s) '+ancData.mois+' mois';
+  const emb=emp.date?new Date(emp.date).toLocaleDateString('fr-FR'):'—';
+  const dep=new Date(dateDepart).toLocaleDateString('fr-FR');
+  const refNum='CERT-'+new Date().getFullYear()+'-'+String(Date.now()).slice(-3);
 
+  const corps=`<div style="font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e;font-size:10px;line-height:1.6;max-width:700px;margin:0 auto;padding:20px">
+<div style="text-align:center;border-bottom:2px solid #1a1a2e;padding-bottom:12px;margin-bottom:18px">
+  <div style="font-size:17px;font-weight:700">${ent.nom||'[NOM DE L\'ENTREPRISE]'}</div>
+  <div style="font-size:8.5px;color:#555;margin-top:4px">${ent.forme||'SARL'} · ICE : ${ent.ice||'000000000000000'} · RC : ${ent.rc||'—'} · CNSS : ${ent.cnss||'—'}</div>
+  <div style="font-size:8.5px;color:#555">${ent.adresse||'—'}</div>
+  <div style="font-size:8.5px;color:#555">Tél : ${ent.tel||''} · ${ent.email||''}</div>
+</div>
+<div style="text-align:center;margin:16px 0 8px">
+  <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Certificat de Travail</div>
+  <div style="font-size:8.5px;color:#888;font-style:italic;margin-top:4px">Réf. : ${refNum}  |  Art. 72 &amp; 73 — Loi n°65-99 du Code du Travail Marocain</div>
+</div>
+<div style="margin:14px 0;font-size:10px;line-height:1.9">
+  Je soussigné(e), <strong>${ent.rep||'[NOM & PRÉNOM DU RESPONSABLE]'}</strong>, agissant en qualité de <strong>${ent.qualite||'Directeur(trice) Général(e)'}</strong> de la société <strong>${ent.nom||'[NOM DE L\'ENTREPRISE]'}</strong>, certifie que :
+</div>
+<div style="border:1px solid #ddd;border-radius:4px;padding:14px 18px;margin:14px 0;line-height:2.2">
+  <div><span style="display:inline-block;width:220px;font-weight:600">Nom &amp; Prénom :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.prenom} ${emp.nom}</span></div>
+  <div><span style="display:inline-block;width:220px;font-weight:600">Numéro CIN :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.cin||'—'}</span></div>
+  <div><span style="display:inline-block;width:220px;font-weight:600">N° CNSS salarié :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.cnss||'—'}</span></div>
+  <div><span style="display:inline-block;width:220px;font-weight:600">Poste / Fonction occupé(e) :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.poste||'—'}</span></div>
+  <div><span style="display:inline-block;width:220px;font-weight:600">Département / Service :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emp.dept||'—'}</span></div>
+  <div><span style="display:inline-block;width:220px;font-weight:600">Date d'embauche :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${emb}</span></div>
+  <div><span style="display:inline-block;width:220px;font-weight:600">Date de fin de contrat :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${dep}</span></div>
+  <div><span style="display:inline-block;width:220px;font-weight:600">Motif de départ :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${motif}</span></div>
+  <div><span style="display:inline-block;width:220px;font-weight:600">Ancienneté totale :</span><span style="border-bottom:1px solid #999;display:inline-block;min-width:200px;padding-bottom:1px">${ancStr}</span></div>
+</div>
+<div style="font-size:10px;margin:14px 0;line-height:1.8">
+  L'intéressé(e) a quitté nos effectifs le <strong>${dep}</strong> et est libre de tout engagement envers notre société à compter de cette date.
+</div>
+<div style="font-size:9px;font-style:italic;color:#555;margin:10px 0">
+  Ce certificat est délivré conformément à l'article 72 du Code du Travail Marocain (Loi n°65-99), à la demande de l'intéressé(e) et pour faire valoir ce que de droit.
+</div>
+<table style="width:100%;border-collapse:collapse;margin-top:30px;font-size:9px">
+  <tr>
+    <td style="width:50%;padding:10px;border:1px solid #ccc;vertical-align:top">
+      <div style="font-weight:600">Fait à : ${ent.ville||ent.adresse||'Casablanca'}, le :</div>
+      <div style="margin-top:8px">_______ / _______ / 20_____</div>
+    </td>
+    <td style="width:50%;padding:10px;border:1px solid #ccc;text-align:center;vertical-align:top">
+      <div style="font-weight:600">La Direction</div>
+      <div style="font-style:italic;margin-top:4px">${ent.rep||'[Nom & Prénom — Qualité]'}</div>
+      <div style="margin-top:8px">
+        <div style="width:80px;height:80px;border:1px dashed #aaa;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px">
+          <span style="font-size:7px;color:#bbb">Cachet &amp; Signature</span>
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>
+<div style="margin-top:14px;font-size:8px;color:#888;font-style:italic;border-top:1px solid #ddd;padding-top:8px;text-align:center">
+  Base légale : Loi n°65-99 (Code du Travail marocain) · Décret n°2-04-469 · CNSS (Dahir n°1-72-184)<br>
+  Document confidentiel — Délivré à la demande de l'intéressé(e) et pour faire valoir ce que de droit.
+</div>
+</div>`;
+
+  const pz=document.getElementById('print-zone');
+  const win=window.open('','_blank','width=900,height=700');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Certificat de Travail</title><style>@page{size:A4 portrait;margin:10mm 12mm}*{box-sizing:border-box;margin:0;padding:0}body{font-family:\'Segoe UI\',Arial,sans-serif;background:white}</style></head><body>'+corps+'</body></html>');
+  win.document.close();
+  win.onload=()=>{win.focus();win.print();};
+  addAudit("CESSATION",`Certificat de travail — ${emp.prenom} ${emp.nom} — ${motif} — ${dep}`);
+}
 // ======================== CONGÉS ========================
 function addAbsence() {
   const empId=parseInt(document.getElementById('absence-emp').value);
