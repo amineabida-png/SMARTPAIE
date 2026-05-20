@@ -128,7 +128,7 @@ app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.ht
 
 // ── Démarrage ─────────────────────────────────────────────────────────────
 initUsers();
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 SmartPAIE Pro+ démarré sur le port ${PORT}`);
   console.log(`📁 Data dir : ${DATA_DIR}`);
 });
